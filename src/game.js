@@ -45,6 +45,7 @@
     "Firemaking",
     "Crafting",
     "Thieving",
+    "Agility",
     "Slayer",
   ];
 
@@ -64,6 +65,7 @@
     Firemaking: ["1 Logs", "15 Oak logs", "30 Town warmth and diary credit"],
     Crafting: ["1 Cowhide work", "5 Leather body", "20 Clue casket handling"],
     Thieving: ["1 Cake stall", "5 Silk stall rolls", "15 Better odds", "25 Wilderness pockets someday"],
+    Agility: ["1 Balance log", "5 Rope swing", "12 Stepping stones", "20 Faster run recovery", "35 Shortcut stamina"],
     Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "25 Moss brutes", "30 Deep wight", "38 Lesser demons"],
   };
 
@@ -361,6 +363,7 @@
       ferriesTaken: 0,
       firesLit: 0,
       fishCaught: 0,
+      agilityObstacles: 0,
       goblinsSlain: 0,
       lesserDemonsSlain: 0,
       logsCut: 0,
@@ -420,6 +423,7 @@
     { id: "potion", label: "Drink a potion", done: () => state.stats.potionsDrunk > 0 },
     { id: "craft", label: "Craft leather", done: () => state.stats.cowhidesCrafted > 0 },
     { id: "thieving", label: "Steal from a market stall", done: () => state.stats.stallsStolen > 0 },
+    { id: "agility", label: "Clear an agility obstacle", done: () => state.stats.agilityObstacles > 0 },
     { id: "slayer", label: "Finish a Slayer task", done: () => state.stats.slayerTasksCompleted > 0 },
     { id: "clue", label: "Solve a clue scroll", done: () => state.stats.cluesSolved > 0 },
     { id: "map", label: "Open the world map", done: () => state.stats.mapsOpened > 0 },
@@ -434,6 +438,7 @@
     { id: "mine", label: "Greyrock Mine", x: 62, y: 18, note: "ore and furnace road", color: "#cfd3d6" },
     { id: "graveyard", label: "Old Graveyard", x: 55, y: 52, note: "skeletons and bones", color: "#e7dec4" },
     { id: "lake", label: "Lake Mollusk", x: 64, y: 64, note: "fish and ferry", color: "#7fd7ff" },
+    { id: "agility", label: "Agility Yard", x: 31, y: 24, note: "obstacles and run training", color: "#9dff8a" },
     { id: "hollow", label: "Crawler Hollow", x: 68, y: 43, note: "crawlers and wight", color: "#a0a8ff" },
     { id: "mosswood", label: "Mosswood", x: 16, y: 18, note: "brutes and oaks", color: "#9bd36f" },
     { id: "wildy", label: "Low Wilderness", x: 11, y: 12, note: "chaos altar, danger", color: "#ff8e77" },
@@ -522,6 +527,18 @@
 
   function maxPrayer() {
     return Math.max(10, getLevel("Prayer") * 10);
+  }
+
+  function agilityRunBonus() {
+    return Math.max(0, effectiveLevel("Agility") - 1);
+  }
+
+  function runDrainRate() {
+    return 5.5 * (1 - Math.min(0.38, agilityRunBonus() * 0.006));
+  }
+
+  function runRestoreRate(base) {
+    return base * (1 + Math.min(0.5, agilityRunBonus() * 0.01));
   }
 
   function prayerBoost(kind) {
@@ -765,6 +782,7 @@
     drawRoad(38, 42, 23, 49, 1);
     drawRoad(47, 40, 66, 44, 1);
     drawRoad(40, 56, 54, 62, 1);
+    drawRoad(39, 27, 31, 24, 1);
 
     setRect(31, 27, 9, 7, "town");
     setRect(42, 28, 8, 7, "town");
@@ -773,6 +791,7 @@
     setRect(55, 34, 9, 8, "town");
     setRect(36, 36, 8, 5, "town");
     setRect(50, 27, 7, 5, "town");
+    setRect(27, 21, 10, 7, "dirt");
     setRect(5, 8, 19, 20, "dirt");
     setRect(8, 10, 6, 5, "stone");
     setRect(16, 16, 6, 6, "swamp");
@@ -789,6 +808,9 @@
     addScenery("well", "Town well", 40, 39, { action: "examine" });
     addScenery("quest_sign", "Quest noticeboard", 37, 38, { action: "quests" });
     addScenery("market_stall", "Market stall", 44, 36, { action: "steal", level: 1 });
+    addScenery("balance_log", "Balance log", 31, 24, { action: "agility", level: 1, xp: 34, restore: 7, failDamage: 3, cooldown: 2.2 });
+    addScenery("rope_swing", "Rope swing", 34, 23, { action: "agility", level: 5, xp: 58, restore: 10, failDamage: 5, cooldown: 3.0 });
+    addScenery("stepping_stones", "Stepping stones", 29, 26, { action: "agility", level: 12, xp: 86, restore: 13, failDamage: 7, cooldown: 3.4 });
     addScenery("dock", "Fishing dock", 55, 61, { action: "fish" });
     addScenery("ditch", "Wilderness ditch", 24, 31, { action: "wildy" });
     addScenery("chaos_altar", "Chaos altar", 11, 12, { action: "chaos_altar" });
@@ -1187,6 +1209,26 @@
     addChat(moved ? "You deposit your backpack." : "There is nothing to deposit.");
   }
 
+  function sortBank() {
+    ensureSlots(state.player.bank, 48);
+    const stacks = new Map();
+    const singles = [];
+    for (const item of state.player.bank) {
+      if (!item) continue;
+      if (ITEMS[item.id]?.stackable) {
+        stacks.set(item.id, (stacks.get(item.id) || 0) + item.qty);
+      } else {
+        singles.push({ id: item.id, qty: item.qty });
+      }
+    }
+    const sorted = [
+      ...Array.from(stacks.entries()).map(([id, qty]) => ({ id, qty })),
+      ...singles,
+    ].sort((a, b) => (ITEMS[a.id]?.name || a.id).localeCompare(ITEMS[b.id]?.name || b.id));
+    state.player.bank = sorted.concat(Array.from({ length: Math.max(0, 48 - sorted.length) }, () => null)).slice(0, 48);
+    addChat("You tidy the bank.");
+  }
+
   function formatItem(itemId, qty = 1) {
     const name = ITEMS[itemId]?.name || itemId;
     if (qty === 1) return name;
@@ -1450,7 +1492,7 @@
     if (!player.path.length) return;
     const target = player.path[0];
     const canRun = player.run && player.runEnergy > 0;
-    const speed = canRun ? 6.0 : 3.3;
+    const speed = canRun ? 6.0 + Math.min(0.35, agilityRunBonus() * 0.008) : 3.3;
     const dx = target.x - player.x;
     const dy = target.y - player.y;
     const d = Math.hypot(dx, dy);
@@ -1464,7 +1506,7 @@
     player.x += (dx / d) * step;
     player.y += (dy / d) * step;
     if (canRun) {
-      player.runEnergy = Math.max(0, player.runEnergy - dt * 5.5);
+      player.runEnergy = Math.max(0, player.runEnergy - dt * runDrainRate());
       if (player.runEnergy <= 0) {
         player.run = false;
         addChat("You are too tired to run.");
@@ -1507,9 +1549,9 @@
   function updateVitals(dt) {
     const player = state.player;
     if (!player.path.length && !player.action && !player.combatTarget) {
-      player.runEnergy = Math.min(100, player.runEnergy + dt * 2.4);
+      player.runEnergy = Math.min(100, player.runEnergy + dt * runRestoreRate(2.4));
     } else if (!player.run) {
-      player.runEnergy = Math.min(100, player.runEnergy + dt * 0.6);
+      player.runEnergy = Math.min(100, player.runEnergy + dt * runRestoreRate(0.6));
     }
     if (player.prayerMode !== "none") {
       player.prayerPoints = Math.max(0, player.prayerPoints - dt * 1.25);
@@ -1539,6 +1581,7 @@
     if (x < 22 && y < 28) return "Low Wilderness";
     if (Math.hypot(x - 66, y - 43) < 11) return "Crawler Hollow";
     if (Math.hypot(x - 62, y - 18) < 12) return "Greyrock Mine";
+    if (Math.hypot(x - 31, y - 24) < 7) return "Agility Yard";
     if (Math.hypot(x - 55, y - 52) < 12) return "Old Graveyard";
     if (Math.hypot(x - 23, y - 53) < 9) return "Cow Field";
     if (x > 30 && x < 56 && y > 27 && y < 48) return "Boonshire";
@@ -2308,6 +2351,8 @@
       if (spot) resourceAction(spot);
     } else if (action === "steal") {
       stealFromStall(obj);
+    } else if (action === "agility") {
+      attemptAgility(obj);
     } else if (action === "wildy") {
       addChat("The ditch marks Low Wilderness. Everything there hits harder.", "danger");
     } else if (action === "chaos_altar") {
@@ -2321,6 +2366,35 @@
     return state.resources
       .filter((r) => r.type === type)
       .sort((a, b) => dist(a, state.player) - dist(b, state.player))[0];
+  }
+
+  function attemptAgility(obj) {
+    const level = obj.level || 1;
+    if (getLevel("Agility") < level) {
+      addChat(`You need Agility level ${level} for that obstacle.`);
+      return;
+    }
+    if (obj.depletedUntil && obj.depletedUntil > state.time) {
+      addChat("Catch your breath before trying that again.");
+      return;
+    }
+    const chance = clamp(0.55 + (effectiveLevel("Agility") - level) * 0.028, 0.35, 0.94);
+    obj.depletedUntil = state.time + (obj.cooldown || 2.5);
+    if (random() > chance) {
+      const hit = obj.failDamage || 4;
+      state.player.hp = Math.max(1, state.player.hp - hit);
+      state.player.damageFlash = 0.35;
+      addFloatingText(state.player.x, state.player.y, `${hit}`, "#ff5858");
+      gainXp("Agility", Math.max(6, Math.floor((obj.xp || 32) * 0.22)));
+      addChat(`You slip on the ${obj.name.toLowerCase()}.`);
+      return;
+    }
+    state.stats.agilityObstacles += 1;
+    state.player.runEnergy = Math.min(100, state.player.runEnergy + (obj.restore || 7));
+    gainXp("Agility", obj.xp || 34);
+    addFloatingText(state.player.x, state.player.y, "+run", "#77ff77");
+    addChat(`You clear the ${obj.name.toLowerCase()} and feel lighter on your feet.`);
+    playSfx("loot");
   }
 
   function stealFromStall(obj) {
@@ -2874,6 +2948,38 @@
       ctx.fillStyle = "#8f6848";
       ctx.fillRect(screen.x + 20, screen.y - 34, 13, 11);
       drawText("STALL", screen.x, screen.y - 42, { color: "#ffe39b", outline: "#000", size: 10, align: "center" });
+    } else if (obj.type === "balance_log") {
+      ctx.save();
+      ctx.translate(screen.x, screen.y - 13);
+      ctx.rotate(-0.25);
+      drawBox(0, 0, 82, 12, "#7a4a27", "#251309");
+      ctx.restore();
+      drawText("AGI", screen.x, screen.y - 33, { color: "#a9ff8f", outline: "#000", size: 10, align: "center" });
+    } else if (obj.type === "rope_swing") {
+      ctx.strokeStyle = "#5c321e";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(screen.x - 26, screen.y - 8);
+      ctx.lineTo(screen.x - 26, screen.y - 58);
+      ctx.lineTo(screen.x + 26, screen.y - 58);
+      ctx.lineTo(screen.x + 26, screen.y - 8);
+      ctx.stroke();
+      ctx.strokeStyle = "#d7c08a";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(screen.x, screen.y - 58);
+      ctx.lineTo(screen.x + 7, screen.y - 19);
+      ctx.stroke();
+      drawBox(screen.x + 7, screen.y - 14, 22, 8, "#9b6335", "#28160b");
+    } else if (obj.type === "stepping_stones") {
+      for (let i = 0; i < 4; i += 1) {
+        ctx.fillStyle = i % 2 ? "#8b8b82" : "#a19d91";
+        ctx.beginPath();
+        ctx.ellipse(screen.x - 30 + i * 20, screen.y - 10 - (i % 2) * 4, 11, 7, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#393730";
+        ctx.stroke();
+      }
     } else if (obj.type === "dock") {
       drawBox(screen.x, screen.y - 8, 80, 16, "#8b5c32", "#3f2412");
     } else if (obj.type === "ditch") {
@@ -3468,7 +3574,8 @@
         const label = item.type.includes("tree") ? "Chop" : item.type.includes("rock") ? "Mine" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        options.push({ label: `${item.action === "steal" ? "Steal-from" : "Use"} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : "Use";
+        options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
     }
@@ -3508,6 +3615,7 @@
     if (kind === "enemy") return `A level ${item.level} ${item.name}. It looks grindable.`;
     if (kind === "npc") return `${item.name} seems ready to repeat the same line forever.`;
     if (kind === "resource") return `A ${resourceName(item).toLowerCase()} waiting to become experience.`;
+    if (kind === "scenery" && item.action === "agility") return `A very official-looking shortcut for Agility level ${item.level || 1}.`;
     return `You examine the ${item.name}.`;
   }
 
@@ -3627,6 +3735,9 @@
     state.modal.rects.push(close);
     drawButton(close, "x");
     drawText("Withdraw", x + 20, y + 62, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
+    const sortButton = { kind: "bankSort", x: x + 286, y: y + 48, w: 82, h: 26 };
+    state.modal.rects.push(sortButton);
+    drawButton(sortButton, "Sort");
     drawText("Deposit from inventory", x + 390, y + 62, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
     const cell = 46;
     for (let i = 0; i < 48; i += 1) {
@@ -4056,6 +4167,7 @@
     if (rect.kind === "lampSkill") return [`Rub lamp on ${rect.skill}`];
     if (rect.kind === "diaryOpen") return ["Boonshire Diary", `${diaryCompletedCount()}/${DIARY_TASKS.length}`];
     if (rect.kind === "diaryClaim") return ["Claim diary reward"];
+    if (rect.kind === "bankSort") return ["Sort bank", "Tidy and stack items"];
     return [];
   }
 
@@ -4078,7 +4190,10 @@
     if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.slayerType ? `Slayer: ${item.slayerType.replaceAll("_", " ")}` : "Attack"];
     if (picked.kind === "npc") return [item.name, item.role.replaceAll("_", " ")];
     if (picked.kind === "resource") return [resourceName(item)];
-    if (picked.kind === "scenery") return [item.name, item.action === "steal" ? "Steal-from" : "Use"];
+    if (picked.kind === "scenery") {
+      if (item.action === "agility") return [item.name, `Agility ${item.level || 1}`, `Run +${item.restore || 0}%`];
+      return [item.name, item.action === "steal" ? "Steal-from" : "Use"];
+    }
     return [];
   }
 
@@ -4126,6 +4241,7 @@
     } else if (rect.kind === "diaryClaim") claimDiaryReward();
     else if (rect.kind === "dialogueChoice") rect.choice.action();
     else if (rect.kind === "bankDepositAll") depositInventoryAll();
+    else if (rect.kind === "bankSort") sortBank();
     else if (rect.kind === "bankSlot") {
       if (state.player.bank[rect.slot]) moveItem(state.player.bank, state.player.inventory, rect.slot, ITEMS[state.player.bank[rect.slot].id].stackable ? state.player.bank[rect.slot].qty : 1);
     } else if (rect.kind === "shopBuy") {
@@ -4280,6 +4396,10 @@
       .filter((resource) => resource.depleted <= state.time && dist(resource, state.player) < 7)
       .slice(0, 12)
       .map((resource) => ({ id: resource.id, type: resource.type, x: resource.x, y: resource.y }));
+    const nearbyScenery = state.scenery
+      .filter((obj) => dist(obj, state.player) < 7)
+      .slice(0, 12)
+      .map((obj) => ({ id: obj.id, name: obj.name, type: obj.type, action: obj.action, level: obj.level || null, x: obj.x, y: obj.y }));
     const nearbyGroundItems = state.groundItems
       .filter((item) => dist(item, state.player) < 8)
       .map((item) => ({ id: item.id, itemId: item.itemId, name: ITEMS[item.itemId].name, qty: item.qty, x: Number(item.x.toFixed(1)), y: Number(item.y.toFixed(1)) }));
@@ -4318,6 +4438,7 @@
         ferriesTaken: state.stats.ferriesTaken,
         potionsDrunk: state.stats.potionsDrunk,
         stallsStolen: state.stats.stallsStolen,
+        agilityObstacles: state.stats.agilityObstacles,
         randomEventsCompleted: state.stats.randomEventsCompleted,
         slayerTasksCompleted: state.stats.slayerTasksCompleted,
       },
@@ -4328,6 +4449,7 @@
       nearbyEnemies,
       nearbyNpcs,
       nearbyResources,
+      nearbyScenery,
       nearbyGroundItems,
       modal: state.modal?.type || null,
       chat: state.chat.slice(-4).map((line) => line.text),

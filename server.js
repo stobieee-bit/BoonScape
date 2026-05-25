@@ -12,10 +12,16 @@ const mimeTypes = {
   ".json": "application/json; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".ico": "image/x-icon",
 };
 
 const server = http.createServer((req, res) => {
   const safeUrl = decodeURIComponent(req.url.split("?")[0]);
+  if (safeUrl === "/favicon.ico") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
   let filePath = path.join(root, safeUrl === "/" ? "index.html" : safeUrl);
   if (!filePath.startsWith(root)) {
     res.writeHead(403);
