@@ -1,0 +1,9 @@
+{
+  "name": "boonscape-2005",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A from-scratch early-2000s point-and-click fantasy MMO homage.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
