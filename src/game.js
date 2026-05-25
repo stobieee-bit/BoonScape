@@ -46,6 +46,7 @@
     "Crafting",
     "Thieving",
     "Agility",
+    "Fletching",
     "Slayer",
   ];
 
@@ -66,6 +67,7 @@
     Crafting: ["1 Cowhide work", "5 Leather body", "20 Clue casket handling"],
     Thieving: ["1 Cake stall", "5 Silk stall rolls", "15 Better odds", "25 Wilderness pockets someday"],
     Agility: ["1 Balance log", "5 Rope swing", "12 Stepping stones", "20 Faster run recovery", "35 Shortcut stamina"],
+    Fletching: ["1 Arrow shafts", "1 Bronze arrows", "5 Shortbows", "15 Oak shortbows", "25 Broad arrow wisdom"],
     Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "25 Moss brutes", "30 Deep wight", "38 Lesser demons"],
   };
 
@@ -129,6 +131,23 @@
       color: "#c58d47",
       icon: "ar",
       value: 2,
+    },
+    knife: { name: "Knife", color: "#d9d9d4", icon: "kn", value: 12 },
+    feather: { name: "Feather", stackable: true, color: "#f5f0dc", icon: "ft", value: 1 },
+    arrow_shaft: { name: "Arrow shaft", stackable: true, color: "#b47a3f", icon: "as", value: 1 },
+    bronze_arrowtips: { name: "Bronze arrowtips", stackable: true, color: "#c98548", icon: "bt", value: 2 },
+    bow_string: { name: "Bow string", color: "#e8dcc0", icon: "bs", value: 14 },
+    oak_shortbow: {
+      name: "Oak shortbow",
+      slot: "weapon",
+      color: "#b47a3f",
+      icon: "ob",
+      value: 135,
+      attack: 7,
+      strength: 6,
+      ranged: true,
+      range: 6,
+      requirements: { Ranged: 10, Fletching: 15 },
     },
     wooden_shield: {
       name: "Wooden shield",
@@ -284,6 +303,23 @@
       value: 16,
       food: 5,
     },
+    raw_chicken: {
+      name: "Raw chicken",
+      color: "#d69b85",
+      icon: "rc",
+      value: 7,
+      cookTo: "cooked_chicken",
+      burnTo: "burnt_meat",
+      cookingXp: 32,
+      burnLevel: 9,
+    },
+    cooked_chicken: {
+      name: "Cooked chicken",
+      color: "#d78c48",
+      icon: "cc",
+      value: 15,
+      food: 5,
+    },
     logs: { name: "Logs", color: "#8b5a32", icon: "lg", value: 5, log: true },
     oak_logs: { name: "Oak logs", color: "#a16b35", icon: "ok", value: 14, log: true },
     copper_ore: { name: "Copper ore", color: "#c26a35", icon: "co", value: 6, ore: true },
@@ -351,6 +387,11 @@
         state: "not-started",
         text: "Slayer Master Vann wants proof that the Deep wight can be put down.",
       },
+      fletchersOrder: {
+        title: "Fletcher's Order",
+        state: "not-started",
+        text: "Fletcher Rowan needs 15 bronze arrows for the town guard.",
+      },
     },
     stats: {
       bankUses: 0,
@@ -364,6 +405,9 @@
       firesLit: 0,
       fishCaught: 0,
       agilityObstacles: 0,
+      arrowsFletched: 0,
+      bowsFletched: 0,
+      chickensSlain: 0,
       goblinsSlain: 0,
       lesserDemonsSlain: 0,
       logsCut: 0,
@@ -424,6 +468,7 @@
     { id: "craft", label: "Craft leather", done: () => state.stats.cowhidesCrafted > 0 },
     { id: "thieving", label: "Steal from a market stall", done: () => state.stats.stallsStolen > 0 },
     { id: "agility", label: "Clear an agility obstacle", done: () => state.stats.agilityObstacles > 0 },
+    { id: "fletching", label: "Fletch bronze arrows", done: () => state.stats.arrowsFletched > 0 },
     { id: "slayer", label: "Finish a Slayer task", done: () => state.stats.slayerTasksCompleted > 0 },
     { id: "clue", label: "Solve a clue scroll", done: () => state.stats.cluesSolved > 0 },
     { id: "map", label: "Open the world map", done: () => state.stats.mapsOpened > 0 },
@@ -446,6 +491,7 @@
   ];
 
   const BESTIARY = [
+    { type: "chicken", name: "Chicken", level: 1, location: "Cow Field", drops: "feathers, raw chicken", tip: "classic arrow supply" },
     { type: "giant_rat", name: "Giant rat", level: 2, location: "Cow Field", drops: "bones, coins", tip: "safe novice task" },
     { type: "pasture_cow", name: "Pasture cow", level: 2, location: "Cow Field", drops: "cowhide, beef", tip: "crafting starter" },
     { type: "field_imp", name: "Field imp", level: 5, location: "West fields", drops: "runes, coins", tip: "weak to melee" },
@@ -808,6 +854,7 @@
     addScenery("well", "Town well", 40, 39, { action: "examine" });
     addScenery("quest_sign", "Quest noticeboard", 37, 38, { action: "quests" });
     addScenery("market_stall", "Market stall", 44, 36, { action: "steal", level: 1 });
+    addScenery("fletching_table", "Fletching table", 43, 34, { action: "fletch" });
     addScenery("balance_log", "Balance log", 31, 24, { action: "agility", level: 1, xp: 34, restore: 7, failDamage: 3, cooldown: 2.2 });
     addScenery("rope_swing", "Rope swing", 34, 23, { action: "agility", level: 5, xp: 58, restore: 10, failDamage: 5, cooldown: 3.0 });
     addScenery("stepping_stones", "Stepping stones", 29, 26, { action: "agility", level: 12, xp: 86, restore: 13, failDamage: 7, cooldown: 3.4 });
@@ -851,8 +898,23 @@
     addNpc("guide", "Town Guide", "guide", 39, 38);
     addNpc("fisher", "Old Ferryman", "fisher", 54, 61);
     addNpc("apothecary", "Apothecary Herwin", "apothecary", 47, 45);
+    addNpc("fletcher", "Fletcher Rowan", "fletcher", 43, 35);
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
+
+    for (let i = 0; i < 8; i += 1) {
+      addEnemy("chicken", "Chicken", 23 + (i % 4) * 2, 57 + Math.floor(i / 4) * 2, {
+        level: 1,
+        hp: 12,
+        attack: 1,
+        strength: 1,
+        defence: 0,
+        xp: 12,
+        aggro: 0.5,
+        respawn: 5,
+        slayerType: "chicken",
+      }, [["feather", 8 + (i % 3) * 2, 0.95], ["raw_chicken", 1, 0.8], ["bones", 1, 0.4]]);
+    }
 
     for (let i = 0; i < 9; i += 1) {
       addEnemy("giant_rat", "Giant rat", 24 + (i % 4) * 2, 48 + Math.floor(i / 4) * 2, {
@@ -1336,7 +1398,7 @@
               : roll > 0.32
                 ? ["law_rune", 2 + Math.floor(random() * 3)]
                 : roll > 0.16
-                  ? ["spinach_roll", 1]
+                  ? [choice(["spinach_roll", "bow_string"]), 1]
                   : ["coins", 80 + Math.floor(random() * 220)];
     addInventory(reward[0], reward[1]);
     gainXp("Crafting", 35);
@@ -1433,10 +1495,13 @@
   function initInventory() {
     addInventory("bread", 3, true);
     addInventory("coins", 45, true);
+    addInventory("knife", 1, true);
     addInventory("slayer_gem", 1, true);
     addInventory("air_rune", 20, true);
     addInventory("mind_rune", 10, true);
     addBank("logs", 8);
+    addBank("feather", 30);
+    addBank("bow_string", 2);
     addBank("copper_ore", 4);
     addBank("tin_ore", 4);
     addBank("cooked_shrimp", 4);
@@ -1522,7 +1587,7 @@
       state.player.pending = null;
       return;
     }
-    const range = pending.kind === "enemy" ? 1.55 : 1.75;
+    const range = pending.kind === "enemy" ? 1.55 : pending.kind === "scenery" ? target.interactRange || (target.width ? 2.8 : 2.05) : 1.75;
     if (dist(state.player, target) <= range) {
       state.player.pending = null;
       interactWith(pending.kind, target);
@@ -1759,6 +1824,7 @@
     enemy.respawnTimer = enemy.respawn;
     enemy.hp = 0;
     state.player.combatTarget = null;
+    state.stats.chickensSlain += enemy.type === "chicken" ? 1 : 0;
     state.stats.goblinsSlain += enemy.type === "field_imp" ? 1 : 0;
     state.stats.darkWizardsSlain += enemy.type === "dark_wizard" ? 1 : 0;
     state.stats.deepWightsSlain += enemy.type === "deep_wight" ? 1 : 0;
@@ -2030,6 +2096,8 @@
         { label: "Ask about boosts", action: () => addChat("Potion boosts decay slowly. Bring one before scary tasks.") },
         { label: "Close", action: () => closeModal() },
       ]);
+    } else if (npc.role === "fletcher") {
+      fletcherDialogue(npc);
     } else if (npc.role === "fisher") {
       openDialogue(npc.name, ["Small net for shrimp by the bridge. Higher levels can fish trout at the lake. I also row shortcuts for coin."], [
         { label: "To Lake Mollusk - 12gp", action: () => travelTo(63.5, 62.5, 12, "Lake Mollusk") },
@@ -2164,6 +2232,49 @@
     }
   }
 
+  function fletcherDialogue(npc) {
+    const quest = state.quests.fletchersOrder;
+    const supplyChoices = [
+      { label: "Trade fletching supplies", action: () => openFletcherShop() },
+      { label: "Ask about arrows", action: () => addChat("Use a knife on logs for shafts. Hammer bronze bars near the anvil for tips.") },
+      { label: "Close", action: () => closeModal() },
+    ];
+    if (quest.state === "not-started") {
+      openDialogue(npc.name, ["The guard ordered arrows, then forgot to pay me. Bring 15 bronze arrows and I will make it worth your while."], [
+        {
+          label: "Start Fletcher's Order",
+          action: () => {
+            quest.state = "started";
+            addChat("Quest started: Fletcher's Order.");
+            closeModal();
+          },
+        },
+        ...supplyChoices,
+      ]);
+    } else if (quest.state === "started") {
+      const ready = inventoryCount("bronze_arrow") >= 15;
+      openDialogue(npc.name, [ready ? "Those arrows are straight enough for guard work." : "Shafts, feathers, bronze tips. Fifteen arrows will do."], [
+        {
+          label: ready ? "Complete quest" : "Keep fletching",
+          action: () => {
+            if (ready) {
+              removeItem(state.player.inventory, "bronze_arrow", 15);
+              addInventory("coins", 160);
+              addInventory("bow_string", 2);
+              gainXp("Fletching", 220);
+              quest.state = "completed";
+              addChat("Quest complete: Fletcher's Order.");
+            }
+            closeModal();
+          },
+        },
+        ...supplyChoices.slice(0, 2),
+      ]);
+    } else {
+      openDialogue(npc.name, ["The guard now has arrows and still no aim. Such is public service."], supplyChoices);
+    }
+  }
+
   function slayerDialogue(npc) {
     const task = state.slayer.task;
     const wightQuest = state.quests.wightHunt;
@@ -2248,6 +2359,7 @@
     const combat = combatLevel();
     const pool = [
       { type: "giant_rat", label: "giant rats", amount: 6, minCombat: 1, xp: 30 },
+      { type: "chicken", label: "chickens", amount: 7, minCombat: 1, xp: 22 },
       { type: "pasture_cow", label: "pasture cows", amount: 6, minCombat: 1, xp: 28 },
       { type: "field_imp", label: "field imps", amount: 8, minCombat: 4, xp: 45 },
       { type: "grave_skeleton", label: "grave skeletons", amount: 8, minCombat: 10, xp: 75 },
@@ -2285,6 +2397,9 @@
         { id: "bronze_sword", price: 30 },
         { id: "shortbow", price: 58 },
         { id: "bronze_arrow", price: 22, qty: 25 },
+        { id: "knife", price: 13 },
+        { id: "feather", price: 15, qty: 30 },
+        { id: "bow_string", price: 24 },
         { id: "wooden_shield", price: 24 },
         { id: "leather_body", price: 80 },
         { id: "raw_shrimp", price: 5 },
@@ -2308,6 +2423,22 @@
         { id: "energy_potion", price: 36 },
         { id: "ranging_potion", price: 88 },
         { id: "magic_potion", price: 94 },
+      ],
+    };
+  }
+
+  function openFletcherShop() {
+    state.modal = {
+      type: "shop",
+      title: "Fletcher's Stall",
+      rects: [],
+      stock: [
+        { id: "knife", price: 12 },
+        { id: "feather", price: 14, qty: 30 },
+        { id: "bow_string", price: 24 },
+        { id: "bronze_arrowtips", price: 24, qty: 15 },
+        { id: "shortbow", price: 58 },
+        { id: "bronze_arrow", price: 20, qty: 25 },
       ],
     };
   }
@@ -2353,6 +2484,8 @@
       stealFromStall(obj);
     } else if (action === "agility") {
       attemptAgility(obj);
+    } else if (action === "fletch") {
+      fletchBest(true);
     } else if (action === "wildy") {
       addChat("The ditch marks Low Wilderness. Everything there hits harder.", "danger");
     } else if (action === "chaos_altar") {
@@ -2397,6 +2530,68 @@
     playSfx("loot");
   }
 
+  function fletchBest(fromTable = false) {
+    if (!fromTable && inventoryCount("knife") < 1) {
+      addChat("You need a knife to fletch.");
+      return;
+    }
+    if (inventoryCount("arrow_shaft") >= 15 && inventoryCount("feather") >= 15 && inventoryCount("bronze_arrowtips") >= 15) {
+      removeItem(state.player.inventory, "arrow_shaft", 15);
+      removeItem(state.player.inventory, "feather", 15);
+      removeItem(state.player.inventory, "bronze_arrowtips", 15);
+      addInventory("bronze_arrow", 15);
+      gainXp("Fletching", 42);
+      state.stats.arrowsFletched += 15;
+      addChat("You fletch a tidy batch of bronze arrows.", "loot");
+      return;
+    }
+    if (inventoryCount("oak_logs") > 0 && inventoryCount("bow_string") > 0 && getLevel("Fletching") >= 15) {
+      removeItem(state.player.inventory, "oak_logs", 1);
+      removeItem(state.player.inventory, "bow_string", 1);
+      addInventory("oak_shortbow", 1);
+      gainXp("Fletching", 92);
+      state.stats.bowsFletched += 1;
+      addChat("You carve and string an oak shortbow.", "loot");
+      return;
+    }
+    if (inventoryCount("logs") > 0 && inventoryCount("bow_string") > 0 && getLevel("Fletching") >= 5) {
+      removeItem(state.player.inventory, "logs", 1);
+      removeItem(state.player.inventory, "bow_string", 1);
+      addInventory("shortbow", 1);
+      gainXp("Fletching", 62);
+      state.stats.bowsFletched += 1;
+      addChat("You carve and string a shortbow.", "loot");
+      return;
+    }
+    if (inventoryCount("oak_logs") > 0 && getLevel("Fletching") >= 15) {
+      removeItem(state.player.inventory, "oak_logs", 1);
+      addInventory("arrow_shaft", 30);
+      gainXp("Fletching", 36);
+      addChat("You cut oak logs into arrow shafts.");
+      return;
+    }
+    if (inventoryCount("logs") > 0) {
+      removeItem(state.player.inventory, "logs", 1);
+      addInventory("arrow_shaft", 15);
+      gainXp("Fletching", 18);
+      addChat("You cut the logs into arrow shafts.");
+      return;
+    }
+    addChat("Bring logs, feathers, tips, or bow strings to fletch.");
+  }
+
+  function makeBronzeArrowtips(slot) {
+    const nearAnvil = state.scenery.some((obj) => obj.action === "smith" && dist(obj, state.player) < 3);
+    if (!nearAnvil) {
+      addChat("Use bronze bars near an anvil to make arrowtips.");
+      return;
+    }
+    removeSlot(state.player.inventory, slot, 1);
+    addInventory("bronze_arrowtips", 15);
+    gainXp("Smithing", 34);
+    addChat("You hammer the bronze bar into arrowtips.");
+  }
+
   function stealFromStall(obj) {
     const level = obj.level || 1;
     if (getLevel("Thieving") < level) {
@@ -2427,7 +2622,7 @@
   }
 
   function cookBestRawFish() {
-    const itemId = inventoryCount("raw_trout") > 0 ? "raw_trout" : inventoryCount("raw_beef") > 0 ? "raw_beef" : inventoryCount("raw_shrimp") > 0 ? "raw_shrimp" : null;
+    const itemId = inventoryCount("raw_trout") > 0 ? "raw_trout" : inventoryCount("raw_beef") > 0 ? "raw_beef" : inventoryCount("raw_chicken") > 0 ? "raw_chicken" : inventoryCount("raw_shrimp") > 0 ? "raw_shrimp" : null;
     if (!itemId) {
       addChat("You need raw food to cook.");
       return;
@@ -2513,6 +2708,10 @@
       gainXp("Prayer", item.id === "big_bones" ? 135 : 45);
       if (state.quests.restlessBones.state === "started") state.stats.bonesBuried += 1;
       addChat("You bury the bones.");
+    } else if (item.id === "knife") {
+      fletchBest();
+    } else if (item.id === "bronze_bar") {
+      makeBronzeArrowtips(slot);
     } else if (data.log) {
       lightFire(slot);
     } else if (item.id === "cowhide") {
@@ -2525,7 +2724,7 @@
         state.stats.cowhidesCrafted += 1;
         addChat("You stitch the cowhides into a leather body.");
       }
-    } else if (item.id === "raw_shrimp" || item.id === "raw_trout" || item.id === "raw_beef") {
+    } else if (item.id === "raw_shrimp" || item.id === "raw_trout" || item.id === "raw_beef" || item.id === "raw_chicken") {
       const nearRange = state.scenery.some((obj) => obj.action === "cook" && dist(obj, state.player) < 3);
       const nearFire = state.fires.some((fire) => dist(fire, state.player) < 2.5);
       if (nearRange || nearFire) cookBestRawFish();
@@ -2585,7 +2784,7 @@
     else if (roll > 0.92) addInventory("slayer_helm", 1);
     else if (roll > 0.76) addInventory("amulet_of_accuracy", 1);
     else if (roll > 0.62) addInventory("uncut_gem", 1);
-    else if (roll > 0.46) addInventory(choice(["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion"]), 1);
+    else if (roll > 0.46) addInventory(choice(["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "bow_string"]), 1);
     else addInventory("broad_arrow", 20 + Math.floor(random() * 25));
     gainXp("Crafting", 60);
     addChat(`You open the casket and find ${coins} coins and treasure.`, "loot");
@@ -2948,6 +3147,17 @@
       ctx.fillStyle = "#8f6848";
       ctx.fillRect(screen.x + 20, screen.y - 34, 13, 11);
       drawText("STALL", screen.x, screen.y - 42, { color: "#ffe39b", outline: "#000", size: 10, align: "center" });
+    } else if (obj.type === "fletching_table") {
+      drawBox(screen.x, screen.y - 16, 70, 24, "#7b4b2b", "#241209");
+      ctx.strokeStyle = "#e7dcc0";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(screen.x - 22, screen.y - 20);
+      ctx.lineTo(screen.x + 18, screen.y - 29);
+      ctx.moveTo(screen.x - 18, screen.y - 11);
+      ctx.lineTo(screen.x + 20, screen.y - 14);
+      ctx.stroke();
+      drawText("FLETCH", screen.x, screen.y - 38, { color: "#ffe39b", outline: "#000", size: 10, align: "center" });
     } else if (obj.type === "balance_log") {
       ctx.save();
       ctx.translate(screen.x, screen.y - 13);
@@ -3011,7 +3221,7 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : "#7f5231";
+    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
     if (npc.role === "slayer") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
@@ -3042,6 +3252,7 @@
     const screen = screenOf(enemy);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
     const colors = {
+      chicken: "#f5f0dc",
       giant_rat: "#67513b",
       pasture_cow: "#f0e8d2",
       field_imp: "#b64c48",
@@ -3055,7 +3266,29 @@
     };
     ctx.save();
     if (enemy.hitFlash > 0) ctx.globalAlpha = 0.5 + Math.sin(state.time * 80) * 0.25;
-    if (enemy.type === "giant_rat") {
+    if (enemy.type === "chicken") {
+      ctx.fillStyle = colors[enemy.type];
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 17, 14, 11, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#f0c94d";
+      ctx.beginPath();
+      ctx.moveTo(screen.x + 13, screen.y - 19);
+      ctx.lineTo(screen.x + 24, screen.y - 16);
+      ctx.lineTo(screen.x + 13, screen.y - 13);
+      ctx.fill();
+      ctx.fillStyle = "#d43a33";
+      ctx.beginPath();
+      ctx.arc(screen.x - 2, screen.y - 31, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#d0c2a4";
+      ctx.beginPath();
+      ctx.moveTo(screen.x - 6, screen.y - 7);
+      ctx.lineTo(screen.x - 9, screen.y + 2);
+      ctx.moveTo(screen.x + 5, screen.y - 7);
+      ctx.lineTo(screen.x + 7, screen.y + 2);
+      ctx.stroke();
+    } else if (enemy.type === "giant_rat") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
       ctx.ellipse(screen.x, screen.y - 15, 19, 11, 0, 0, Math.PI * 2);
@@ -3430,6 +3663,7 @@
       Hitpoints: "Hits",
       Woodcutting: "Woodcut",
       Firemaking: "Firemake",
+      Fletching: "Fletch",
     }[skill] || skill;
   }
 
@@ -3440,8 +3674,8 @@
       const color = quest.state === "completed" ? "#78e05f" : quest.state === "started" ? "#ffe46b" : "#d0c0a0";
       drawText(`${quest.title}`, x, yy, { color, outline: "#000", size: 12, align: "left" });
       drawText(`${quest.state}`, x + w, yy, { color, outline: "#000", size: 10, align: "right" });
-      wrapText(quest.text, x, yy + 14, w, 11, "#cdbb8a");
-      yy += 56;
+      drawText(fitLine(quest.text, w, 10), x, yy + 14, { color: "#cdbb8a", outline: "#000", size: 10, align: "left" });
+      yy += 42;
     }
     if (state.clue) {
       drawText("Active Clue", x, yy, { color: "#83efff", outline: "#000", size: 12, align: "left" });
@@ -3566,7 +3800,7 @@
           action: () => moveToTile(Math.floor(item.x), Math.floor(item.y), { kind: "groundItem", id: item.id }),
         });
       } else if (picked.kind === "npc") {
-        const primary = item.role === "banker" ? "Bank" : item.role === "shop" ? "Trade" : item.role === "slayer" ? "Talk-to / Assignment" : "Talk-to";
+        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" ? "Trade" : item.role === "slayer" ? "Talk-to / Assignment" : "Talk-to";
         options.push({ label: `${primary} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "npc", id: item.id }) });
       } else if (picked.kind === "enemy") {
         options.push({ label: `Attack ${item.name} (level ${item.level})`, action: () => approachOrAttackEnemy(item) });
@@ -3574,7 +3808,7 @@
         const label = item.type.includes("tree") ? "Chop" : item.type.includes("rock") ? "Mine" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : "Use";
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : "Use";
         options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
@@ -3616,6 +3850,7 @@
     if (kind === "npc") return `${item.name} seems ready to repeat the same line forever.`;
     if (kind === "resource") return `A ${resourceName(item).toLowerCase()} waiting to become experience.`;
     if (kind === "scenery" && item.action === "agility") return `A very official-looking shortcut for Agility level ${item.level || 1}.`;
+    if (kind === "scenery" && item.action === "fletch") return "A table covered in arrow shafts, curls of wood, and bad business margins.";
     return `You examine the ${item.name}.`;
   }
 
@@ -4014,14 +4249,18 @@
     const done = diaryCompletedCount();
     drawText("Boonshire Diary", x + 20, y + 30, { color: "#6feaff", outline: "#000", size: 20, align: "left" });
     drawText(`${done}/${DIARY_TASKS.length} tasks complete`, x + 20, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
+    const taskColW = (w - 56) / 2;
     DIARY_TASKS.forEach((task, i) => {
-      const rowY = y + 92 + i * 28;
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const rowX = x + 20 + col * (taskColW + 16);
+      const rowY = y + 92 + row * 32;
       ctx.fillStyle = i % 2 ? "#25180d" : "#2c1d10";
-      ctx.fillRect(x + 20, rowY - 14, w - 40, 24);
+      ctx.fillRect(rowX, rowY - 14, taskColW, 24);
       ctx.strokeStyle = "#4d3a20";
-      ctx.strokeRect(x + 20, rowY - 14, w - 40, 24);
-      drawText(task.done() ? "*" : "-", x + 34, rowY - 2, { color: task.done() ? "#78e05f" : "#a89468", outline: "#000", size: 12, align: "left" });
-      drawText(task.label, x + 58, rowY - 2, { color: task.done() ? "#ffe9a8" : "#cdbb8a", outline: "#000", size: 12, align: "left" });
+      ctx.strokeRect(rowX, rowY - 14, taskColW, 24);
+      drawText(task.done() ? "*" : "-", rowX + 12, rowY - 2, { color: task.done() ? "#78e05f" : "#a89468", outline: "#000", size: 11, align: "left" });
+      drawText(task.label, rowX + 30, rowY - 2, { color: task.done() ? "#ffe9a8" : "#cdbb8a", outline: "#000", size: 10, align: "left" });
     });
     if (done === DIARY_TASKS.length && !state.diaryRewardClaimed) {
       const claim = { kind: "diaryClaim", x: x + 154, y: y + h - 52, w: 212, h: 32 };
@@ -4035,6 +4274,14 @@
         align: "left",
       });
     }
+  }
+
+  function fitLine(text, maxWidth, size = 11) {
+    ctx.font = `${size}px Verdana, Tahoma, sans-serif`;
+    if (ctx.measureText(text).width <= maxWidth) return text;
+    let clipped = text;
+    while (clipped.length > 3 && ctx.measureText(`${clipped}...`).width > maxWidth) clipped = clipped.slice(0, -1);
+    return `${clipped.trimEnd()}...`;
   }
 
   function wrapText(text, x, y, maxWidth, lineHeight, color) {
@@ -4192,6 +4439,7 @@
     if (picked.kind === "resource") return [resourceName(item)];
     if (picked.kind === "scenery") {
       if (item.action === "agility") return [item.name, `Agility ${item.level || 1}`, `Run +${item.restore || 0}%`];
+      if (item.action === "fletch") return [item.name, "Fletch supplies"];
       return [item.name, item.action === "steal" ? "Steal-from" : "Use"];
     }
     return [];
@@ -4439,6 +4687,9 @@
         potionsDrunk: state.stats.potionsDrunk,
         stallsStolen: state.stats.stallsStolen,
         agilityObstacles: state.stats.agilityObstacles,
+        arrowsFletched: state.stats.arrowsFletched,
+        bowsFletched: state.stats.bowsFletched,
+        chickensSlain: state.stats.chickensSlain,
         randomEventsCompleted: state.stats.randomEventsCompleted,
         slayerTasksCompleted: state.stats.slayerTasksCompleted,
       },
