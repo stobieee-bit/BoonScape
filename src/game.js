@@ -47,6 +47,8 @@
     "Thieving",
     "Agility",
     "Fletching",
+    "Farming",
+    "Herblore",
     "Slayer",
   ];
 
@@ -68,6 +70,8 @@
     Thieving: ["1 Cake stall", "5 Silk stall rolls", "15 Better odds", "25 Wilderness pockets someday"],
     Agility: ["1 Balance log", "5 Rope swing", "12 Stepping stones", "20 Faster run recovery", "35 Shortcut stamina"],
     Fletching: ["1 Arrow shafts", "1 Bronze arrows", "5 Shortbows", "15 Oak shortbows", "25 Broad arrow wisdom"],
+    Farming: ["1 Potato patch", "5 Mirthleaf herbs", "10 Better yields", "20 Lower disease chance", "35 Farmhands nod politely"],
+    Herblore: ["1 Clean mirthleaf", "1 Mix attack potions", "8 Energy mixtures", "15 Stronger brews someday"],
     Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "25 Moss brutes", "30 Deep wight", "38 Lesser demons"],
   };
 
@@ -216,6 +220,14 @@
     ranging_potion: { name: "Ranging potion", color: "#5dbb62", icon: "rp", value: 70, boostSkill: "Ranged", boostFlat: 4, boostPct: 0.1 },
     magic_potion: { name: "Magic potion", color: "#57a9e8", icon: "mp", value: 74, boostSkill: "Magic", boostFlat: 4, boostPct: 0.08 },
     energy_potion: { name: "Energy potion", color: "#f0d85b", icon: "ep", value: 36, runRestore: 35 },
+    potato_seed: { name: "Potato seed", stackable: true, color: "#9f7a3f", icon: "ps", value: 3 },
+    mirthleaf_seed: { name: "Mirthleaf seed", stackable: true, color: "#6cbf5f", icon: "ms", value: 9 },
+    potato: { name: "Potato", color: "#cfa866", icon: "pt", value: 8, food: 3 },
+    grimy_mirthleaf: { name: "Grimy mirthleaf", color: "#5f8f46", icon: "gh", value: 18 },
+    clean_mirthleaf: { name: "Mirthleaf", color: "#7fd76b", icon: "mh", value: 28 },
+    vial_of_water: { name: "Vial of water", color: "#7fd7ff", icon: "vw", value: 8 },
+    empty_vial: { name: "Empty vial", color: "#cfdfff", icon: "ev", value: 4 },
+    compost: { name: "Compost", color: "#6a4a2d", icon: "cp", value: 10 },
     achievement_cape: {
       name: "Achievement cape",
       slot: "body",
@@ -392,6 +404,11 @@
         state: "not-started",
         text: "Fletcher Rowan needs 15 bronze arrows for the town guard.",
       },
+      gardenTrouble: {
+        title: "Garden Trouble",
+        state: "not-started",
+        text: "Gardener Bess wants a harvested crop and a homemade potion.",
+      },
     },
     stats: {
       bankUses: 0,
@@ -408,18 +425,28 @@
       arrowsFletched: 0,
       bowsFletched: 0,
       chickensSlain: 0,
+      cropsHarvested: 0,
+      farmingContractsCompleted: 0,
       goblinsSlain: 0,
+      herbsCleaned: 0,
+      herbsHarvested: 0,
       lesserDemonsSlain: 0,
       logsCut: 0,
       mapsOpened: 0,
       oresMined: 0,
       potionsDrunk: 0,
+      potionsMixed: 0,
       randomEventsCompleted: 0,
       slayerTasksCompleted: 0,
       stallsStolen: 0,
       visitedWilderness: false,
     },
     slayer: { task: null, streak: 0, points: 0 },
+    farmingContract: null,
+    farmingPatches: {
+      vegetable: { crop: null, plantedAt: 0, watered: false, diseased: false },
+      herb: { crop: null, plantedAt: 0, watered: false, diseased: false },
+    },
     player: {
       name: "Adventurer",
       x: 39,
@@ -469,6 +496,9 @@
     { id: "thieving", label: "Steal from a market stall", done: () => state.stats.stallsStolen > 0 },
     { id: "agility", label: "Clear an agility obstacle", done: () => state.stats.agilityObstacles > 0 },
     { id: "fletching", label: "Fletch bronze arrows", done: () => state.stats.arrowsFletched > 0 },
+    { id: "farming", label: "Harvest a farm patch", done: () => state.stats.cropsHarvested > 0 },
+    { id: "herblore", label: "Mix a potion", done: () => state.stats.potionsMixed > 0 },
+    { id: "contract", label: "Complete a farming contract", done: () => state.stats.farmingContractsCompleted > 0 },
     { id: "slayer", label: "Finish a Slayer task", done: () => state.stats.slayerTasksCompleted > 0 },
     { id: "clue", label: "Solve a clue scroll", done: () => state.stats.cluesSolved > 0 },
     { id: "map", label: "Open the world map", done: () => state.stats.mapsOpened > 0 },
@@ -484,6 +514,7 @@
     { id: "graveyard", label: "Old Graveyard", x: 55, y: 52, note: "skeletons and bones", color: "#e7dec4" },
     { id: "lake", label: "Lake Mollusk", x: 64, y: 64, note: "fish and ferry", color: "#7fd7ff" },
     { id: "agility", label: "Agility Yard", x: 31, y: 24, note: "obstacles and run training", color: "#9dff8a" },
+    { id: "farm", label: "Bess's Patches", x: 28, y: 44, note: "farming and herbs", color: "#b9e46a" },
     { id: "hollow", label: "Crawler Hollow", x: 68, y: 43, note: "crawlers and wight", color: "#a0a8ff" },
     { id: "mosswood", label: "Mosswood", x: 16, y: 18, note: "brutes and oaks", color: "#9bd36f" },
     { id: "wildy", label: "Low Wilderness", x: 11, y: 12, note: "chaos altar, danger", color: "#ff8e77" },
@@ -494,15 +525,49 @@
     { type: "chicken", name: "Chicken", level: 1, location: "Cow Field", drops: "feathers, raw chicken", tip: "classic arrow supply" },
     { type: "giant_rat", name: "Giant rat", level: 2, location: "Cow Field", drops: "bones, coins", tip: "safe novice task" },
     { type: "pasture_cow", name: "Pasture cow", level: 2, location: "Cow Field", drops: "cowhide, beef", tip: "crafting starter" },
-    { type: "field_imp", name: "Field imp", level: 5, location: "West fields", drops: "runes, coins", tip: "weak to melee" },
+    { type: "field_imp", name: "Field imp", level: 5, location: "West fields", drops: "runes, potato seeds", tip: "weak to melee" },
     { type: "grave_skeleton", name: "Grave skeleton", level: 12, location: "Old Graveyard", drops: "bones, iron sword", tip: "prayer fuel" },
     { type: "cave_crawler", name: "Cave crawler", level: 16, location: "Crawler Hollow", drops: "gems, coins", tip: "bring food" },
     { type: "dark_wizard", name: "Dark wizard", level: 20, location: "Low Wilderness", drops: "chaos, hats, staff", tip: "keep prayer ready" },
-    { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "coins, steel", tip: "slow but heavy" },
+    { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
     { type: "black_knight", name: "Black knight", level: 33, location: "Low Wilderness", drops: "black helm, legs", tip: "armoured target" },
     { type: "deep_wight", name: "Deep wight", level: 34, location: "Crawler Hollow", drops: "clues, amulet", tip: "Slayer quest prey" },
     { type: "lesser_demon", name: "Lesser demon", level: 42, location: "Low Wilderness", drops: "rune scimitar", tip: "endgame task" },
   ];
+
+  const FARM_CROPS = {
+    potato: {
+      name: "Potatoes",
+      seed: "potato_seed",
+      product: "potato",
+      patch: "vegetable",
+      level: 1,
+      plantXp: 8,
+      harvestXp: 42,
+      growTime: 22,
+      minYield: 3,
+      maxYield: 6,
+    },
+    mirthleaf: {
+      name: "Mirthleaf",
+      seed: "mirthleaf_seed",
+      product: "grimy_mirthleaf",
+      patch: "herb",
+      level: 5,
+      plantXp: 14,
+      harvestXp: 72,
+      growTime: 32,
+      minYield: 2,
+      maxYield: 4,
+    },
+  };
+
+  function defaultFarmingPatches() {
+    return {
+      vegetable: { crop: null, plantedAt: 0, watered: false, diseased: false },
+      herb: { crop: null, plantedAt: 0, watered: false, diseased: false },
+    };
+  }
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -837,6 +902,7 @@
     setRect(55, 34, 9, 8, "town");
     setRect(36, 36, 8, 5, "town");
     setRect(50, 27, 7, 5, "town");
+    setRect(24, 41, 8, 7, "field");
     setRect(27, 21, 10, 7, "dirt");
     setRect(5, 8, 19, 20, "dirt");
     setRect(8, 10, 6, 5, "stone");
@@ -851,10 +917,15 @@
     addScenery("anvil", "Anvil", 55, 30, { action: "smith" });
     addScenery("slayer_board", "Slayer board", 59, 37, { action: "slayer" });
     addScenery("cave", "Damp cave entrance", 68, 43, { action: "cave" });
-    addScenery("well", "Town well", 40, 39, { action: "examine" });
+    addScenery("well", "Town well", 40, 39, { action: "water" });
     addScenery("quest_sign", "Quest noticeboard", 37, 38, { action: "quests" });
     addScenery("market_stall", "Market stall", 44, 36, { action: "steal", level: 1 });
     addScenery("fletching_table", "Fletching table", 43, 34, { action: "fletch" });
+    addScenery("vegetable_patch", "Vegetable patch", 26, 44, { action: "farm", patchId: "vegetable", interactRange: 2.4 });
+    addScenery("herb_patch", "Herb patch", 29, 44, { action: "farm", patchId: "herb", interactRange: 2.4 });
+    addScenery("compost_bin", "Compost bin", 24, 42, { action: "compost", interactRange: 2.3 });
+    addScenery("scarecrow", "Suspicious scarecrow", 31, 42, { action: "examine" });
+    addScenery("seed_sacks", "Seed sacks", 27, 41, { action: "examine" });
     addScenery("balance_log", "Balance log", 31, 24, { action: "agility", level: 1, xp: 34, restore: 7, failDamage: 3, cooldown: 2.2 });
     addScenery("rope_swing", "Rope swing", 34, 23, { action: "agility", level: 5, xp: 58, restore: 10, failDamage: 5, cooldown: 3.0 });
     addScenery("stepping_stones", "Stepping stones", 29, 26, { action: "agility", level: 12, xp: 86, restore: 13, failDamage: 7, cooldown: 3.4 });
@@ -899,6 +970,7 @@
     addNpc("fisher", "Old Ferryman", "fisher", 54, 61);
     addNpc("apothecary", "Apothecary Herwin", "apothecary", 47, 45);
     addNpc("fletcher", "Fletcher Rowan", "fletcher", 43, 35);
+    addNpc("gardener", "Gardener Bess", "gardener", 27, 42);
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
 
@@ -917,14 +989,14 @@
     }
 
     for (let i = 0; i < 9; i += 1) {
-      addEnemy("giant_rat", "Giant rat", 24 + (i % 4) * 2, 48 + Math.floor(i / 4) * 2, {
+      addEnemy("giant_rat", "Giant rat", 18 + (i % 3) * 2, 49 + Math.floor(i / 3) * 2, {
         level: 2,
         hp: 18,
         attack: 2,
         strength: 2,
         defence: 1,
         xp: 18,
-        aggro: 2.5,
+        aggro: 0.7,
         slayerType: "giant_rat",
       }, [["bones", 1, 0.6], ["coins", 3, 0.35]]);
     }
@@ -950,7 +1022,7 @@
         xp: 30,
         aggro: 3,
         slayerType: "field_imp",
-      }, [["coins", 8, 0.5], ["mind_rune", 4, 0.25], ["air_rune", 6, 0.25]]);
+      }, [["coins", 8, 0.5], ["mind_rune", 4, 0.25], ["air_rune", 6, 0.25], ["potato_seed", 2, 0.18]]);
     }
     for (let i = 0; i < 7; i += 1) {
       addEnemy("dark_wizard", "Dark wizard", 8 + (i % 3) * 3, 18 + Math.floor(i / 3) * 3, {
@@ -1036,7 +1108,7 @@
         aggro: 5,
         respawn: 14,
         slayerType: "moss_brute",
-      }, [["bones", 1, 0.9], ["coins", 55, 0.55], ["strength_potion", 1, 0.12], ["steel_sword", 1, 0.04]]);
+      }, [["bones", 1, 0.9], ["coins", 55, 0.55], ["mirthleaf_seed", 2, 0.18], ["strength_potion", 1, 0.12], ["steel_sword", 1, 0.04]]);
     }
   }
 
@@ -1188,9 +1260,27 @@
     while (container.length < size) container.push(null);
   }
 
+  function normalizeFarmingPatches() {
+    const defaults = defaultFarmingPatches();
+    const current = state.farmingPatches || {};
+    state.farmingPatches = {};
+    for (const [patchId, patch] of Object.entries(defaults)) {
+      const saved = current[patchId] || {};
+      state.farmingPatches[patchId] = {
+        ...patch,
+        ...saved,
+        crop: FARM_CROPS[saved.crop] ? saved.crop : null,
+        plantedAt: Number.isFinite(saved.plantedAt) ? saved.plantedAt : 0,
+        watered: Boolean(saved.watered),
+        diseased: Boolean(saved.diseased),
+      };
+    }
+  }
+
   function normalizePlayerState() {
     ensureSlots(state.player.inventory, 28);
     ensureSlots(state.player.bank, 48);
+    normalizeFarmingPatches();
     state.player.boosts = state.player.boosts || {};
     state.player.boostDecay = state.player.boostDecay || 60;
     for (const skill of skillNames) {
@@ -1499,9 +1589,16 @@
     addInventory("slayer_gem", 1, true);
     addInventory("air_rune", 20, true);
     addInventory("mind_rune", 10, true);
+    addInventory("potato_seed", 2, true);
+    addInventory("empty_vial", 1, true);
+    addInventory("grimy_mirthleaf", 1, true);
     addBank("logs", 8);
     addBank("feather", 30);
     addBank("bow_string", 2);
+    addBank("potato_seed", 4);
+    addBank("mirthleaf_seed", 3);
+    addBank("empty_vial", 3);
+    addBank("compost", 1);
     addBank("copper_ore", 4);
     addBank("tin_ore", 4);
     addBank("cooked_shrimp", 4);
@@ -1587,7 +1684,7 @@
       state.player.pending = null;
       return;
     }
-    const range = pending.kind === "enemy" ? 1.55 : pending.kind === "scenery" ? target.interactRange || (target.width ? 2.8 : 2.05) : 1.75;
+    const range = pending.kind === "enemy" ? 1.55 : pending.kind === "scenery" ? target.interactRange || (target.width ? 2.8 : 2.05) : pending.kind === "npc" ? 2.35 : 1.75;
     if (dist(state.player, target) <= range) {
       state.player.pending = null;
       interactWith(pending.kind, target);
@@ -1648,6 +1745,7 @@
     if (Math.hypot(x - 62, y - 18) < 12) return "Greyrock Mine";
     if (Math.hypot(x - 31, y - 24) < 7) return "Agility Yard";
     if (Math.hypot(x - 55, y - 52) < 12) return "Old Graveyard";
+    if (Math.hypot(x - 28, y - 44) < 7) return "Bess's Patches";
     if (Math.hypot(x - 23, y - 53) < 9) return "Cow Field";
     if (x > 30 && x < 56 && y > 27 && y < 48) return "Boonshire";
     if (Math.hypot(x - 64, y - 64) < 11) return "Lake Mollusk";
@@ -1939,6 +2037,8 @@
           guide: ["Roads are safer. Mostly."],
           fisher: ["The trout know your name."],
           apothecary: ["Freshly labelled. Mostly.", "Drink responsibly, then irresponsibly."],
+          fletcher: ["Straight shafts, straight profit."],
+          gardener: ["Water once. Wait forever.", "Compost cures many sins."],
           guard: ["Keep the peace."],
         };
         addBark(npc, choice(lines[npc.role] || ["Lovely weather."]));
@@ -2098,6 +2198,8 @@
       ]);
     } else if (npc.role === "fletcher") {
       fletcherDialogue(npc);
+    } else if (npc.role === "gardener") {
+      gardenerDialogue(npc);
     } else if (npc.role === "fisher") {
       openDialogue(npc.name, ["Small net for shrimp by the bridge. Higher levels can fish trout at the lake. I also row shortcuts for coin."], [
         { label: "To Lake Mollusk - 12gp", action: () => travelTo(63.5, 62.5, 12, "Lake Mollusk") },
@@ -2116,6 +2218,82 @@
     } else {
       openDialogue(npc.name, ["Stay on the roads and keep an eye on your Hitpoints."], [{ label: "Close", action: () => closeModal() }]);
     }
+  }
+
+  function gardenerDialogue(npc) {
+    const quest = state.quests.gardenTrouble;
+    const supplyChoices = [
+      { label: state.farmingContract ? "Deliver farming contract" : "Ask for farming contract", action: () => handleFarmingContract() },
+      { label: "Trade gardening supplies", action: () => openGardenerShop() },
+      { label: "Ask about patches", action: () => addChat("Bess says: plant seeds, water once, wait, then harvest. Compost cures disease.") },
+      { label: "Close", action: () => closeModal() },
+    ];
+    if (quest.state === "not-started") {
+      openDialogue(npc.name, ["My patches are cursed by neglect. Harvest any crop and mix your own potion so I know you can follow instructions."], [
+        {
+          label: "Start Garden Trouble",
+          action: () => {
+            quest.state = "started";
+            addChat("Quest started: Garden Trouble.");
+            closeModal();
+          },
+        },
+        ...supplyChoices,
+      ]);
+    } else if (quest.state === "started") {
+      const ready = state.stats.cropsHarvested > 0 && state.stats.potionsMixed > 0;
+      openDialogue(npc.name, [
+        ready ? "You smell like earth and bottled ambition. Perfect." : `Harvested crops: ${state.stats.cropsHarvested}. Potions mixed: ${state.stats.potionsMixed}.`,
+      ], [
+        {
+          label: ready ? "Complete quest" : "Keep gardening",
+          action: () => {
+            if (ready) {
+              quest.state = "completed";
+              addInventory("coins", 180);
+              addInventory("mirthleaf_seed", 3);
+              addInventory("compost", 2);
+              gainXp("Farming", 180);
+              gainXp("Herblore", 120);
+              addChat("Quest complete: Garden Trouble.");
+            }
+            closeModal();
+          },
+        },
+        ...supplyChoices.slice(0, 3),
+      ]);
+    } else {
+      openDialogue(npc.name, ["The patches are still needy, but at least now they respect you."], supplyChoices);
+    }
+  }
+
+  function handleFarmingContract() {
+    if (!state.farmingContract) {
+      const canHerb = getLevel("Farming") >= FARM_CROPS.mirthleaf.level;
+      const cropId = canHerb && random() > 0.45 ? "mirthleaf" : "potato";
+      const crop = FARM_CROPS[cropId];
+      const amount = cropId === "mirthleaf" ? 2 + Math.floor(random() * 3) : 4 + Math.floor(random() * 4);
+      state.farmingContract = { crop: cropId, product: crop.product, amount, label: ITEMS[crop.product].name };
+      addChat(`Bess contract: bring ${formatItem(crop.product, amount)}.`);
+      closeModal();
+      return;
+    }
+    const contract = state.farmingContract;
+    if (inventoryCount(contract.product) < contract.amount) {
+      addChat(`Farming contract: bring ${formatItem(contract.product, contract.amount)}.`);
+      closeModal();
+      return;
+    }
+    removeItem(state.player.inventory, contract.product, contract.amount);
+    const herbContract = contract.crop === "mirthleaf";
+    addInventory("coins", herbContract ? 95 : 45);
+    addInventory(herbContract ? "mirthleaf_seed" : "potato_seed", herbContract ? 2 : 4);
+    if (random() > 0.45) addInventory("compost", 1);
+    gainXp("Farming", herbContract ? 90 : 45);
+    state.stats.farmingContractsCompleted += 1;
+    state.farmingContract = null;
+    addChat("Farming contract complete.", "loot");
+    closeModal();
   }
 
   function cookDialogue(npc) {
@@ -2423,6 +2601,7 @@
         { id: "energy_potion", price: 36 },
         { id: "ranging_potion", price: 88 },
         { id: "magic_potion", price: 94 },
+        { id: "empty_vial", price: 12, qty: 2 },
       ],
     };
   }
@@ -2439,6 +2618,22 @@
         { id: "bronze_arrowtips", price: 24, qty: 15 },
         { id: "shortbow", price: 58 },
         { id: "bronze_arrow", price: 20, qty: 25 },
+      ],
+    };
+  }
+
+  function openGardenerShop() {
+    state.modal = {
+      type: "shop",
+      title: "Bess's Barrow",
+      rects: [],
+      stock: [
+        { id: "potato_seed", price: 12, qty: 4 },
+        { id: "mirthleaf_seed", price: 28, qty: 3 },
+        { id: "compost", price: 18, qty: 2 },
+        { id: "empty_vial", price: 12, qty: 3 },
+        { id: "vial_of_water", price: 16, qty: 2 },
+        { id: "potato", price: 10, qty: 2 },
       ],
     };
   }
@@ -2486,6 +2681,12 @@
       attemptAgility(obj);
     } else if (action === "fletch") {
       fletchBest(true);
+    } else if (action === "farm") {
+      useFarmPatch(obj);
+    } else if (action === "compost") {
+      useCompostBin();
+    } else if (action === "water") {
+      fillEmptyVial();
     } else if (action === "wildy") {
       addChat("The ditch marks Low Wilderness. Everything there hits harder.", "danger");
     } else if (action === "chaos_altar") {
@@ -2499,6 +2700,169 @@
     return state.resources
       .filter((r) => r.type === type)
       .sort((a, b) => dist(a, state.player) - dist(b, state.player))[0];
+  }
+
+  function cropAge(patch) {
+    return Math.max(0, state.time - (patch.plantedAt || 0));
+  }
+
+  function cropProgress(patch) {
+    const crop = FARM_CROPS[patch.crop];
+    if (!crop) return 0;
+    return clamp(cropAge(patch) / crop.growTime, 0, 1);
+  }
+
+  function cropReady(patch) {
+    const crop = FARM_CROPS[patch.crop];
+    return Boolean(crop && cropAge(patch) >= crop.growTime);
+  }
+
+  function farmPatchStatus(patchId) {
+    const patch = state.farmingPatches?.[patchId];
+    if (!patch?.crop) return "empty";
+    const crop = FARM_CROPS[patch.crop];
+    if (patch.diseased) return `${crop.name} diseased`;
+    if (cropReady(patch)) return `${crop.name} ready`;
+    if (!patch.watered) return `${crop.name} dry`;
+    const pct = Math.floor(cropProgress(patch) * 100);
+    return `${crop.name} ${pct}%`;
+  }
+
+  function farmPatchLines(obj) {
+    const patch = state.farmingPatches?.[obj.patchId];
+    if (!patch?.crop) return [obj.name, obj.patchId === "herb" ? "Empty herb patch" : "Empty vegetable patch"];
+    const crop = FARM_CROPS[patch.crop];
+    const remaining = Math.max(0, Math.ceil(crop.growTime - cropAge(patch)));
+    if (patch.diseased) return [obj.name, `${crop.name} diseased`, "Use compost"];
+    if (cropReady(patch)) return [obj.name, `${crop.name} ready`, "Harvest"];
+    return [obj.name, patch.watered ? `${crop.name}: ${remaining}s` : `${crop.name}: dry`, patch.watered ? "Growing" : "Water"];
+  }
+
+  function useFarmPatch(obj) {
+    normalizeFarmingPatches();
+    const patchId = obj.patchId;
+    const patch = state.farmingPatches[patchId];
+    if (!patch) return;
+    if (!patch.crop) {
+      const cropId = patchId === "herb" ? "mirthleaf" : "potato";
+      const crop = FARM_CROPS[cropId];
+      if (getLevel("Farming") < crop.level) {
+        addChat(`You need Farming level ${crop.level} to plant ${crop.name.toLowerCase()}.`);
+        return;
+      }
+      if (inventoryCount(crop.seed) < 1) {
+        addChat(`You need ${ITEMS[crop.seed].name.toLowerCase()} for this patch.`);
+        return;
+      }
+      removeItem(state.player.inventory, crop.seed, 1);
+      Object.assign(patch, { crop: cropId, plantedAt: state.time, watered: false, diseased: false });
+      gainXp("Farming", crop.plantXp);
+      addChat(`You plant ${ITEMS[crop.seed].name.toLowerCase()} in the ${obj.name.toLowerCase()}.`);
+      return;
+    }
+
+    const crop = FARM_CROPS[patch.crop];
+    const diseaseChance = clamp(0.36 - effectiveLevel("Farming") * 0.012, 0.08, 0.34);
+    if (!patch.watered && !patch.diseased && cropAge(patch) > crop.growTime * 0.55 && random() < diseaseChance) {
+      patch.diseased = true;
+      addChat(`${crop.name} look diseased. Compost should save them.`, "danger");
+      return;
+    }
+    if (patch.diseased) {
+      if (inventoryCount("compost") < 1) {
+        addChat("The patch is diseased. Bring compost.");
+        return;
+      }
+      removeItem(state.player.inventory, "compost", 1);
+      patch.diseased = false;
+      patch.watered = true;
+      gainXp("Farming", 10);
+      addChat("You work compost into the patch and save the crop.");
+      return;
+    }
+    if (!cropReady(patch)) {
+      if (!patch.watered) {
+        patch.watered = true;
+        gainXp("Farming", 5);
+        addChat(`You water the ${crop.name.toLowerCase()}.`);
+      } else {
+        const remaining = Math.max(1, Math.ceil(crop.growTime - cropAge(patch)));
+        addChat(`The ${crop.name.toLowerCase()} need about ${remaining} more seconds.`);
+      }
+      return;
+    }
+    const levelYield = Math.floor(effectiveLevel("Farming") / 18);
+    const waterYield = patch.watered ? 1 : 0;
+    const yieldQty = crop.minYield + Math.floor(random() * (crop.maxYield - crop.minYield + 1)) + levelYield + waterYield;
+    if (!addInventory(crop.product, yieldQty, true)) return;
+    gainXp("Farming", crop.harvestXp);
+    state.stats.cropsHarvested += 1;
+    if (patchId === "herb") state.stats.herbsHarvested += yieldQty;
+    Object.assign(patch, { crop: null, plantedAt: 0, watered: false, diseased: false });
+    addChat(`You harvest ${formatItem(crop.product, yieldQty)}.`, "loot");
+    playSfx("loot");
+  }
+
+  function useCompostBin() {
+    if (inventoryCount("potato") < 1) {
+      addChat("The compost bin wants spare potatoes.");
+      return;
+    }
+    removeItem(state.player.inventory, "potato", 1);
+    addInventory("compost", 1);
+    gainXp("Farming", 8);
+    addChat("You turn a potato into questionably fresh compost.");
+  }
+
+  function fillEmptyVial() {
+    if (inventoryCount("empty_vial") < 1) {
+      addChat("You need an empty vial to fill from the well.");
+      return;
+    }
+    removeItem(state.player.inventory, "empty_vial", 1);
+    addInventory("vial_of_water", 1);
+    addChat("You fill a vial with water.");
+  }
+
+  function cleanHerb(slot) {
+    const item = state.player.inventory[slot];
+    if (!item || item.id !== "grimy_mirthleaf") return;
+    if (getLevel("Herblore") < 1) {
+      addChat("You need Herblore level 1 to clean that herb.");
+      return;
+    }
+    removeSlot(state.player.inventory, slot, 1);
+    addInventory("clean_mirthleaf", 1);
+    gainXp("Herblore", 12);
+    state.stats.herbsCleaned += 1;
+    addChat("You clean the grimy mirthleaf.");
+  }
+
+  function mixHerblorePotion() {
+    if (getLevel("Herblore") < 1) {
+      addChat("You need Herblore level 1 to mix this potion.");
+      return;
+    }
+    if (inventoryCount("clean_mirthleaf") < 1 || inventoryCount("vial_of_water") < 1) {
+      addChat("You need mirthleaf and a vial of water.");
+      return;
+    }
+    if (getLevel("Herblore") >= 8 && inventoryCount("potato") > 0) {
+      removeItem(state.player.inventory, "clean_mirthleaf", 1);
+      removeItem(state.player.inventory, "vial_of_water", 1);
+      removeItem(state.player.inventory, "potato", 1);
+      addInventory("energy_potion", 1);
+      gainXp("Herblore", 62);
+      state.stats.potionsMixed += 1;
+      addChat("You mix a lumpy energy potion.", "loot");
+      return;
+    }
+    removeItem(state.player.inventory, "clean_mirthleaf", 1);
+    removeItem(state.player.inventory, "vial_of_water", 1);
+    addInventory("attack_potion", 1);
+    gainXp("Herblore", 48);
+    state.stats.potionsMixed += 1;
+    addChat("You mix a murky attack potion.", "loot");
   }
 
   function attemptAgility(obj) {
@@ -2694,7 +3058,15 @@
       addChat(`You sell ${data.name} for ${value} coins.`);
       return;
     }
-    if (data.boostSkill || data.runRestore) {
+    if (item.id === "grimy_mirthleaf") {
+      cleanHerb(slot);
+    } else if (item.id === "clean_mirthleaf" || item.id === "vial_of_water") {
+      mixHerblorePotion();
+    } else if (item.id === "empty_vial") {
+      const nearWell = state.scenery.some((obj) => obj.action === "water" && dist(obj, state.player) < 3);
+      if (nearWell) fillEmptyVial();
+      else addChat("Use the empty vial at a well.");
+    } else if (data.boostSkill || data.runRestore) {
       drinkPotion(slot);
     } else if (data.food) {
       const before = state.player.hp;
@@ -3158,6 +3530,28 @@
       ctx.lineTo(screen.x + 20, screen.y - 14);
       ctx.stroke();
       drawText("FLETCH", screen.x, screen.y - 38, { color: "#ffe39b", outline: "#000", size: 10, align: "center" });
+    } else if (obj.type === "vegetable_patch" || obj.type === "herb_patch") {
+      drawFarmPatch(obj, screen);
+    } else if (obj.type === "compost_bin") {
+      drawBox(screen.x, screen.y - 15, 48, 30, "#6c4528", "#221108");
+      ctx.fillStyle = "#3a2a1a";
+      ctx.fillRect(screen.x - 20, screen.y - 28, 40, 8);
+      drawText("COMPOST", screen.x, screen.y - 39, { color: "#d9c47e", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "scarecrow") {
+      ctx.strokeStyle = "#5c321e";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(screen.x, screen.y - 8);
+      ctx.lineTo(screen.x, screen.y - 48);
+      ctx.moveTo(screen.x - 20, screen.y - 34);
+      ctx.lineTo(screen.x + 20, screen.y - 34);
+      ctx.stroke();
+      drawBox(screen.x, screen.y - 24, 24, 22, "#7b5b2f", "#2c190b");
+      drawText("?", screen.x, screen.y - 55, { color: "#ffe39b", outline: "#000", size: 12, align: "center" });
+    } else if (obj.type === "seed_sacks") {
+      drawBox(screen.x - 8, screen.y - 10, 24, 24, "#9c7a3c", "#3c2910");
+      drawBox(screen.x + 10, screen.y - 8, 26, 22, "#8a6935", "#3c2910");
+      drawText("SEED", screen.x, screen.y - 31, { color: "#f1d98b", outline: "#000", size: 9, align: "center" });
     } else if (obj.type === "balance_log") {
       ctx.save();
       ctx.translate(screen.x, screen.y - 13);
@@ -3210,6 +3604,48 @@
     }
   }
 
+  function drawFarmPatch(obj, screen) {
+    const patch = state.farmingPatches?.[obj.patchId] || {};
+    drawDiamond(screen.x, screen.y - 4, 86, 42, "#604326", "#211307");
+    drawDiamond(screen.x, screen.y - 7, 70, 32, patch.watered ? "#4c3d26" : "#795536", "#2b1a0f");
+    for (let i = 0; i < 5; i += 1) {
+      const ox = -24 + i * 12;
+      ctx.strokeStyle = "rgba(33,19,9,0.5)";
+      ctx.beginPath();
+      ctx.moveTo(screen.x + ox - 8, screen.y - 7);
+      ctx.lineTo(screen.x + ox + 8, screen.y - 7);
+      ctx.stroke();
+    }
+    if (!patch.crop) {
+      drawText(obj.patchId === "herb" ? "HERB" : "PATCH", screen.x, screen.y - 28, { color: "#d9c47e", outline: "#000", size: 9, align: "center" });
+      return;
+    }
+    const progress = cropProgress(patch);
+    const crop = FARM_CROPS[patch.crop];
+    const sproutCount = patch.crop === "mirthleaf" ? 4 : 5;
+    const plantColor = patch.diseased ? "#8b6b35" : patch.crop === "mirthleaf" ? "#69ce63" : "#8bd15a";
+    for (let i = 0; i < sproutCount; i += 1) {
+      const ox = -24 + i * (48 / Math.max(1, sproutCount - 1));
+      const height = 7 + progress * (patch.crop === "mirthleaf" ? 22 : 15) + (i % 2) * 2;
+      ctx.strokeStyle = plantColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(screen.x + ox, screen.y - 11);
+      ctx.lineTo(screen.x + ox, screen.y - 11 - height);
+      ctx.stroke();
+      ctx.fillStyle = plantColor;
+      ctx.beginPath();
+      ctx.ellipse(screen.x + ox - 4, screen.y - 18 - height * 0.5, 5, 3, -0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(screen.x + ox + 4, screen.y - 22 - height * 0.45, 5, 3, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    if (cropReady(patch) && !patch.diseased) drawText("READY", screen.x, screen.y - 45, { color: "#eaff82", outline: "#000", size: 9, align: "center" });
+    else if (patch.diseased) drawText("SICK", screen.x, screen.y - 45, { color: "#ff9b64", outline: "#000", size: 9, align: "center" });
+    else drawText(crop.name.toUpperCase().slice(0, 10), screen.x, screen.y - 45, { color: "#c9ef9a", outline: "#000", size: 8, align: "center" });
+  }
+
   function drawBox(cx, cy, w, h, fill, stroke) {
     ctx.fillStyle = fill;
     ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
@@ -3221,10 +3657,11 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : "#7f5231";
+    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
     if (npc.role === "slayer") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
+    if (npc.role === "gardener") drawText("*", screen.x + 15, screen.y - 45, { color: "#d8ff77", outline: "#000", size: 15, align: "center" });
   }
 
   function drawBarks() {
@@ -3649,7 +4086,7 @@
       const level = getLevel(skill);
       const boost = state.player.boosts?.[skill] || 0;
       pushRect({ kind: "skillGuide", skill, x: sx - 2, y: sy - 10, w: colW - 6, h: 22 });
-      const color = skill === "Slayer" ? "#69e7ff" : "#ffe7a8";
+      const color = skill === "Slayer" ? "#69e7ff" : skill === "Farming" || skill === "Herblore" ? "#a9ff8f" : "#ffe7a8";
       drawText(skillShortName(skill), sx, sy, { color, outline: "#000", size: 10, align: "left" });
       drawText(boost ? `${level}+${boost}` : `${level}`, sx + colW - 36, sy, { color: boost ? "#77ff77" : "#ffffff", outline: "#000", size: 11, align: "right" });
       drawText(`${xpToNext(skill)}`, sx + colW - 4, sy, { color: "#cdbb8a", outline: "#000", size: 8, align: "right" });
@@ -3664,6 +4101,7 @@
       Woodcutting: "Woodcut",
       Firemaking: "Firemake",
       Fletching: "Fletch",
+      Herblore: "Herb",
     }[skill] || skill;
   }
 
@@ -3681,6 +4119,11 @@
       drawText("Active Clue", x, yy, { color: "#83efff", outline: "#000", size: 12, align: "left" });
       wrapText(state.clue.hint, x, yy + 14, w, 11, "#cdbb8a");
       yy += 48;
+    }
+    if (state.farmingContract) {
+      drawText("Farming Contract", x, yy, { color: "#a9ff8f", outline: "#000", size: 12, align: "left" });
+      drawText(`${state.farmingContract.amount} x ${state.farmingContract.label}`, x, yy + 14, { color: "#cdbb8a", outline: "#000", size: 10, align: "left" });
+      yy += 38;
     }
     const diaryY = Math.min(yy + 8, y + h - 156);
     const done = diaryCompletedCount();
@@ -3808,7 +4251,7 @@
         const label = item.type.includes("tree") ? "Chop" : item.type.includes("rock") ? "Mine" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : "Use";
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "examine" ? "Look-at" : "Use";
         options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
@@ -3851,6 +4294,11 @@
     if (kind === "resource") return `A ${resourceName(item).toLowerCase()} waiting to become experience.`;
     if (kind === "scenery" && item.action === "agility") return `A very official-looking shortcut for Agility level ${item.level || 1}.`;
     if (kind === "scenery" && item.action === "fletch") return "A table covered in arrow shafts, curls of wood, and bad business margins.";
+    if (kind === "scenery" && item.action === "farm") return `${item.name}: ${farmPatchStatus(item.patchId)}.`;
+    if (kind === "scenery" && item.action === "compost") return "A wooden bin where spare crops become useful dirt.";
+    if (kind === "scenery" && item.action === "water") return "A town well. Excellent for vials and rumours.";
+    if (kind === "scenery" && item.type === "scarecrow") return "It has the posture of a moderator and the wardrobe of a farmer.";
+    if (kind === "scenery" && item.type === "seed_sacks") return "Seed sacks stacked with absolute 2005 confidence.";
     return `You examine the ${item.name}.`;
   }
 
@@ -4333,7 +4781,7 @@
       if (d <= radius) candidates.push({ kind, item, d });
     };
     for (const item of state.groundItems) add("groundItem", item, 28);
-    for (const npc of state.npcs) add("npc", npc, 30);
+    for (const npc of state.npcs) add("npc", npc, 40);
     for (const enemy of state.enemies) if (enemy.hp > 0) add("enemy", enemy, 32);
     for (const resource of state.resources) if (resource.depleted <= state.time) add("resource", resource, resource.type.includes("tree") ? 34 : 28);
     for (const obj of state.scenery) add("scenery", obj, 36);
@@ -4440,6 +4888,10 @@
     if (picked.kind === "scenery") {
       if (item.action === "agility") return [item.name, `Agility ${item.level || 1}`, `Run +${item.restore || 0}%`];
       if (item.action === "fletch") return [item.name, "Fletch supplies"];
+      if (item.action === "farm") return farmPatchLines(item);
+      if (item.action === "compost") return [item.name, "Turns potatoes into compost"];
+      if (item.action === "water") return [item.name, "Fill empty vials"];
+      if (item.action === "examine") return [item.name, "Examine"];
       return [item.name, item.action === "steal" ? "Steal-from" : "Use"];
     }
     return [];
@@ -4596,11 +5048,15 @@
       quests: state.quests,
       stats: state.stats,
       slayer: state.slayer,
+      farmingContract: state.farmingContract,
       clue: state.clue,
       nextRandomEvent: state.nextRandomEvent,
       collection: state.collection,
       diaryRewardClaimed: state.diaryRewardClaimed,
       groundItems: state.groundItems,
+      farmingPatches: state.farmingPatches,
+      farmingSavedAtTime: state.time,
+      farmingSavedAtWall: Date.now(),
     };
     localStorage.setItem("boonscape-save", JSON.stringify(payload));
     addChat("Game saved.");
@@ -4619,12 +5075,22 @@
       state.quests = { ...state.quests, ...(payload.quests || {}) };
       state.stats = { ...state.stats, ...(payload.stats || {}) };
       state.slayer = payload.slayer || state.slayer;
+      state.farmingContract = payload.farmingContract || null;
       state.clue = payload.clue || null;
       state.randomEvent = null;
       state.nextRandomEvent = payload.nextRandomEvent || state.time + 95;
       state.collection = payload.collection || {};
       state.diaryRewardClaimed = Boolean(payload.diaryRewardClaimed);
       state.groundItems = payload.groundItems || [];
+      state.farmingPatches = payload.farmingPatches || state.farmingPatches;
+      normalizeFarmingPatches();
+      const savedAtTime = Number.isFinite(payload.farmingSavedAtTime) ? payload.farmingSavedAtTime : state.time;
+      const offlineSeconds = Number.isFinite(payload.farmingSavedAtWall) ? Math.min(600, Math.max(0, (Date.now() - payload.farmingSavedAtWall) / 1000)) : 0;
+      for (const patch of Object.values(state.farmingPatches)) {
+        if (!patch.crop) continue;
+        const savedAge = Math.max(0, savedAtTime - patch.plantedAt);
+        patch.plantedAt = state.time - savedAge - offlineSeconds;
+      }
       state.player.prayerPoints = Math.min(state.player.prayerPoints ?? maxPrayer(), maxPrayer());
       state.player.runEnergy = clamp(state.player.runEnergy ?? 100, 0, 100);
       addChat("Game loaded.");
@@ -4647,7 +5113,16 @@
     const nearbyScenery = state.scenery
       .filter((obj) => dist(obj, state.player) < 7)
       .slice(0, 12)
-      .map((obj) => ({ id: obj.id, name: obj.name, type: obj.type, action: obj.action, level: obj.level || null, x: obj.x, y: obj.y }));
+      .map((obj) => ({
+        id: obj.id,
+        name: obj.name,
+        type: obj.type,
+        action: obj.action,
+        level: obj.level || null,
+        patch: obj.patchId ? farmPatchStatus(obj.patchId) : null,
+        x: obj.x,
+        y: obj.y,
+      }));
     const nearbyGroundItems = state.groundItems
       .filter((item) => dist(item, state.player) < 8)
       .map((item) => ({ id: item.id, itemId: item.itemId, name: ITEMS[item.itemId].name, qty: item.qty, x: Number(item.x.toFixed(1)), y: Number(item.y.toFixed(1)) }));
@@ -4678,9 +5153,11 @@
       slayer: state.slayer.task
         ? { task: state.slayer.task.label, remaining: state.slayer.task.remaining, streak: state.slayer.streak, points: state.slayer.points }
         : { task: null, streak: state.slayer.streak, points: state.slayer.points },
+      farmingContract: state.farmingContract,
       clue: state.clue ? { hint: state.clue.hint, targetX: state.clue.x, targetY: state.clue.y } : null,
       diary: { completed: diaryCompletedCount(), total: DIARY_TASKS.length, rewardClaimed: state.diaryRewardClaimed },
       collection,
+      farmingPatches: Object.fromEntries(Object.entries(state.farmingPatches).map(([id, patch]) => [id, { crop: patch.crop, status: farmPatchStatus(id), watered: patch.watered, diseased: patch.diseased, progress: Number(cropProgress(patch).toFixed(2)) }])),
       stats: {
         mapsOpened: state.stats.mapsOpened,
         ferriesTaken: state.stats.ferriesTaken,
@@ -4689,6 +5166,11 @@
         agilityObstacles: state.stats.agilityObstacles,
         arrowsFletched: state.stats.arrowsFletched,
         bowsFletched: state.stats.bowsFletched,
+        cropsHarvested: state.stats.cropsHarvested,
+        farmingContractsCompleted: state.stats.farmingContractsCompleted,
+        herbsHarvested: state.stats.herbsHarvested,
+        herbsCleaned: state.stats.herbsCleaned,
+        potionsMixed: state.stats.potionsMixed,
         chickensSlain: state.stats.chickensSlain,
         randomEventsCompleted: state.stats.randomEventsCompleted,
         slayerTasksCompleted: state.stats.slayerTasksCompleted,
