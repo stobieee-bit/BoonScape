@@ -74,7 +74,7 @@
     Runecrafting: ["1 Air runes", "2 Mind runes", "15 Chaos runes", "25 Law runes", "35 Multiple rune whispers"],
     Farming: ["1 Potato patch", "5 Mirthleaf herbs", "10 Better yields", "20 Lower disease chance", "35 Farmhands nod politely"],
     Herblore: ["1 Clean mirthleaf", "1 Mix attack potions", "5 Antipoison", "8 Energy mixtures", "15 Stronger brews someday"],
-    Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "25 Moss brutes", "30 Deep wight", "38 Lesser demons"],
+    Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "20 Banshees need earmuffs", "30 Deep wight", "35 Specters need nose peg", "38 Lesser demons"],
   };
 
   const terrainColors = {
@@ -180,6 +180,7 @@
       defence: 4,
       requirements: { Defence: 5 },
     },
+    leather_gloves: { name: "Leather gloves", color: "#8a5a36", icon: "lg", value: 18 },
     slayer_helm: {
       name: "Slayer helm",
       slot: "helm",
@@ -190,7 +191,26 @@
       strength: 4,
       defence: 6,
       slayerBoost: true,
+      slayerProtectAll: true,
       requirements: { Defence: 10, Slayer: 15 },
+    },
+    earmuffs: {
+      name: "Earmuffs",
+      slot: "helm",
+      color: "#c8c5b5",
+      icon: "em",
+      value: 55,
+      defence: 1,
+      slayerProtection: "banshee",
+    },
+    nose_peg: {
+      name: "Nose peg",
+      slot: "helm",
+      color: "#d8ccb8",
+      icon: "np",
+      value: 75,
+      defence: 1,
+      slayerProtection: "specter",
     },
     amulet_of_accuracy: {
       name: "Amulet of accuracy",
@@ -247,6 +267,7 @@
     iron_platelegs: { name: "Iron platelegs", slot: "legs", color: "#aeb5b9", icon: "pl", value: 130, defence: 4, requirements: { Defence: 5 } },
     team_cape: { name: "Team cape", slot: "body", color: "#b63232", icon: "tc", value: 160, attack: 1, defence: 3 },
     spider_cape: { name: "Spider silk cape", slot: "body", color: "#dfe7d3", icon: "sp", value: 540, attack: 2, defence: 4, poisonResist: true, requirements: { Crafting: 12 } },
+    ghostly_robe: { name: "Ghostly robe", slot: "body", color: "#bcd6dc", icon: "gr", value: 680, attack: 2, defence: 6, magicBoost: true, requirements: { Defence: 15, Magic: 10 } },
     castle_ticket: { name: "Castle wars ticket", stackable: true, color: "#e0c45b", icon: "ct", value: 12 },
     castle_bandage: { name: "Castle bandage", color: "#f2e7c7", icon: "cb", value: 8, food: 9 },
     decorative_helm: { name: "Decorative helm", slot: "helm", color: "#d8d0a8", icon: "dh", value: 520, defence: 4, requirements: { Defence: 10 } },
@@ -287,6 +308,7 @@
       requirements: { Magic: 25 },
     },
     ancient_page: { name: "Ancient page", color: "#bba66d", icon: "pg", value: 210 },
+    mystic_wand: { name: "Mystic wand", slot: "weapon", color: "#78bff0", icon: "mw", value: 720, attack: 12, strength: 3, magicBoost: true, requirements: { Magic: 20 } },
     rune_scimitar: {
       name: "Rune scimitar",
       slot: "weapon",
@@ -408,6 +430,8 @@
     power_amulet: { name: "Power amulet", color: "#65e8d2", icon: "pa", value: 360, slot: "amulet", attack: 3, strength: 3, defence: 3, requirements: { Crafting: 20 } },
     slayer_gem: { name: "Slayer gem", color: "#65d6ff", icon: "sg", value: 1 },
     bag_of_salt: { name: "Bag of salt", stackable: true, color: "#f3eee0", icon: "sa", value: 5 },
+    tower_key: { name: "Tower key", color: "#b8a25a", icon: "tk", value: 90 },
+    ectoplasm: { name: "Ectoplasm", stackable: true, color: "#9be8d2", icon: "ec", value: 22 },
     rune_essence: { name: "Rune essence", stackable: true, color: "#d9d2ff", icon: "re", value: 5 },
     rune_pouch: { name: "Rune pouch", color: "#57406f", icon: "rp", value: 120 },
     air_talisman: { name: "Air talisman", color: "#dcecff", icon: "at", value: 45 },
@@ -501,6 +525,11 @@
         state: "not-started",
         text: "Trader Kojo wants bananas and a lobster from Karamel Isle.",
       },
+      towerWhispers: {
+        title: "Tower of Whispers",
+        state: "not-started",
+        text: "Slayer Master Vann wants a key from the north Slayer Tower.",
+      },
     },
     stats: {
       bankUses: 0,
@@ -531,6 +560,10 @@
       jungleSpidersSlain: 0,
       lobstersCaught: 0,
       lobstersCooked: 0,
+      bansheesSlain: 0,
+      crawlingHandsSlain: 0,
+      spectersSlain: 0,
+      towerChestsOpened: 0,
       mapsOpened: 0,
       oresMined: 0,
       potionsDrunk: 0,
@@ -619,6 +652,8 @@
     { id: "farming", label: "Harvest a farm patch", done: () => state.stats.cropsHarvested > 0 },
     { id: "banana", label: "Pick island bananas", done: () => state.stats.bananasPicked > 0 },
     { id: "web", label: "Cut an island spider web", done: () => state.stats.websCut > 0 },
+    { id: "tower", label: "Open the Slayer Tower chest", done: () => state.stats.towerChestsOpened > 0 },
+    { id: "banshee", label: "Defeat a banshee", done: () => state.stats.bansheesSlain > 0 },
     { id: "herblore", label: "Mix a potion", done: () => state.stats.potionsMixed > 0 },
     { id: "antipoison", label: "Cure poison", done: () => state.stats.poisonsCured > 0 },
     { id: "contract", label: "Complete a farming contract", done: () => state.stats.farmingContractsCompleted > 0 },
@@ -645,6 +680,7 @@
     { id: "agility", label: "Agility Yard", x: 31, y: 24, note: "obstacles and run training", color: "#9dff8a" },
     { id: "farm", label: "Bess's Patches", x: 28, y: 44, note: "farming and herbs", color: "#b9e46a" },
     { id: "hollow", label: "Crawler Hollow", x: 68, y: 43, note: "crawlers and wight", color: "#a0a8ff" },
+    { id: "tower", label: "Slayer Tower", x: 72, y: 12, note: "earmuffs, keys, specters", color: "#a8f5ff" },
     { id: "mosswood", label: "Mosswood", x: 16, y: 18, note: "brutes and oaks", color: "#9bd36f" },
     { id: "wildy", label: "Low Wilderness", x: 11, y: 12, note: "chaos altar, danger", color: "#ff8e77" },
     { id: "cowfield", label: "Cow Field", x: 23, y: 53, note: "hides and beef", color: "#fff0c5" },
@@ -658,7 +694,10 @@
     { type: "grave_skeleton", name: "Grave skeleton", level: 12, location: "Old Graveyard", drops: "bones, iron sword", tip: "prayer fuel" },
     { type: "salt_slug", name: "Salt slug", level: 18, location: "Crawler Hollow", drops: "gems, salt", tip: "finish with salt" },
     { type: "cave_crawler", name: "Cave crawler", level: 16, location: "Crawler Hollow", drops: "gems, coins", tip: "bring food" },
+    { type: "crawling_hand", name: "Crawling hand", level: 8, location: "Slayer Tower", drops: "tower keys, gloves", tip: "entry tower task" },
+    { type: "banshee", name: "Banshee", level: 23, location: "Slayer Tower", drops: "keys, ectoplasm", tip: "wear earmuffs" },
     { type: "jungle_spider", name: "Jungle spider", level: 24, location: "Karamel Isle", drops: "bananas, herbs, silk", tip: "poisons; pack antipoison" },
+    { type: "aberrant_specter", name: "Aberrant specter", level: 46, location: "Slayer Tower", drops: "herbs, mystic loot", tip: "wear a nose peg" },
     { type: "dark_wizard", name: "Dark wizard", level: 20, location: "Low Wilderness", drops: "chaos, talismans, staff", tip: "keep prayer ready" },
     { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
     { type: "black_knight", name: "Black knight", level: 33, location: "Low Wilderness", drops: "black helm, legs", tip: "armoured target" },
@@ -860,6 +899,20 @@
     return Boolean(helm && ITEMS[helm]?.slayerBoost && task && enemy && task.type === enemy.slayerType);
   }
 
+  function slayerProtectionName(kind) {
+    if (kind === "banshee") return "earmuffs";
+    if (kind === "specter") return "a nose peg";
+    return "proper Slayer gear";
+  }
+
+  function hasSlayerProtection(enemy) {
+    if (!enemy?.requiredProtection) return true;
+    const helmId = state.player.equipment.helm;
+    const helm = ITEMS[helmId];
+    if (!helm) return false;
+    return Boolean(helm.slayerProtectAll || helm.slayerProtection === enemy.requiredProtection);
+  }
+
   function gainXp(skill, amount) {
     if (!state.player.skills[skill]) return;
     const before = getLevel(skill);
@@ -1025,6 +1078,8 @@
       wanderSpeed: stats.wanderSpeed || 0.55,
       poisonDamage: stats.poisonDamage || 0,
       poisonChance: stats.poisonChance || 0,
+      requiredProtection: stats.requiredProtection || null,
+      warningCooldown: 0,
       cryptBrother: stats.cryptBrother || null,
       despawnOnDeath: Boolean(stats.despawnOnDeath),
       finisher: stats.finisher || null,
@@ -1087,6 +1142,10 @@
     setRect(54, 51, 8, 5, "stone");
     setRect(62, 59, 5, 4, "stone");
     drawRoad(58, 58, 64, 61, 1);
+    setRect(68, 8, 10, 10, "stone");
+    setRect(70, 10, 6, 6, "dirt");
+    setRect(72, 13, 4, 3, "swamp");
+    drawRoad(63, 18, 72, 13, 1);
     setRect(69, 68, 10, 10, "sand");
     setRect(71, 70, 6, 5, "field");
     setRect(74, 68, 4, 4, "stone");
@@ -1123,6 +1182,9 @@
     addScenery("rope_swing", "Rope swing", 34, 23, { action: "agility", level: 5, xp: 58, restore: 10, failDamage: 5, cooldown: 3.0 });
     addScenery("stepping_stones", "Stepping stones", 29, 26, { action: "agility", level: 12, xp: 86, restore: 13, failDamage: 7, cooldown: 3.4 });
     addScenery("dock", "Fishing dock", 55, 61, { action: "fish" });
+    addScenery("slayer_tower", "Slayer Tower door", 71, 12, { action: "tower_door", interactRange: 2.8 });
+    addScenery("tower_chest", "Slayer Tower chest", 74, 13, { action: "tower_chest", interactRange: 2.5 });
+    addScenery("tower_notice", "Tower warning", 69, 10, { action: "examine", interactRange: 2.2 });
     addScenery("island_dock", "Karamel dock", 72, 75, { action: "fish_lobster", interactRange: 2.8 });
     addScenery("banana_tree", "Banana tree", 72, 71, { action: "banana", interactRange: 2.4, readyAt: 0 });
     addScenery("banana_tree", "Banana tree", 75, 74, { action: "banana", interactRange: 2.4, readyAt: 0 });
@@ -1200,6 +1262,7 @@
     addNpc("gardener", "Gardener Bess", "gardener", 27, 42);
     addNpc("castle_squire", "Castle Squire", "squire", 70, 36);
     addNpc("island_trader", "Trader Kojo", "island_trader", 73, 72);
+    addNpc("tower_keeper", "Keeper Maev", "tower_keeper", 70, 11);
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
 
@@ -1328,6 +1391,65 @@
         slayerType: "salt_slug",
         finisher: "bag_of_salt",
       }, [["bones", 1, 0.55], ["coins", 32, 0.5], ["uncut_gem", 1, 0.1], ["bag_of_salt", 1, 0.2]]);
+    }
+    for (const spot of [
+      [69, 12],
+      [70, 13],
+      [71, 14],
+      [69, 15],
+      [72, 11],
+    ]) {
+      addEnemy("crawling_hand", "Crawling hand", spot[0], spot[1], {
+        level: 8,
+        hp: 32,
+        attack: 5,
+        strength: 6,
+        defence: 4,
+        xp: 45,
+        aggro: 2.3,
+        respawn: 9,
+        wanderRadius: 2.0,
+        slayerType: "crawling_hand",
+      }, [["bones", 1, 0.35], ["tower_key", 1, 0.12], ["ectoplasm", 1, 0.22], ["coins", 16, 0.45], ["leather_gloves", 1, 0.08]]);
+    }
+    for (const spot of [
+      [72, 12],
+      [73, 11],
+      [74, 12],
+      [75, 14],
+    ]) {
+      addEnemy("banshee", "Banshee", spot[0], spot[1], {
+        level: 23,
+        hp: 64,
+        attack: 15,
+        strength: 16,
+        defence: 10,
+        xp: 120,
+        aggro: 3.5,
+        respawn: 13,
+        requiredProtection: "banshee",
+        slayerType: "banshee",
+      }, [["bones", 1, 0.55], ["tower_key", 1, 0.18], ["ectoplasm", 2, 0.55], ["death_rune", 1, 0.12], ["ghostly_robe", 1, 0.035]]);
+    }
+    for (const spot of [
+      [75, 15],
+      [76, 13],
+      [76, 16],
+    ]) {
+      addEnemy("aberrant_specter", "Aberrant specter", spot[0], spot[1], {
+        level: 46,
+        hp: 118,
+        attack: 27,
+        strength: 30,
+        defence: 20,
+        xp: 280,
+        aggro: 4.3,
+        respawn: 22,
+        requiredProtection: "specter",
+        poisonDamage: 3,
+        poisonChance: 0.18,
+        slayerType: "aberrant_specter",
+      }, [["grimy_mirthleaf", 2, 0.45], ["tower_key", 1, 0.22], ["ectoplasm", 3, 0.7], ["mystic_wand", 1, 0.035], ["clue_scroll", 1, 0.18]]);
     }
     addEnemy("deep_wight", "Deep wight", 69, 46, {
       level: 34,
@@ -1795,9 +1917,9 @@
     const reward = roll > 0.992
       ? ["rune_scimitar", 1]
       : roll > 0.965
-        ? [choice(["crypt_helm", "ancient_page"]), 1]
+        ? [choice(["crypt_helm", "ancient_page", "mystic_wand"]), 1]
         : roll > 0.92
-          ? ["team_cape", 1]
+          ? [choice(["team_cape", "ghostly_robe"]), 1]
           : roll > 0.82
             ? ["clue_scroll", 1]
             : roll > 0.66
@@ -2073,8 +2195,10 @@
 
   function areaAt(x, y) {
     if (x < 22 && y < 28) return "Low Wilderness";
+    if (x > 66 && y > 7 && y < 19) return "Slayer Tower";
     if (x > 64 && y > 22 && y < 39) return "Castle Wars";
     if (x > 68 && y > 67) return "Karamel Isle";
+    if (Math.hypot(x - 60, y - 38) < 5) return "Slayer Lodge";
     if (Math.hypot(x - 66, y - 43) < 11) return "Crawler Hollow";
     if (Math.hypot(x - 62, y - 18) < 12) return "Greyrock Mine";
     if (Math.hypot(x - 52, y - 25) < 7) return "Wizard Tower";
@@ -2272,9 +2396,12 @@
       const offensiveLevel = (usingRanged ? effectiveLevel("Ranged") : effectiveLevel("Attack")) * prayerBoost("attack");
       const powerLevel = (usingRanged ? effectiveLevel("Ranged") : effectiveLevel("Strength")) * prayerBoost("strength");
       const slayerBonus = usingSlayerBoost(enemy) ? 1.16 : 1;
-      const attackRoll = (offensiveLevel + equipmentBonus("attack")) * slayerBonus + random() * 12;
+      const protectedGear = hasSlayerProtection(enemy);
+      const protectionPenalty = protectedGear ? 1 : 0.52;
+      if (!protectedGear) warnSlayerProtection(enemy);
+      const attackRoll = (offensiveLevel + equipmentBonus("attack")) * slayerBonus * protectionPenalty + random() * 12;
       const defenceRoll = enemy.defence + random() * 15;
-      const maxHit = Math.max(1, Math.floor(((powerLevel + equipmentBonus("strength")) * slayerBonus) / 3) + (ammo === "broad_arrow" ? 2 : 1));
+      const maxHit = Math.max(1, Math.floor(((powerLevel + equipmentBonus("strength")) * slayerBonus * protectionPenalty) / 3) + (ammo === "broad_arrow" ? 2 : 1));
       const hit = attackRoll > defenceRoll ? Math.floor(random() * (maxHit + 1)) : 0;
       if (hit > 0) {
         enemy.hp = Math.max(0, enemy.hp - hit);
@@ -2317,6 +2444,19 @@
     addChat(`${sourceName} poisons you.`, "danger");
   }
 
+  function warnSlayerProtection(enemy) {
+    if (!enemy?.requiredProtection) return;
+    if (enemy.warningCooldown > 0) return;
+    enemy.warningCooldown = 7;
+    if (enemy.requiredProtection === "banshee") {
+      addChat("The banshee shrieks through your skull. Earmuffs would help.", "danger");
+    } else if (enemy.requiredProtection === "specter") {
+      addChat("The specter chokes you with swamp stink. A nose peg would help.", "danger");
+    } else {
+      addChat(`You need ${slayerProtectionName(enemy.requiredProtection)} for this task.`, "danger");
+    }
+  }
+
   function killEnemy(enemy) {
     if (enemy.finisher) {
       if (inventoryCount(enemy.finisher) <= 0) {
@@ -2339,6 +2479,9 @@
     state.stats.deepWightsSlain += enemy.type === "deep_wight" ? 1 : 0;
     state.stats.jungleSpidersSlain += enemy.type === "jungle_spider" ? 1 : 0;
     state.stats.lesserDemonsSlain += enemy.type === "lesser_demon" ? 1 : 0;
+    state.stats.crawlingHandsSlain += enemy.type === "crawling_hand" ? 1 : 0;
+    state.stats.bansheesSlain += enemy.type === "banshee" ? 1 : 0;
+    state.stats.spectersSlain += enemy.type === "aberrant_specter" ? 1 : 0;
     for (const [itemId, qty, chance] of enemy.loot) {
       if (random() < chance) dropGroundItem(itemId, qty, enemy.x, enemy.y);
     }
@@ -2346,6 +2489,7 @@
     handleCryptWightDefeat(enemy);
     handleSlayerKill(enemy);
     if (enemy.type === "grave_skeleton" && state.quests.restlessBones.state === "started") addChat("The priest will like those bones.");
+    if (enemy.type === "banshee" && state.quests.towerWhispers.state === "started") addChat("Vann wanted proof from the tower. Find a key and report back.");
   }
 
   function handleSlayerKill(enemy) {
@@ -2370,6 +2514,7 @@
   function updateEnemies(dt) {
     for (const enemy of state.enemies) {
       if (enemy.hitFlash > 0) enemy.hitFlash -= dt;
+      if (enemy.warningCooldown > 0) enemy.warningCooldown -= dt;
       if (enemy.hp <= 0) {
         enemy.respawnTimer -= dt;
         if (enemy.respawnTimer <= 0) {
@@ -2396,9 +2541,17 @@
           enemy.attackTimer = 2.2;
           const defence = effectiveLevel("Defence") * prayerBoost("defence") + equipmentBonus("defence");
           const wildBoost = areaAt(enemy.x, enemy.y) === "Low Wilderness" ? 1.12 : 1;
-          const roll = enemy.attack * wildBoost + random() * 12;
+          const missingProtection = !hasSlayerProtection(enemy);
+          const protectionPressure = missingProtection ? 1.2 : 1;
+          const roll = enemy.attack * wildBoost * protectionPressure + random() * 12;
           const block = defence + random() * 16;
-          const hit = roll > block ? Math.floor(random() * (enemy.strength * wildBoost / 2 + 3)) : 0;
+          const baseHit = roll > block ? Math.floor(random() * (enemy.strength * wildBoost * protectionPressure / 2 + 3)) : 0;
+          const gearHit = missingProtection ? 2 + Math.floor(random() * 5) : 0;
+          const hit = Math.max(baseHit, gearHit);
+          if (missingProtection) {
+            state.player.prayerPoints = Math.max(0, state.player.prayerPoints - 4);
+            warnSlayerProtection(enemy);
+          }
           if (hit > 0) {
             state.player.hp = Math.max(0, state.player.hp - hit);
             state.player.damageFlash = 0.4;
@@ -2456,6 +2609,7 @@
           wizard: ["Essence hums. So do unpaid apprentices.", "Mind the altar sparks."],
           squire: ["Take the flag. Bring it back. Simple until it isn't.", "Tickets buy lovely pointless armour."],
           island_trader: ["Bananas stack badly. Profit stacks nicely.", "Volcano spiders make poor customers."],
+          tower_keeper: ["Earmuffs for shrieks. Nose pegs for stink.", "The tower pays in keys and bruises."],
           guard: ["Keep the peace."],
         };
         addBark(npc, choice(lines[npc.role] || ["Lovely weather."]));
@@ -2631,6 +2785,8 @@
       castleSquireDialogue(npc);
     } else if (npc.role === "island_trader") {
       islandTraderDialogue(npc);
+    } else if (npc.role === "tower_keeper") {
+      towerKeeperDialogue(npc);
     } else if (npc.role === "fisher") {
       openDialogue(npc.name, ["Small net for shrimp by the bridge. Higher levels can fish trout at the lake. I also row shortcuts for coin."], [
         { label: "To Lake Mollusk - 12gp", action: () => travelTo(63.5, 62.5, 12, "Lake Mollusk") },
@@ -2665,6 +2821,29 @@
     } else {
       openDialogue(npc.name, ["Stay on the roads and keep an eye on your Hitpoints."], [{ label: "Close", action: () => closeModal() }]);
     }
+  }
+
+  function towerKeeperDialogue(npc) {
+    openDialogue(npc.name, ["Hands below, banshees above, specters in the damp room. Bring the right nonsense or leave with fewer thoughts."], [
+      {
+        label: "Buy earmuffs - 45gp",
+        action: () => {
+          if (!spendCoins(45)) addChat("You need 45 coins for earmuffs.");
+          else addInventory("earmuffs", 1);
+          closeModal();
+        },
+      },
+      {
+        label: "Buy nose peg - 65gp",
+        action: () => {
+          if (!spendCoins(65)) addChat("You need 65 coins for a nose peg.");
+          else addInventory("nose_peg", 1);
+          closeModal();
+        },
+      },
+      { label: "Ask about keys", action: () => addChat("Maev says: tower keys fall from the things that should not have hands, throats, or manners.") },
+      { label: "Close", action: () => closeModal() },
+    ]);
   }
 
   function castleSquireDialogue(npc) {
@@ -3013,6 +3192,7 @@
   function slayerDialogue(npc) {
     const task = state.slayer.task;
     const wightQuest = state.quests.wightHunt;
+    const towerQuest = state.quests.towerWhispers;
     const lines = task
       ? [`Your task is to kill ${task.remaining} more ${task.label}.`, `Streak: ${state.slayer.streak}. Points: ${state.slayer.points}.`]
       : ["No task. That means you are currently wasting perfectly good violence."];
@@ -3070,6 +3250,36 @@
         },
       });
     }
+    if (towerQuest.state === "not-started") {
+      choices.push({
+        label: "Tower whispers",
+        action: () => {
+          towerQuest.state = "started";
+          addInventory("earmuffs", 1);
+          addChat("Quest started: Tower of Whispers.");
+          closeModal();
+        },
+      });
+    } else if (towerQuest.state === "started") {
+      const ready = state.stats.bansheesSlain > 0 && inventoryCount("tower_key") > 0;
+      choices.push({
+        label: ready ? "Claim tower reward" : "Ask about tower",
+        action: () => {
+          if (ready) {
+            removeItem(state.player.inventory, "tower_key", 1);
+            towerQuest.state = "completed";
+            state.slayer.points += 2;
+            addInventory("nose_peg", 1);
+            addInventory("death_rune", 3);
+            gainXp("Slayer", 260);
+            addChat("Quest complete: Tower of Whispers.");
+          } else {
+            addChat("Vann says: wear earmuffs, kill a banshee, and bring me a tower key.");
+          }
+          closeModal();
+        },
+      });
+    }
     choices.push({ label: "Close", action: () => closeModal() });
     openDialogue(npc.name, lines, choices);
   }
@@ -3083,6 +3293,8 @@
       stock: [
         { id: "broad_arrow", price: 1, qty: 35 },
         { id: "bag_of_salt", price: 1, qty: 20 },
+        { id: "earmuffs", price: 1 },
+        { id: "nose_peg", price: 2 },
         { id: "antipoison", price: 1 },
         { id: "clue_scroll", price: 2 },
         { id: "amulet_of_accuracy", price: 3 },
@@ -3100,13 +3312,16 @@
       { type: "pasture_cow", label: "pasture cows", amount: 6, minCombat: 1, xp: 28 },
       { type: "field_imp", label: "field imps", amount: 8, minCombat: 4, xp: 45 },
       { type: "grave_skeleton", label: "grave skeletons", amount: 8, minCombat: 10, xp: 75 },
+      { type: "crawling_hand", label: "crawling hands", amount: 8, minCombat: 8, xp: 60 },
       { type: "salt_slug", label: "salt slugs", amount: 8, minCombat: 12, xp: 80 },
       { type: "cave_crawler", label: "cave crawlers", amount: 10, minCombat: 12, xp: 95 },
       { type: "jungle_spider", label: "jungle spiders", amount: 8, minCombat: 16, xp: 105 },
       { type: "dark_wizard", label: "dark wizards", amount: 7, minCombat: 18, xp: 110 },
+      { type: "banshee", label: "banshees", amount: 7, minCombat: 20, xp: 115 },
       { type: "moss_brute", label: "moss brutes", amount: 6, minCombat: 24, xp: 140 },
       { type: "black_knight", label: "black knights", amount: 5, minCombat: 28, xp: 175 },
       { type: "deep_wight", label: "deep wights", amount: 3, minCombat: 30, xp: 220 },
+      { type: "aberrant_specter", label: "aberrant specters", amount: 3, minCombat: 42, xp: 260 },
       { type: "lesser_demon", label: "lesser demons", amount: 2, minCombat: 38, xp: 260 },
     ].filter((task) => combat >= task.minCombat || slayer >= Math.floor(task.minCombat / 2));
     const task = choice(pool);
@@ -3312,6 +3527,10 @@
       fillEmptyVial();
     } else if (action === "runecraft") {
       craftRunes(obj);
+    } else if (action === "tower_door") {
+      addChat("The Slayer Tower door groans open. Inside: hands, shrieks, and damp mistakes.");
+    } else if (action === "tower_chest") {
+      openTowerChest();
     } else if (action === "crypt") {
       summonCryptBrother(obj);
     } else if (action === "crypt_chest") {
@@ -3641,6 +3860,29 @@
     state.crypt.defeated = [];
     state.enemies = state.enemies.filter((enemy) => !enemy.cryptBrother || enemy.hp > 0);
     addChat(`You loot the crypt chest: ${coins} coins, runes${rare ? `, and ${ITEMS[rare].name}` : ""}.`, "loot");
+    playSfx("loot");
+  }
+
+  function openTowerChest() {
+    if (inventoryCount("tower_key") < 1) {
+      addChat("The Slayer Tower chest needs a tower key.");
+      return;
+    }
+    removeItem(state.player.inventory, "tower_key", 1);
+    const coins = 90 + Math.floor(random() * 190);
+    addInventory("coins", coins);
+    addInventory("ectoplasm", 1 + Math.floor(random() * 3), true);
+    const roll = random();
+    let rare = null;
+    if (roll > 0.94) rare = "mystic_wand";
+    else if (roll > 0.84) rare = "ghostly_robe";
+    else if (roll > 0.68) addInventory("death_rune", 2 + Math.floor(random() * 4));
+    else if (roll > 0.48) addInventory("clue_scroll", 1);
+    else if (roll > 0.3) addInventory("antipoison", 1);
+    if (rare) addInventory(rare, 1);
+    state.stats.towerChestsOpened += 1;
+    gainXp("Slayer", 90);
+    addChat(`You open the Slayer Tower chest: ${coins} coins, ectoplasm${rare ? `, and ${ITEMS[rare].name}` : ""}.`, "loot");
     playSfx("loot");
   }
 
@@ -4184,6 +4426,7 @@
         { id: "dock", hint: "Cast your eyes south where fish ripple near planks.", x: 55, y: 61, radius: 3.2, xp: 100 },
         { id: "mine", hint: "Grey stone remembers the bite of iron.", x: 62, y: 18, radius: 4.2, xp: 120 },
         { id: "hollow", hint: "Under the damp cave mouth, legs skitter in the dark.", x: 68, y: 43, radius: 4.2, xp: 150 },
+        { id: "tower", hint: "Where a northern tower whispers through wool and rotten air.", x: 72, y: 12, radius: 3.2, xp: 170 },
         { id: "moss", hint: "The green brutes guard a quiet western wood.", x: 15, y: 17, radius: 4.8, xp: 180 },
         { id: "chaos", hint: "Where purple stone hums beyond the ditch.", x: 11, y: 12, radius: 4.2, xp: 210 },
       ]);
@@ -4212,6 +4455,7 @@
     if (roll > 0.985) addInventory("rune_scimitar", 1);
     else if (roll > 0.94) addInventory("team_cape", 1);
     else if (roll > 0.92) addInventory("slayer_helm", 1);
+    else if (roll > 0.88) addInventory(choice(["ghostly_robe", "mystic_wand"]), 1);
     else if (roll > 0.78) addInventory(choice(["amulet_of_accuracy", "power_amulet", "pirate_cutlass"]), 1);
     else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster"]), 1);
     else if (roll > 0.46) addInventory(choice(["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "bow_string"]), 1);
@@ -4613,6 +4857,27 @@
     } else if (obj.type === "slayer_board") {
       drawBox(screen.x, screen.y - 42, 62, 54, "#4f301f", "#1c0e08");
       drawText("SLAYER", screen.x, screen.y - 44, { color: "#8ff0ff", outline: "#000", size: 10, align: "center" });
+    } else if (obj.type === "slayer_tower") {
+      drawBox(screen.x, screen.y - 56, 76, 92, "#5a5d5f", "#17191a");
+      ctx.fillStyle = "#303234";
+      ctx.fillRect(screen.x - 20, screen.y - 34, 40, 70);
+      ctx.strokeStyle = "#a9b2b4";
+      ctx.strokeRect(screen.x - 20, screen.y - 34, 40, 70);
+      ctx.fillStyle = "#95dbe0";
+      ctx.fillRect(screen.x - 29, screen.y - 50, 13, 12);
+      ctx.fillRect(screen.x + 16, screen.y - 50, 13, 12);
+      drawText("TOWER", screen.x, screen.y - 75, { color: "#a8f5ff", outline: "#000", size: 10, align: "center" });
+    } else if (obj.type === "tower_chest") {
+      drawBox(screen.x, screen.y - 22, 58, 34, "#4a3420", "#130b05");
+      ctx.fillStyle = "#a3915b";
+      ctx.fillRect(screen.x - 25, screen.y - 33, 50, 8);
+      ctx.strokeStyle = "#17100a";
+      ctx.strokeRect(screen.x - 25, screen.y - 33, 50, 8);
+      drawText("KEY", screen.x, screen.y - 45, { color: "#e7d479", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "tower_notice") {
+      drawBox(screen.x, screen.y - 38, 58, 48, "#5a3a20", "#1b0e06");
+      drawText("!", screen.x, screen.y - 42, { color: "#a8f5ff", outline: "#000", size: 22, align: "center" });
+      drawText("SLAY", screen.x, screen.y - 18, { color: "#f1d98b", outline: "#000", size: 8, align: "center" });
     } else if (obj.type === "cave") {
       ctx.fillStyle = "#1e1b1b";
       ctx.beginPath();
@@ -4906,7 +5171,7 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : "#7f5231";
+    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
     if (npc.role === "slayer") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
@@ -4914,6 +5179,7 @@
     if (npc.role === "wizard") drawText("*", screen.x + 15, screen.y - 45, { color: "#d9d2ff", outline: "#000", size: 16, align: "center" });
     if (npc.role === "squire") drawText("cw", screen.x + 17, screen.y - 45, { color: "#f0d25d", outline: "#000", size: 10, align: "center" });
     if (npc.role === "island_trader") drawText("gp", screen.x + 17, screen.y - 45, { color: "#ffe36a", outline: "#000", size: 10, align: "center" });
+    if (npc.role === "tower_keeper") drawText("tk", screen.x + 17, screen.y - 45, { color: "#a8f5ff", outline: "#000", size: 10, align: "center" });
   }
 
   function drawBarks() {
@@ -4950,6 +5216,9 @@
       grave_skeleton: "#dfd8bd",
       cave_crawler: "#3f6051",
       salt_slug: "#7d8f75",
+      crawling_hand: "#7b665a",
+      banshee: "#b9d5dc",
+      aberrant_specter: "#73a08c",
       jungle_spider: "#2f2f28",
       deep_wight: "#5860a8",
       lesser_demon: "#8e2f32",
@@ -5061,6 +5330,38 @@
       ctx.moveTo(screen.x + 16, screen.y - 18);
       ctx.lineTo(screen.x + 24, screen.y - 29);
       ctx.stroke();
+    } else if (enemy.type === "crawling_hand") {
+      ctx.fillStyle = colors[enemy.type];
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 11, 16, 8, 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#2a211d";
+      ctx.lineWidth = 3;
+      for (let i = -2; i <= 2; i += 1) {
+        ctx.beginPath();
+        ctx.moveTo(screen.x + i * 5, screen.y - 15);
+        ctx.lineTo(screen.x + i * 7, screen.y - 28 - Math.abs(i) * 2);
+        ctx.stroke();
+      }
+      drawText("h", screen.x, screen.y - 35, { color: "#d9c2aa", outline: "#000", size: 11, align: "center" });
+    } else if (enemy.type === "banshee") {
+      ctx.save();
+      ctx.globalAlpha *= 0.86 + Math.sin(state.time * 5 + enemy.id.length) * 0.08;
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#e8f7f7", 1.05);
+      ctx.strokeStyle = "#e4fbff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(screen.x, screen.y - 42, 23 + Math.sin(state.time * 7) * 2, 0.4, Math.PI - 0.4);
+      ctx.stroke();
+      drawText("w", screen.x + 18, screen.y - 52, { color: "#e4fbff", outline: "#000", size: 14, align: "center" });
+      ctx.restore();
+    } else if (enemy.type === "aberrant_specter") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#acd7c9", 1.12);
+      ctx.fillStyle = "rgba(122, 196, 162, 0.42)";
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 25, 33 + Math.sin(state.time * 4) * 3, 18, 0, 0, Math.PI * 2);
+      ctx.fill();
+      drawText("stink", screen.x, screen.y - 64, { color: "#b8ffd6", outline: "#000", size: 8, align: "center" });
     } else if (enemy.type === "jungle_spider") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
@@ -5420,10 +5721,10 @@
     let yy = y + 34;
     for (const quest of Object.values(state.quests)) {
       const color = quest.state === "completed" ? "#78e05f" : quest.state === "started" ? "#ffe46b" : "#d0c0a0";
-      drawText(`${quest.title}`, x, yy, { color, outline: "#000", size: 11, align: "left" });
-      drawText(`${quest.state}`, x + w, yy, { color, outline: "#000", size: 9, align: "right" });
-      drawText(fitLine(quest.text, w, 9), x, yy + 13, { color: "#cdbb8a", outline: "#000", size: 9, align: "left" });
-      yy += 35;
+      drawText(`${quest.title}`, x, yy, { color, outline: "#000", size: 10, align: "left" });
+      drawText(`${quest.state}`, x + w, yy, { color, outline: "#000", size: 8, align: "right" });
+      drawText(fitLine(quest.text, w, 8), x, yy + 12, { color: "#cdbb8a", outline: "#000", size: 8, align: "left" });
+      yy += 27;
     }
     if (state.clue) {
       drawText("Active Clue", x, yy, { color: "#83efff", outline: "#000", size: 12, align: "left" });
@@ -5558,7 +5859,7 @@
           action: () => moveToTile(Math.floor(item.x), Math.floor(item.y), { kind: "groundItem", id: item.id }),
         });
       } else if (picked.kind === "npc") {
-        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" || item.role === "wizard" ? "Trade" : item.role === "squire" ? "Join / Rewards" : item.role === "slayer" ? "Talk-to / Assignment" : "Talk-to";
+        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" || item.role === "wizard" || item.role === "tower_keeper" ? "Trade" : item.role === "squire" ? "Join / Rewards" : item.role === "slayer" ? "Talk-to / Assignment" : "Talk-to";
         options.push({ label: `${primary} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "npc", id: item.id }) });
       } else if (picked.kind === "enemy") {
         options.push({ label: `Attack ${item.name} (level ${item.level})`, action: () => approachOrAttackEnemy(item) });
@@ -5566,7 +5867,7 @@
         const label = item.type.includes("tree") ? "Chop" : item.type === "essence_rock" ? "Mine-essence" : item.type.includes("rock") ? "Mine" : item.type === "lobster_spot" ? "Cage" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_lobster" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "runecraft" ? "Craft-rune-at" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "castle_wars" ? "Enter" : item.action === "castle_flag" ? "Use-flag" : item.action === "castle_supply" ? "Take-from" : item.action === "castle_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_lobster" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "runecraft" ? "Craft-rune-at" : item.action === "tower_door" ? "Enter" : item.action === "tower_chest" ? "Open" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "castle_wars" ? "Enter" : item.action === "castle_flag" ? "Use-flag" : item.action === "castle_supply" ? "Take-from" : item.action === "castle_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
         options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
@@ -5607,7 +5908,7 @@
 
   function examineText(kind, item) {
     if (kind === "groundItem") return `It's ${formatItem(item.itemId, item.qty)} on the ground.`;
-    if (kind === "enemy") return `A level ${item.level} ${item.name}. ${item.finisher ? `Needs ${ITEMS[item.finisher].name.toLowerCase()} at the end.` : "It looks grindable."}`;
+    if (kind === "enemy") return `A level ${item.level} ${item.name}. ${item.requiredProtection ? `Needs ${slayerProtectionName(item.requiredProtection)}.` : item.finisher ? `Needs ${ITEMS[item.finisher].name.toLowerCase()} at the end.` : "It looks grindable."}`;
     if (kind === "npc") return `${item.name} seems ready to repeat the same line forever.`;
     if (kind === "resource") return `A ${resourceName(item).toLowerCase()} waiting to become experience.`;
     if (kind === "scenery" && item.action === "agility") return `A very official-looking shortcut for Agility level ${item.level || 1}.`;
@@ -5619,6 +5920,9 @@
     if (kind === "scenery" && item.action === "banana") return `${item.name}: ${item.readyAt && item.readyAt > state.time ? "bare for now" : "heavy with yellow supplies"}.`;
     if (kind === "scenery" && item.action === "web") return `${item.name}: ${item.readyAt && item.readyAt > state.time ? "thin strands regrowing" : "thick enough to cut for silk"}.`;
     if (kind === "scenery" && item.action === "island_shop") return "A stall with prices set by someone who owns the only boat.";
+    if (kind === "scenery" && item.action === "tower_door") return "A cold Slayer Tower door. The notice says earmuffs, nose pegs, and keys are strongly advised.";
+    if (kind === "scenery" && item.action === "tower_chest") return "A locked chest from the Slayer Tower, scratched by hands and wet with ectoplasm.";
+    if (kind === "scenery" && item.type === "tower_notice") return "The notice reads: banshees shriek, specters reek, and hands steal keys badly.";
     if (kind === "scenery" && item.action === "runecraft") return `${item.name}: ${RUNECRAFTING_RECIPES[item.rune].name} runes require Runecrafting ${RUNECRAFTING_RECIPES[item.rune].level}.`;
     if (kind === "scenery" && item.action === "crypt") return `${item.name}: a slab for one of the crypt brothers. ${cryptStatusText()}.`;
     if (kind === "scenery" && item.action === "crypt_chest") return `The crypt chest is sealed by old combat nonsense. ${cryptStatusText()}.`;
@@ -5678,12 +5982,18 @@
       y += 19;
     }
     if (state.modal?.type === "dialogue") {
-      let x = CHAT.x + 24;
+      const minX = CHAT.x + 24;
+      const maxX = CHAT.x + CHAT.w - 24;
+      let x = minX;
       y = CHAT.y + CHAT.h - 34;
       state.modal.rects = [];
       for (const choiceItem of state.modal.choices) {
         ctx.font = "12px Verdana, Tahoma, sans-serif";
-        const width = Math.max(104, ctx.measureText(choiceItem.label).width + 30);
+        const width = Math.min(188, Math.max(104, ctx.measureText(choiceItem.label).width + 30));
+        if (x + width > maxX && x > minX) {
+          x = minX;
+          y -= 34;
+        }
         const rect = { kind: "dialogueChoice", choice: choiceItem, x, y: y - 20, w: width, h: 28 };
         state.modal.rects.push(rect);
         drawButton(rect, choiceItem.label);
@@ -5822,11 +6132,11 @@
     state.modal.rects.push(close);
     drawButton(close, "x");
     const groups = [
-      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "pirate_cutlass", "wight_blade", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "wizard_hat", "black_helm", "iron_platelegs", "team_cape", "spider_cape", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff"]],
+      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "pirate_cutlass", "wight_blade", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "earmuffs", "nose_peg", "leather_gloves", "wizard_hat", "black_helm", "iron_platelegs", "team_cape", "spider_cape", "ghostly_robe", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff", "mystic_wand"]],
       ["Skilling", ["logs", "oak_logs", "copper_ore", "tin_ore", "iron_ore", "gold_ore", "bronze_bar", "iron_bar", "gold_bar", "cowhide", "leather_body", "silk", "fur"]],
       ["Food", ["bread", "cake", "spinach_roll", "banana", "raw_shrimp", "cooked_shrimp", "raw_trout", "cooked_trout", "raw_lobster", "lobster", "raw_beef", "cooked_beef", "burnt_fish", "burnt_meat"]],
       ["Potions", ["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "energy_potion", "antipoison"]],
-      ["Treasure", ["slayer_gem", "bag_of_salt", "spider_silk", "lobster_pot", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "achievement_cape"]],
+      ["Treasure", ["slayer_gem", "bag_of_salt", "tower_key", "ectoplasm", "spider_silk", "lobster_pot", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "achievement_cape"]],
       ["Runes", ["air_rune", "mind_rune", "chaos_rune", "law_rune", "death_rune"]],
     ];
     let yy = y + 82;
@@ -5935,16 +6245,16 @@
     drawText("You", playerX + 9, playerY + 8, { color: "#ffffff", outline: "#000", size: 10, align: "left" });
 
     const listX = x + 488;
-    let listY = y + 82;
-    const rowH = 29;
+    let listY = y + 80;
+    const rowH = 27;
     for (const destination of MAP_DESTINATIONS) {
-      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 11, w: 202, h: 26 };
+      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 10, w: 202, h: 24 };
       state.modal.rects.push(rect);
       ctx.fillStyle = "#2d2013";
       ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
       ctx.strokeStyle = "#70552d";
       ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-      drawText(destination.label, listX + 10, listY, { color: destination.color, outline: "#000", size: 11, align: "left" });
+      drawText(destination.label, listX + 10, listY, { color: destination.color, outline: "#000", size: 10, align: "left" });
       drawText(destination.note, listX + 10, listY + 12, { color: "#cdbb8a", outline: "#000", size: 7, align: "left" });
       listY += rowH;
     }
@@ -5993,18 +6303,18 @@
     drawText("Locations, drops, and the kind of questionable advice every task needs.", x + 20, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
     const activeType = state.slayer.task?.type;
     BESTIARY.forEach((entry, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const rect = { x: x + 20 + col * 332, y: y + 88 + row * 70, w: 312, h: 56 };
+      const col = i % 3;
+      const row = Math.floor(i / 3);
+      const rect = { x: x + 18 + col * 222, y: y + 84 + row * 74, w: 208, h: 60 };
       const active = activeType === entry.type;
       ctx.fillStyle = active ? "#243c44" : "#2a1c10";
       ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
       ctx.strokeStyle = active ? "#6feaff" : "#6c5129";
       ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-      drawText(`${entry.name} (${entry.level})`, rect.x + 10, rect.y + 15, { color: active ? "#8ff0ff" : "#ffe9a8", outline: "#000", size: 12, align: "left" });
-      drawText(entry.location, rect.x + rect.w - 10, rect.y + 15, { color: "#cdbb8a", outline: "#000", size: 10, align: "right" });
-      drawText(`Drops: ${entry.drops}`, rect.x + 10, rect.y + 35, { color: "#f2dfb4", outline: "#000", size: 10, align: "left" });
-      drawText(entry.tip, rect.x + 10, rect.y + 50, { color: "#9fb894", outline: "#000", size: 10, align: "left" });
+      drawText(fitLine(`${entry.name} (${entry.level})`, rect.w - 18, 10), rect.x + 9, rect.y + 14, { color: active ? "#8ff0ff" : "#ffe9a8", outline: "#000", size: 10, align: "left" });
+      drawText(fitLine(entry.location, rect.w - 18, 8), rect.x + 9, rect.y + 28, { color: "#cdbb8a", outline: "#000", size: 8, align: "left" });
+      drawText(fitLine(`Drops: ${entry.drops}`, rect.w - 18, 8), rect.x + 9, rect.y + 43, { color: "#f2dfb4", outline: "#000", size: 8, align: "left" });
+      drawText(fitLine(entry.tip, rect.w - 18, 8), rect.x + 9, rect.y + 55, { color: "#9fb894", outline: "#000", size: 8, align: "left" });
     });
   }
 
@@ -6030,13 +6340,13 @@
       const col = i % 2;
       const row = Math.floor(i / 2);
       const rowX = x + 20 + col * (taskColW + 16);
-      const rowY = y + 92 + row * 32;
+      const rowY = y + 88 + row * 27;
       ctx.fillStyle = i % 2 ? "#25180d" : "#2c1d10";
-      ctx.fillRect(rowX, rowY - 14, taskColW, 24);
+      ctx.fillRect(rowX, rowY - 13, taskColW, 22);
       ctx.strokeStyle = "#4d3a20";
-      ctx.strokeRect(rowX, rowY - 14, taskColW, 24);
-      drawText(task.done() ? "*" : "-", rowX + 12, rowY - 2, { color: task.done() ? "#78e05f" : "#a89468", outline: "#000", size: 11, align: "left" });
-      drawText(task.label, rowX + 30, rowY - 2, { color: task.done() ? "#ffe9a8" : "#cdbb8a", outline: "#000", size: 10, align: "left" });
+      ctx.strokeRect(rowX, rowY - 13, taskColW, 22);
+      drawText(task.done() ? "*" : "-", rowX + 12, rowY - 2, { color: task.done() ? "#78e05f" : "#a89468", outline: "#000", size: 10, align: "left" });
+      drawText(fitLine(task.label, taskColW - 40, 9), rowX + 30, rowY - 2, { color: task.done() ? "#ffe9a8" : "#cdbb8a", outline: "#000", size: 9, align: "left" });
     });
     if (done === DIARY_TASKS.length && !state.diaryRewardClaimed) {
       const claim = { kind: "diaryClaim", x: x + 154, y: y + h - 52, w: 212, h: 32 };
@@ -6204,6 +6514,8 @@
     if (data.runRestore) lines.push(`Restores ${data.runRestore}% run`);
     if (data.poisonCure) lines.push("Cures poison");
     if (data.poisonResist) lines.push("Resists poison");
+    if (data.slayerProtection) lines.push(`Protects vs ${slayerProtectionName(data.slayerProtection)}`);
+    if (data.slayerProtectAll) lines.push("Protects vs Slayer hazards");
     if (item.id === "rune_pouch") lines.push(runePouchText());
     if (data.requirements) lines.push(`Requires ${requirementText(data.requirements)}`);
     if (data.value) lines.push(`Value ${data.value} gp`);
@@ -6213,7 +6525,7 @@
   function hoverLinesForWorld(picked) {
     const item = picked.item;
     if (picked.kind === "groundItem") return hoverLinesForItem({ id: item.itemId, qty: item.qty });
-    if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.slayerType ? `Slayer: ${item.slayerType.replaceAll("_", " ")}` : "Attack", item.poisonDamage ? "Poisonous" : null, item.finisher ? `Finish with ${ITEMS[item.finisher].name}` : null].filter(Boolean);
+    if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.slayerType ? `Slayer: ${item.slayerType.replaceAll("_", " ")}` : "Attack", item.requiredProtection ? (hasSlayerProtection(item) ? `${slayerProtectionName(item.requiredProtection)} covered` : `Needs ${slayerProtectionName(item.requiredProtection)}`) : null, item.poisonDamage ? "Poisonous" : null, item.finisher ? `Finish with ${ITEMS[item.finisher].name}` : null].filter(Boolean);
     if (picked.kind === "npc") return [item.name, item.role.replaceAll("_", " ")];
     if (picked.kind === "resource") return [resourceName(item)];
     if (picked.kind === "scenery") {
@@ -6235,6 +6547,8 @@
       if (item.action === "castle_flag") return [item.name, item.team === "enemy" ? "Steal flag" : "Score here", castleWarsScoreText()];
       if (item.action === "castle_supply") return [item.name, "Bandages and run energy", castleWarsScoreText()];
       if (item.action === "castle_scoreboard") return [item.name, castleWarsScoreText()];
+      if (item.action === "tower_door") return [item.name, "Enter Slayer Tower", "Wear protection gear"];
+      if (item.action === "tower_chest") return [item.name, "Open with tower key"];
       if (item.action === "fish_lobster") return [item.name, "Cage lobsters", "Requires Fishing 35 and lobster pot"];
       if (item.action === "banana") return [item.name, item.readyAt && item.readyAt > state.time ? "Growing back" : "Pick banana"];
       if (item.action === "web") return [item.name, item.readyAt && item.readyAt > state.time ? "Regrowing" : "Cut spider silk", "Requires knife"];
@@ -6478,7 +6792,7 @@
       .filter((enemy) => enemy.hp > 0 && dist(enemy, state.player) < 8)
       .map((enemy) => {
         const screen = screenOf(enemy);
-        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
+        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, requiredProtection: enemy.requiredProtection || null, protected: hasSlayerProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
       });
     const nearbyNpcs = state.npcs
       .filter((npc) => dist(npc, state.player) < 7)
@@ -6539,6 +6853,7 @@
         action: state.player.action?.kind || null,
         combatTarget: state.player.combatTarget,
         combatLevel: combatLevel(),
+        equipment: { ...state.player.equipment },
       },
       skills: Object.fromEntries(skillNames.map((skill) => [skill, getLevel(skill)])),
       effectiveSkills: Object.fromEntries(skillNames.map((skill) => [skill, effectiveLevel(skill)])),
@@ -6591,6 +6906,10 @@
         bananasPicked: state.stats.bananasPicked,
         islandTrips: state.stats.islandTrips,
         jungleSpidersSlain: state.stats.jungleSpidersSlain,
+        crawlingHandsSlain: state.stats.crawlingHandsSlain,
+        bansheesSlain: state.stats.bansheesSlain,
+        spectersSlain: state.stats.spectersSlain,
+        towerChestsOpened: state.stats.towerChestsOpened,
         websCut: state.stats.websCut,
         herbsHarvested: state.stats.herbsHarvested,
         herbsCleaned: state.stats.herbsCleaned,
