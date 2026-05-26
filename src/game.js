@@ -1142,9 +1142,9 @@
     setRect(54, 51, 8, 5, "stone");
     setRect(62, 59, 5, 4, "stone");
     drawRoad(58, 58, 64, 61, 1);
-    setRect(68, 8, 10, 10, "stone");
-    setRect(70, 10, 6, 6, "dirt");
-    setRect(72, 13, 4, 3, "swamp");
+    setRect(66, 6, 14, 14, "stone");
+    setRect(68, 8, 10, 10, "dirt");
+    setRect(72, 13, 5, 4, "swamp");
     drawRoad(63, 18, 72, 13, 1);
     setRect(69, 68, 10, 10, "sand");
     setRect(71, 70, 6, 5, "field");
@@ -1266,79 +1266,126 @@
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
 
-    for (let i = 0; i < 8; i += 1) {
-      addEnemy("chicken", "Chicken", 23 + (i % 4) * 2, 57 + Math.floor(i / 4) * 2, {
+    for (const [i, spot] of [
+      [22, 56],
+      [25, 57],
+      [28, 56],
+      [21, 59],
+      [24, 60],
+      [27, 59],
+      [30, 60],
+    ].entries()) {
+      addEnemy("chicken", "Chicken", spot[0], spot[1], {
         level: 1,
         hp: 12,
         attack: 1,
         strength: 1,
         defence: 0,
         xp: 12,
-        aggro: 0.5,
+        aggro: 0.15,
         respawn: 5,
+        wanderRadius: 1.4,
         slayerType: "chicken",
       }, [["feather", 8 + (i % 3) * 2, 0.95], ["raw_chicken", 1, 0.8], ["bones", 1, 0.4]]);
     }
 
-    for (let i = 0; i < 9; i += 1) {
-      addEnemy("giant_rat", "Giant rat", 18 + (i % 3) * 2, 49 + Math.floor(i / 3) * 2, {
+    for (const spot of [
+      [15, 48],
+      [19, 48],
+      [23, 49],
+      [16, 52],
+      [20, 53],
+      [24, 52],
+    ]) {
+      addEnemy("giant_rat", "Giant rat", spot[0], spot[1], {
         level: 2,
         hp: 18,
         attack: 2,
         strength: 2,
         defence: 1,
         xp: 18,
-        aggro: 0.7,
+        aggro: 0.45,
+        wanderRadius: 1.6,
         slayerType: "giant_rat",
       }, [["bones", 1, 0.6], ["coins", 3, 0.35]]);
     }
-    for (let i = 0; i < 8; i += 1) {
-      addEnemy("pasture_cow", "Pasture cow", 20 + (i % 4) * 2, 53 + Math.floor(i / 4) * 2, {
+    for (const spot of [
+      [19, 55],
+      [23, 54],
+      [27, 55],
+      [21, 58],
+      [25, 58],
+      [29, 57],
+    ]) {
+      addEnemy("pasture_cow", "Pasture cow", spot[0], spot[1], {
         level: 2,
         hp: 22,
         attack: 1,
         strength: 2,
         defence: 1,
         xp: 20,
-        aggro: 1.5,
+        aggro: 0.2,
+        wanderRadius: 1.7,
         slayerType: "pasture_cow",
       }, [["bones", 1, 0.95], ["cowhide", 1, 0.9], ["raw_beef", 1, 0.65]]);
     }
-    for (let i = 0; i < 8; i += 1) {
-      addEnemy("field_imp", "Field imp", 17 + (i % 4) * 2, 34 + Math.floor(i / 4) * 3, {
+    for (const spot of [
+      [14, 33],
+      [18, 35],
+      [22, 33],
+      [15, 39],
+      [20, 40],
+      [24, 38],
+    ]) {
+      addEnemy("field_imp", "Field imp", spot[0], spot[1], {
         level: 5,
         hp: 25,
         attack: 4,
         strength: 4,
         defence: 2,
         xp: 30,
-        aggro: 3,
+        aggro: 1.8,
+        wanderRadius: 1.8,
         slayerType: "field_imp",
       }, [["coins", 8, 0.5], ["mind_rune", 4, 0.25], ["air_rune", 6, 0.25], ["air_talisman", 1, 0.07], ["potato_seed", 2, 0.18]]);
     }
-    for (let i = 0; i < 7; i += 1) {
-      addEnemy("dark_wizard", "Dark wizard", 8 + (i % 3) * 3, 18 + Math.floor(i / 3) * 3, {
+    for (const spot of [
+      [6, 16],
+      [11, 15],
+      [16, 17],
+      [7, 22],
+      [13, 23],
+      [18, 25],
+    ]) {
+      addEnemy("dark_wizard", "Dark wizard", spot[0], spot[1], {
         level: 20,
         hp: 58,
         attack: 19,
         strength: 13,
         defence: 8,
         xp: 95,
-        aggro: 5,
+        aggro: 3.2,
         respawn: 12,
+        wanderRadius: 2.0,
         slayerType: "dark_wizard",
       }, [["bones", 1, 0.7], ["chaos_rune", 2, 0.35], ["law_rune", 1, 0.08], ["chaos_talisman", 1, 0.06], ["mind_talisman", 1, 0.08], ["magic_potion", 1, 0.1], ["wizard_hat", 1, 0.07], ["staff_of_air", 1, 0.04]]);
     }
-    for (let i = 0; i < 4; i += 1) {
-      addEnemy("black_knight", "Black knight", 15 + (i % 2) * 3, 10 + Math.floor(i / 2) * 3, {
+    for (const spot of [
+      [13, 9],
+      [18, 11],
+      [11, 15],
+      [17, 18],
+    ]) {
+      addEnemy("black_knight", "Black knight", spot[0], spot[1], {
         level: 33,
         hp: 92,
         attack: 21,
         strength: 22,
         defence: 20,
         xp: 170,
-        aggro: 4.5,
+        aggro: 3.1,
         respawn: 17,
+        wanderRadius: 1.8,
         slayerType: "black_knight",
       }, [["big_bones", 1, 0.8], ["coins", 65, 0.55], ["defence_potion", 1, 0.12], ["black_helm", 1, 0.08], ["iron_platelegs", 1, 0.07], ["steel_sword", 1, 0.06]]);
     }
@@ -1349,55 +1396,76 @@
       strength: 28,
       defence: 22,
       xp: 310,
-      aggro: 7,
+      aggro: 5.2,
       respawn: 35,
+      wanderRadius: 2.2,
       slayerType: "lesser_demon",
     }, [["big_bones", 1, 1], ["chaos_rune", 8, 0.55], ["law_rune", 2, 0.18], ["clue_scroll", 1, 0.28], ["strength_potion", 1, 0.16], ["rune_scimitar", 1, 0.035], ["slayer_helm", 1, 0.03]]);
-    for (let i = 0; i < 7; i += 1) {
-      addEnemy("grave_skeleton", "Grave skeleton", 55 + (i % 3) * 3, 49 + Math.floor(i / 3) * 3, {
+    for (const spot of [
+      [52, 47],
+      [56, 49],
+      [60, 47],
+      [53, 53],
+      [58, 55],
+      [62, 52],
+    ]) {
+      addEnemy("grave_skeleton", "Grave skeleton", spot[0], spot[1], {
         level: 12,
         hp: 42,
         attack: 8,
         strength: 8,
         defence: 6,
         xp: 65,
-        aggro: 4,
+        aggro: 2.4,
+        wanderRadius: 1.7,
         slayerType: "grave_skeleton",
       }, [["bones", 1, 0.95], ["coins", 18, 0.4], ["attack_potion", 1, 0.08], ["iron_sword", 1, 0.06]]);
     }
-    for (let i = 0; i < 9; i += 1) {
-      addEnemy("cave_crawler", "Cave crawler", 64 + (i % 4) * 2, 39 + Math.floor(i / 4) * 2, {
+    for (const spot of [
+      [61, 39],
+      [67, 38],
+      [73, 40],
+      [64, 46],
+      [71, 49],
+    ]) {
+      addEnemy("cave_crawler", "Cave crawler", spot[0], spot[1], {
         level: 16,
         hp: 50,
         attack: 10,
         strength: 9,
         defence: 7,
         xp: 80,
-        aggro: 4.5,
+        aggro: 2.4,
         respawn: 10,
+        wanderRadius: 1.7,
         slayerType: "cave_crawler",
       }, [["bones", 1, 0.7], ["uncut_gem", 1, 0.08], ["energy_potion", 1, 0.1], ["coins", 24, 0.5]]);
     }
-    for (let i = 0; i < 6; i += 1) {
-      addEnemy("salt_slug", "Salt slug", 72 + (i % 3) * 2, 41 + Math.floor(i / 3) * 2, {
+    for (const spot of [
+      [76, 42],
+      [78, 47],
+      [72, 50],
+      [66, 48],
+    ]) {
+      addEnemy("salt_slug", "Salt slug", spot[0], spot[1], {
         level: 18,
         hp: 54,
         attack: 9,
         strength: 11,
         defence: 12,
         xp: 90,
-        aggro: 3.6,
+        aggro: 2.2,
         respawn: 12,
+        wanderRadius: 1.6,
         slayerType: "salt_slug",
         finisher: "bag_of_salt",
       }, [["bones", 1, 0.55], ["coins", 32, 0.5], ["uncut_gem", 1, 0.1], ["bag_of_salt", 1, 0.2]]);
     }
     for (const spot of [
-      [69, 12],
-      [70, 13],
-      [71, 14],
-      [69, 15],
-      [72, 11],
+      [67, 9],
+      [69, 17],
+      [75, 9],
+      [78, 17],
     ]) {
       addEnemy("crawling_hand", "Crawling hand", spot[0], spot[1], {
         level: 8,
@@ -1406,17 +1474,15 @@
         strength: 6,
         defence: 4,
         xp: 45,
-        aggro: 2.3,
+        aggro: 1.4,
         respawn: 9,
-        wanderRadius: 2.0,
+        wanderRadius: 1.2,
         slayerType: "crawling_hand",
       }, [["bones", 1, 0.35], ["tower_key", 1, 0.12], ["ectoplasm", 1, 0.22], ["coins", 16, 0.45], ["leather_gloves", 1, 0.08]]);
     }
     for (const spot of [
-      [72, 12],
-      [73, 11],
-      [74, 12],
-      [75, 14],
+      [72, 9],
+      [77, 12],
     ]) {
       addEnemy("banshee", "Banshee", spot[0], spot[1], {
         level: 23,
@@ -1425,16 +1491,15 @@
         strength: 16,
         defence: 10,
         xp: 120,
-        aggro: 3.5,
+        aggro: 2.1,
         respawn: 13,
+        wanderRadius: 1.3,
         requiredProtection: "banshee",
         slayerType: "banshee",
       }, [["bones", 1, 0.55], ["tower_key", 1, 0.18], ["ectoplasm", 2, 0.55], ["death_rune", 1, 0.12], ["ghostly_robe", 1, 0.035]]);
     }
     for (const spot of [
-      [75, 15],
-      [76, 13],
-      [76, 16],
+      [75, 16],
     ]) {
       addEnemy("aberrant_specter", "Aberrant specter", spot[0], spot[1], {
         level: 46,
@@ -1443,8 +1508,9 @@
         strength: 30,
         defence: 20,
         xp: 280,
-        aggro: 4.3,
+        aggro: 2.7,
         respawn: 22,
+        wanderRadius: 1.2,
         requiredProtection: "specter",
         poisonDamage: 3,
         poisonChance: 0.18,
@@ -1458,20 +1524,27 @@
       strength: 21,
       defence: 18,
       xp: 240,
-      aggro: 2.8,
+      aggro: 2.0,
       respawn: 28,
+      wanderRadius: 1.2,
       slayerType: "deep_wight",
     }, [["bones", 1, 1], ["coins", 120, 0.7], ["clue_scroll", 1, 0.35], ["ranging_potion", 1, 0.14], ["amulet_of_accuracy", 1, 0.08], ["team_cape", 1, 0.06], ["steel_sword", 1, 0.05]]);
-    for (let i = 0; i < 5; i += 1) {
-      addEnemy("moss_brute", "Moss brute", 14 + (i % 3) * 3, 16 + Math.floor(i / 3) * 3, {
+    for (const spot of [
+      [12, 15],
+      [17, 13],
+      [20, 18],
+      [14, 22],
+    ]) {
+      addEnemy("moss_brute", "Moss brute", spot[0], spot[1], {
         level: 28,
         hp: 80,
         attack: 16,
         strength: 17,
         defence: 14,
         xp: 130,
-        aggro: 5,
+        aggro: 3.1,
         respawn: 14,
+        wanderRadius: 1.8,
         slayerType: "moss_brute",
       }, [["bones", 1, 0.9], ["coins", 55, 0.55], ["mirthleaf_seed", 2, 0.18], ["strength_potion", 1, 0.12], ["steel_sword", 1, 0.04]]);
     }
@@ -2212,6 +2285,26 @@
     return "Wilderness Road";
   }
 
+  function isMultiCombatArea(name) {
+    return name === "Low Wilderness";
+  }
+
+  function singleCombatAggressorId() {
+    if (state.player.combatTarget) return state.player.combatTarget;
+    let best = null;
+    let bestD = Infinity;
+    for (const enemy of state.enemies) {
+      if (enemy.hp <= 0) continue;
+      if (isMultiCombatArea(areaAt(enemy.x, enemy.y))) continue;
+      const d = dist(enemy, state.player);
+      if (d < enemy.aggro && d < bestD) {
+        best = enemy.id;
+        bestD = d;
+      }
+    }
+    return best;
+  }
+
   function updatePoison(dt) {
     const player = state.player;
     if (!isPoisoned()) return;
@@ -2512,6 +2605,7 @@
   }
 
   function updateEnemies(dt) {
+    const singleAggressorId = singleCombatAggressorId();
     for (const enemy of state.enemies) {
       if (enemy.hitFlash > 0) enemy.hitFlash -= dt;
       if (enemy.warningCooldown > 0) enemy.warningCooldown -= dt;
@@ -2527,7 +2621,9 @@
       }
       enemy.attackTimer -= dt;
       const d = dist(enemy, state.player);
-      if (d < enemy.aggro || state.player.combatTarget === enemy.id) {
+      const playerTargetingEnemy = state.player.combatTarget === enemy.id;
+      const allowedToEngage = playerTargetingEnemy || isMultiCombatArea(areaAt(enemy.x, enemy.y)) || enemy.id === singleAggressorId;
+      if ((d < enemy.aggro || playerTargetingEnemy) && allowedToEngage) {
         if (d > 1.4) {
           const dx = (state.player.x - enemy.x) / d;
           const dy = (state.player.y - enemy.y) / d;
@@ -3308,20 +3404,20 @@
     const combat = combatLevel();
     const pool = [
       { type: "giant_rat", label: "giant rats", amount: 6, minCombat: 1, xp: 30 },
-      { type: "chicken", label: "chickens", amount: 7, minCombat: 1, xp: 22 },
+      { type: "chicken", label: "chickens", amount: 6, minCombat: 1, xp: 22 },
       { type: "pasture_cow", label: "pasture cows", amount: 6, minCombat: 1, xp: 28 },
-      { type: "field_imp", label: "field imps", amount: 8, minCombat: 4, xp: 45 },
-      { type: "grave_skeleton", label: "grave skeletons", amount: 8, minCombat: 10, xp: 75 },
-      { type: "crawling_hand", label: "crawling hands", amount: 8, minCombat: 8, xp: 60 },
-      { type: "salt_slug", label: "salt slugs", amount: 8, minCombat: 12, xp: 80 },
-      { type: "cave_crawler", label: "cave crawlers", amount: 10, minCombat: 12, xp: 95 },
+      { type: "field_imp", label: "field imps", amount: 6, minCombat: 4, xp: 45 },
+      { type: "grave_skeleton", label: "grave skeletons", amount: 6, minCombat: 10, xp: 75 },
+      { type: "crawling_hand", label: "crawling hands", amount: 5, minCombat: 8, xp: 60 },
+      { type: "salt_slug", label: "salt slugs", amount: 5, minCombat: 12, xp: 80 },
+      { type: "cave_crawler", label: "cave crawlers", amount: 6, minCombat: 12, xp: 95 },
       { type: "jungle_spider", label: "jungle spiders", amount: 8, minCombat: 16, xp: 105 },
-      { type: "dark_wizard", label: "dark wizards", amount: 7, minCombat: 18, xp: 110 },
-      { type: "banshee", label: "banshees", amount: 7, minCombat: 20, xp: 115 },
-      { type: "moss_brute", label: "moss brutes", amount: 6, minCombat: 24, xp: 140 },
-      { type: "black_knight", label: "black knights", amount: 5, minCombat: 28, xp: 175 },
+      { type: "dark_wizard", label: "dark wizards", amount: 6, minCombat: 18, xp: 110 },
+      { type: "banshee", label: "banshees", amount: 4, minCombat: 20, xp: 115 },
+      { type: "moss_brute", label: "moss brutes", amount: 4, minCombat: 24, xp: 140 },
+      { type: "black_knight", label: "black knights", amount: 4, minCombat: 28, xp: 175 },
       { type: "deep_wight", label: "deep wights", amount: 3, minCombat: 30, xp: 220 },
-      { type: "aberrant_specter", label: "aberrant specters", amount: 3, minCombat: 42, xp: 260 },
+      { type: "aberrant_specter", label: "aberrant specters", amount: 2, minCombat: 42, xp: 260 },
       { type: "lesser_demon", label: "lesser demons", amount: 2, minCombat: 38, xp: 260 },
     ].filter((task) => combat >= task.minCombat || slayer >= Math.floor(task.minCombat / 2));
     const task = choice(pool);
@@ -6788,11 +6884,14 @@
   }
 
   function renderGameToText() {
+    const renderSingleAggressorId = singleCombatAggressorId();
     const nearbyEnemies = state.enemies
       .filter((enemy) => enemy.hp > 0 && dist(enemy, state.player) < 8)
       .map((enemy) => {
         const screen = screenOf(enemy);
-        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, requiredProtection: enemy.requiredProtection || null, protected: hasSlayerProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
+        const area = areaAt(enemy.x, enemy.y);
+        const distance = dist(enemy, state.player);
+        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, requiredProtection: enemy.requiredProtection || null, protected: hasSlayerProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, aggro: enemy.aggro, distance: Number(distance.toFixed(2)), engaging: state.player.combatTarget === enemy.id || isMultiCombatArea(area) || enemy.id === renderSingleAggressorId, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
       });
     const nearbyNpcs = state.npcs
       .filter((npc) => dist(npc, state.player) < 7)
