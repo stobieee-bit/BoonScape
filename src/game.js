@@ -15,8 +15,8 @@
   const TILE_H = 24;
   const HALF_W = TILE_W / 2;
   const HALF_H = TILE_H / 2;
-  const WORLD_W = 112;
-  const WORLD_H = 112;
+  const WORLD_W = 168;
+  const WORLD_H = 168;
   const MAX_CHAT = 10;
 
   const tabs = ["inventory", "skills", "quests", "equipment", "magic", "settings"];
@@ -87,6 +87,8 @@
     stone: ["#73736d", "#5d5d59", "#444442"],
     swamp: ["#546c3c", "#40562f", "#2d3f25"],
     field: ["#857b37", "#736b32", "#584f26"],
+    snow: ["#d9e4df", "#c4d2cf", "#aebfbd"],
+    moor: ["#59643f", "#465339", "#33402e"],
   };
 
   const ITEMS = {
@@ -547,6 +549,11 @@
         state: "not-started",
         text: "Southport's sailor wants proof that the outer roads are open again.",
       },
+      farRoadSurvey: {
+        title: "Far Road Survey",
+        state: "not-started",
+        text: "Sailor Ren wants reports from the newest edges of Briarbound.",
+      },
     },
     stats: {
       bankUses: 0,
@@ -582,6 +589,11 @@
       desertScorpionsSlain: 0,
       highwaymenSlain: 0,
       hillGiantsSlain: 0,
+      reefRaidersSlain: 0,
+      reedStalkersSlain: 0,
+      glassMaraudersSlain: 0,
+      ridgeWardensSlain: 0,
+      orchardSpiritsSlain: 0,
       miasmaWraithsSlain: 0,
       towerChestsOpened: 0,
       mapsOpened: 0,
@@ -604,6 +616,15 @@
       vigilTasksCompleted: 0,
       stallsStolen: 0,
       visitedSouthport: false,
+      visitedStormbreak: false,
+      visitedReedmere: false,
+      visitedGlassFlats: false,
+      visitedFrostgate: false,
+      visitedOldOrchard: false,
+      visitedAmberDowns: false,
+      visitedStarfallHeath: false,
+      visitedTideglassQuay: false,
+      visitedPaleWatch: false,
       visitedAshlands: false,
       websCut: 0,
     },
@@ -684,8 +705,15 @@
     { id: "event", label: "Claim a random event", done: () => state.stats.randomEventsCompleted > 0 },
     { id: "low_ash", label: "Step into Low Ash", done: () => Boolean(state.stats.visitedAshlands) },
     { id: "southport", label: "Reach Southport docks", done: () => Boolean(state.stats.visitedSouthport) },
+    { id: "stormbreak", label: "Reach Stormbreak Coast", done: () => Boolean(state.stats.visitedStormbreak) },
+    { id: "reedmere", label: "Reach Reedmere Fen", done: () => Boolean(state.stats.visitedReedmere) },
+    { id: "frostgate", label: "Reach Frostgate Pass", done: () => Boolean(state.stats.visitedFrostgate) },
+    { id: "amber", label: "Reach Amber Downs", done: () => Boolean(state.stats.visitedAmberDowns) },
+    { id: "tideglass", label: "Reach Tideglass Quay", done: () => Boolean(state.stats.visitedTideglassQuay) },
     { id: "giant", label: "Defeat a hill giant", done: () => state.stats.hillGiantsSlain > 0 },
     { id: "scorpion", label: "Defeat a desert scorpion", done: () => state.stats.desertScorpionsSlain > 0 },
+    { id: "reef", label: "Defeat a reef raider", done: () => state.stats.reefRaidersSlain > 0 },
+    { id: "glass", label: "Defeat a glass marauder", done: () => state.stats.glassMaraudersSlain > 0 },
     { id: "banner_flag", label: "Capture a banner", done: () => state.stats.bannersCaptured > 0 },
     { id: "crypt", label: "Loot the crypt chest", done: () => state.stats.cryptChestsOpened > 0 },
     { id: "wight", label: "Defeat the Hollow wight", done: () => state.stats.hollowWightsSlain > 0 },
@@ -712,6 +740,15 @@
     { id: "eastdunes", label: "East Dunes", x: 97, y: 45, note: "scorpions and tollmen", color: "#eac76f" },
     { id: "northridge", label: "North Ridge", x: 95, y: 13, note: "ore, giants, cold roads", color: "#d4d7d4" },
     { id: "westwood", label: "Westwood", x: 19, y: 85, note: "oaks and big bones", color: "#9bd36f" },
+    { id: "oldorchard", label: "Old Orchard", x: 18, y: 124, note: "oaks, spirits, quiet roads", color: "#c7e182" },
+    { id: "reedmere", label: "Reedmere Fen", x: 50, y: 124, note: "reeds, herbs, wet trouble", color: "#93c77d" },
+    { id: "stormbreak", label: "Stormbreak Coast", x: 124, y: 111, note: "dock, raiders, salt wind", color: "#81d5e8" },
+    { id: "glassflats", label: "Glass Flats", x: 125, y: 48, note: "mirage camp and gems", color: "#f2d482" },
+    { id: "frostgate", label: "Frostgate Pass", x: 124, y: 10, note: "snow, forge, wardens", color: "#d8f3ff" },
+    { id: "amberdowns", label: "Amber Downs", x: 26, y: 150, note: "fields, oaks, quiet contracts", color: "#e2cf72" },
+    { id: "starfall", label: "Starfall Heath", x: 148, y: 78, note: "wide moor and signal stones", color: "#b8d77a" },
+    { id: "tideglass", label: "Tideglass Quay", x: 148, y: 139, note: "deep pier, redclaws, ferries", color: "#8bdff0" },
+    { id: "palewatch", label: "Pale Watch", x: 148, y: 18, note: "snow watch and high ore", color: "#e2f6ff" },
   ];
 
   const BESTIARY = [
@@ -728,6 +765,11 @@
     { type: "desert_scorpion", name: "Desert scorpion", level: 14, location: "East Dunes", drops: "tails, antipoison", tip: "poisons lightly" },
     { type: "highwayman", name: "Highwayman", level: 18, location: "East Dunes", drops: "coins, cake, clues", tip: "thinly spaced ambushes" },
     { type: "hill_giant", name: "Hill giant", level: 28, location: "Westwood / North Ridge", drops: "big bones, roots, club", tip: "slow heavy target" },
+    { type: "orchard_spirit", name: "Orchard spirit", level: 32, location: "Old Orchard / Amber Downs", drops: "oak logs, seeds, ectoplasm", tip: "woodcutters dislike them" },
+    { type: "reed_stalker", name: "Reed stalker", level: 22, location: "Reedmere Fen", drops: "herbs, brine charms", tip: "poisons lightly" },
+    { type: "reef_raider", name: "Reef raider", level: 24, location: "Stormbreak / Tideglass", drops: "coins, redclaws, clues", tip: "safe shoreline task" },
+    { type: "glass_marauder", name: "Glass marauder", level: 30, location: "Glass Flats / Starfall", drops: "gems, silk, coins", tip: "spaced along the flats" },
+    { type: "ridge_warden", name: "Ridge warden", level: 40, location: "Frostgate / Pale Watch", drops: "ore, big bones, oath sigils", tip: "hard northern task" },
     { type: "miasma_wraith", name: "Miasma wraith", level: 46, location: "Gloamspire", drops: "herbs, mystic loot", tip: "wear a mire charm" },
     { type: "dusk_conjurer", name: "Dusk conjurer", level: 20, location: "Low Ash", drops: "rift, talismans, staff", tip: "keep Resolve ready" },
     { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
@@ -1194,12 +1236,32 @@
         const eastDune = Math.hypot((x - 98) / 1.25, y - 46);
         const westwood = Math.hypot((x - 20) / 1.15, y - 86);
         const ridge = Math.hypot((x - 96) / 1.45, y - 14);
-        const southCoast = y > 99 + Math.sin(x * 0.19) * 2;
+        const southHarbor = x > 52 && x < 82 && y > 99 + Math.sin(x * 0.19) * 2;
+        const southCoast = y > 158 + Math.sin(x * 0.15) * 3;
+        const oldOrchard = Math.hypot((x - 19) / 1.25, (y - 124) / 0.95);
+        const reedmere = Math.hypot((x - 50) / 1.35, (y - 124) / 1.0);
+        const stormbreak = Math.hypot((x - 124) / 1.35, (y - 111) / 1.0);
+        const glassFlats = Math.hypot((x - 125) / 1.45, (y - 48) / 0.95);
+        const frostgate = Math.hypot((x - 124) / 1.5, (y - 10) / 0.85);
+        const amberDowns = Math.hypot((x - 26) / 1.35, (y - 150) / 0.95);
+        const starfallHeath = Math.hypot((x - 148) / 1.4, (y - 78) / 0.95);
+        const tideglassQuay = Math.hypot((x - 148) / 1.3, (y - 139) / 0.9);
+        const paleWatch = Math.hypot((x - 148) / 1.45, (y - 18) / 0.85);
         if (southCoast) setTile(x, y, "water");
-        else if (y > 94 && mapAt(x, y) === "grass") setTile(x, y, "sand");
+        else if (southHarbor) setTile(x, y, "water");
+        else if ((y > 152 || (x > 52 && x < 82 && y > 94)) && mapAt(x, y) === "grass") setTile(x, y, "sand");
         if (eastDune < 17) setTile(x, y, eastDune < 8 ? "sand" : mapAt(x, y) === "grass" ? "sand" : mapAt(x, y));
         if (westwood < 15 && mapAt(x, y) === "grass") setTile(x, y, "field");
         if (ridge < 15) setTile(x, y, ridge < 9 ? "stone" : "dirt");
+        if (oldOrchard < 19 && (mapAt(x, y) === "grass" || mapAt(x, y) === "field")) setTile(x, y, oldOrchard < 8 ? "field" : "moor");
+        if (reedmere < 17 && mapAt(x, y) !== "water") setTile(x, y, reedmere < 10 ? "swamp" : "moor");
+        if (stormbreak < 19 && mapAt(x, y) !== "water") setTile(x, y, stormbreak < 8 ? "town" : stormbreak < 14 ? "sand" : "dirt");
+        if (glassFlats < 20 && mapAt(x, y) !== "water") setTile(x, y, glassFlats < 8 ? "sand" : "dirt");
+        if (frostgate < 21 && mapAt(x, y) !== "water") setTile(x, y, frostgate < 11 ? "snow" : "stone");
+        if (amberDowns < 20 && mapAt(x, y) !== "water") setTile(x, y, amberDowns < 9 ? "field" : "moor");
+        if (starfallHeath < 21 && mapAt(x, y) !== "water") setTile(x, y, starfallHeath < 10 ? "moor" : "field");
+        if (tideglassQuay < 20 && mapAt(x, y) !== "water") setTile(x, y, tideglassQuay < 8 ? "town" : tideglassQuay < 14 ? "sand" : "dirt");
+        if (paleWatch < 22 && mapAt(x, y) !== "water") setTile(x, y, paleWatch < 11 ? "snow" : "stone");
       }
     }
     setRect(57, 88, 17, 8, "town");
@@ -1212,12 +1274,44 @@
     setRect(91, 10, 9, 5, "dirt");
     setRect(8, 75, 27, 22, "field");
     setRect(16, 82, 8, 5, "dirt");
+    setRect(10, 116, 18, 15, "field");
+    setRect(15, 121, 9, 5, "dirt");
+    setRect(43, 118, 16, 11, "swamp");
+    setRect(48, 121, 8, 5, "town");
+    setRect(114, 103, 21, 15, "town");
+    setRect(118, 116, 14, 5, "sand");
+    setRect(116, 42, 18, 13, "sand");
+    setRect(120, 46, 9, 5, "town");
+    setRect(114, 5, 22, 14, "snow");
+    setRect(119, 8, 11, 6, "town");
+    setRect(16, 142, 22, 13, "field");
+    setRect(23, 147, 9, 5, "town");
+    setRect(140, 70, 18, 16, "moor");
+    setRect(145, 75, 9, 5, "dirt");
+    setRect(138, 132, 20, 14, "town");
+    setRect(142, 146, 14, 5, "sand");
+    setRect(138, 10, 22, 17, "snow");
+    setRect(144, 15, 10, 5, "town");
     drawRoad(64, 61, 64, 94, 1);
     drawRoad(64, 93, 97, 45, 1);
     drawRoad(72, 30, 97, 45, 1);
     drawRoad(72, 13, 95, 13, 1);
     drawRoad(23, 53, 19, 85, 1);
     drawRoad(19, 85, 64, 93, 1);
+    drawRoad(19, 85, 18, 124, 1);
+    drawRoad(64, 93, 50, 124, 1);
+    drawRoad(64, 93, 124, 111, 1);
+    drawRoad(97, 45, 125, 48, 1);
+    drawRoad(125, 48, 124, 111, 1);
+    drawRoad(95, 13, 124, 10, 1);
+    drawRoad(125, 48, 124, 10, 1);
+    drawRoad(18, 124, 26, 150, 1);
+    drawRoad(50, 124, 26, 150, 1);
+    drawRoad(124, 111, 148, 139, 1);
+    drawRoad(125, 48, 148, 78, 1);
+    drawRoad(148, 78, 148, 139, 1);
+    drawRoad(124, 10, 148, 18, 1);
+    drawRoad(148, 18, 148, 78, 1);
 
     addScenery("bank_booth", "Bank booth", 34, 30, { width: 4, height: 1, action: "bank" });
     addScenery("chest", "Bank chest", 37, 30, { action: "bank" });
@@ -1281,6 +1375,40 @@
     addScenery("ruins", "Desert waystone", 97, 45, { action: "examine" });
     addScenery("quest_sign", "North ridge sign", 89, 12, { action: "examine" });
     addScenery("ruins", "Ridge cairn", 95, 13, { action: "examine" });
+    addScenery("quest_sign", "Old Orchard sign", 18, 124, { action: "examine" });
+    addScenery("ruins", "Forgotten cider press", 15, 121, { action: "examine" });
+    addScenery("quest_sign", "Reedmere marker", 49, 124, { action: "examine" });
+    addScenery("well", "Reedmere well", 52, 122, { action: "water" });
+    addScenery("dock", "Reedmere boardwalk", 46, 127, { action: "fish", interactRange: 2.7 });
+    addScenery("range", "Reedmere smoke pit", 55, 123, { action: "cook" });
+    addScenery("quest_sign", "Stormbreak notice", 122, 108, { action: "examine" });
+    addScenery("dock", "Stormbreak pier", 124, 117, { action: "fish", interactRange: 2.8 });
+    addScenery("island_dock", "Stormbreak crab pots", 129, 116, { action: "fish_redclaw", interactRange: 2.8 });
+    addScenery("market_stall", "Stormbreak stall", 120, 108, { action: "steal", level: 16 });
+    addScenery("range", "Stormbreak cookfire", 127, 109, { action: "cook" });
+    addScenery("quest_sign", "Glass Flats placard", 124, 48, { action: "examine" });
+    addScenery("ruins", "Mirage marker", 129, 45, { action: "examine" });
+    addScenery("well", "Glass camp well", 121, 49, { action: "water" });
+    addScenery("quest_sign", "Frostgate board", 124, 10, { action: "examine" });
+    addScenery("furnace", "Frostgate furnace", 121, 9, { action: "smelt" });
+    addScenery("anvil", "Frostgate anvil", 126, 10, { action: "smith" });
+    addScenery("quest_sign", "Amber Downs charter", 26, 150, { action: "examine" });
+    addScenery("well", "Amber Downs well", 28, 148, { action: "water" });
+    addScenery("range", "Amber mill hearth", 25, 149, { action: "cook" });
+    addScenery("market_stall", "Amber grain stall", 30, 148, { action: "steal", level: 18 });
+    addScenery("ruins", "Old threshing stone", 20, 146, { action: "examine" });
+    addScenery("quest_sign", "Starfall signal", 148, 78, { action: "examine" });
+    addScenery("well", "Heath rain barrel", 146, 76, { action: "water" });
+    addScenery("ruins", "Fallen sky-stone", 152, 75, { action: "examine" });
+    addScenery("quest_sign", "Tideglass tide bell", 148, 139, { action: "examine" });
+    addScenery("dock", "Tideglass long pier", 150, 147, { action: "fish", interactRange: 2.8 });
+    addScenery("island_dock", "Tideglass redclaw pots", 155, 145, { action: "fish_redclaw", interactRange: 2.8 });
+    addScenery("range", "Tideglass cookfire", 145, 136, { action: "cook" });
+    addScenery("market_stall", "Tideglass net stall", 151, 136, { action: "steal", level: 24 });
+    addScenery("quest_sign", "Pale Watch board", 148, 18, { action: "examine" });
+    addScenery("furnace", "Pale Watch furnace", 146, 17, { action: "smelt" });
+    addScenery("anvil", "Pale Watch anvil", 151, 18, { action: "smith" });
+    addScenery("range", "Pale Watch brazier", 149, 15, { action: "cook" });
 
     for (let i = 0; i < 85; i += 1) {
       const x = 7 + Math.floor(hash(i, 3) * 23);
@@ -1351,6 +1479,69 @@
     ]) {
       addResource("redclaw_spot", spot[0], spot[1]);
     }
+    for (let i = 0; i < 96; i += 1) {
+      const x = 5 + Math.floor(hash(i, 307) * 31);
+      const y = 108 + Math.floor(hash(i, 313) * 31);
+      if (["grass", "field", "moor"].includes(mapAt(x, y))) addResource(hash(i, 317) > 0.38 ? "oak_tree" : "tree", x, y);
+    }
+    for (let i = 0; i < 70; i += 1) {
+      const x = 108 + Math.floor(hash(i, 331) * 31);
+      const y = 3 + Math.floor(hash(i, 337) * 22);
+      if (["snow", "stone", "dirt"].includes(mapAt(x, y))) {
+        const roll = hash(i, 347);
+        addResource(roll > 0.54 ? "gold_rock" : roll > 0.22 ? "iron_rock" : roll > 0.1 ? "tin_rock" : "copper_rock", x, y);
+      }
+    }
+    for (const spot of [
+      [44, 128],
+      [48, 130],
+      [53, 129],
+      [120, 118],
+      [124, 119],
+      [132, 117],
+    ]) {
+      addResource("fishing_spot", spot[0], spot[1]);
+    }
+    for (const spot of [
+      [127, 119],
+      [132, 120],
+      [136, 118],
+    ]) {
+      addResource("redclaw_spot", spot[0], spot[1]);
+    }
+    for (let i = 0; i < 92; i += 1) {
+      const x = 7 + Math.floor(hash(i, 353) * 41);
+      const y = 136 + Math.floor(hash(i, 359) * 23);
+      if (["grass", "field", "moor"].includes(mapAt(x, y))) addResource(hash(i, 367) > 0.44 ? "oak_tree" : "tree", x, y);
+    }
+    for (let i = 0; i < 58; i += 1) {
+      const x = 136 + Math.floor(hash(i, 373) * 28);
+      const y = 63 + Math.floor(hash(i, 379) * 33);
+      if (["grass", "field", "moor"].includes(mapAt(x, y))) addResource(hash(i, 383) > 0.68 ? "oak_tree" : "tree", x, y);
+    }
+    for (let i = 0; i < 76; i += 1) {
+      const x = 134 + Math.floor(hash(i, 389) * 30);
+      const y = 6 + Math.floor(hash(i, 397) * 26);
+      if (["snow", "stone", "dirt"].includes(mapAt(x, y))) {
+        const roll = hash(i, 401);
+        addResource(roll > 0.5 ? "gold_rock" : roll > 0.24 ? "iron_rock" : roll > 0.11 ? "tin_rock" : "copper_rock", x, y);
+      }
+    }
+    for (const spot of [
+      [145, 148],
+      [149, 149],
+      [154, 147],
+      [158, 144],
+    ]) {
+      addResource("fishing_spot", spot[0], spot[1]);
+    }
+    for (const spot of [
+      [152, 150],
+      [157, 148],
+      [161, 145],
+    ]) {
+      addResource("redclaw_spot", spot[0], spot[1]);
+    }
 
     addNpc("banker", "Banker Niles", "banker", 35, 31);
     addNpc("shopkeeper", "Shopkeeper Marnie", "shop", 45, 32);
@@ -1371,6 +1562,17 @@
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
     addNpc("southport_sailor", "Sailor Ren", "sailor", 64, 91);
     addNpc("ridge_prospector", "Prospector Gale", "guard", 92, 12);
+    addNpc("old_orchard_keeper", "Orchard Keeper Lysa", "frontier_shop", 18, 122);
+    addNpc("reedmere_hermit", "Reedmere Hermit", "frontier_shop", 52, 124);
+    addNpc("stormbreak_porter", "Porter Cale", "sailor", 123, 109);
+    addNpc("stormbreak_trader", "Stormbreak Trader", "frontier_shop", 121, 108);
+    addNpc("glass_peddler", "Glass Flats Peddler", "frontier_shop", 122, 48);
+    addNpc("frostgate_keeper", "Frostgate Keeper", "frontier_shop", 124, 9);
+    addNpc("amber_miller", "Amber Miller Fen", "frontier_shop", 26, 149);
+    addNpc("starfall_surveyor", "Surveyor Nix", "frontier_shop", 149, 77);
+    addNpc("tideglass_factor", "Tideglass Factor", "frontier_shop", 147, 138);
+    addNpc("tideglass_sailor", "Sailor Wren", "sailor", 145, 137);
+    addNpc("pale_watch_keeper", "Pale Watch Keeper", "frontier_shop", 148, 17);
 
     for (const [i, spot] of [
       [22, 56],
@@ -1754,6 +1956,189 @@
         vigilType: "highwayman",
       }, [["bones", 1, 0.6], ["coins", 48, 0.72], ["cake", 1, 0.16], ["silk", 1, 0.12], ["clue_scroll", 1, 0.08], ["iron_sword", 1, 0.035]]);
     }
+    for (const spot of [
+      [12, 120],
+      [24, 116],
+      [27, 126],
+      [17, 132],
+      [34, 136],
+    ]) {
+      addEnemy("orchard_spirit", "Orchard spirit", spot[0], spot[1], {
+        level: 32,
+        hp: 86,
+        attack: 18,
+        strength: 19,
+        defence: 17,
+        xp: 150,
+        aggro: 0.16,
+        respawn: 18,
+        wanderRadius: 1.65,
+        wanderSpeed: 0.3,
+        vigilType: "orchard_spirit",
+      }, [["oak_logs", 3, 0.55], ["mirthleaf_seed", 2, 0.24], ["ectoplasm", 1, 0.25], ["cut_gem", 1, 0.05], ["clue_scroll", 1, 0.08]]);
+    }
+    for (const spot of [
+      [43, 121],
+      [45, 132],
+      [58, 129],
+      [61, 118],
+      [53, 136],
+    ]) {
+      addEnemy("reed_stalker", "Reed stalker", spot[0], spot[1], {
+        level: 22,
+        hp: 62,
+        attack: 14,
+        strength: 15,
+        defence: 12,
+        xp: 105,
+        aggro: 0.2,
+        poisonDamage: 2,
+        poisonChance: 0.12,
+        respawn: 13,
+        wanderRadius: 1.55,
+        wanderSpeed: 0.36,
+        vigilType: "reed_stalker",
+      }, [["bones", 1, 0.45], ["grimy_mirthleaf", 1, 0.28], ["mirthleaf_seed", 1, 0.18], ["brine_charm", 1, 0.14], ["antipoison", 1, 0.08]]);
+    }
+    for (const spot of [
+      [112, 111],
+      [119, 121],
+      [134, 108],
+      [138, 118],
+      [128, 126],
+    ]) {
+      addEnemy("reef_raider", "Reef raider", spot[0], spot[1], {
+        level: 24,
+        hp: 70,
+        attack: 17,
+        strength: 16,
+        defence: 12,
+        xp: 122,
+        aggro: 0.22,
+        respawn: 14,
+        wanderRadius: 1.6,
+        wanderSpeed: 0.38,
+        vigilType: "reef_raider",
+      }, [["bones", 1, 0.65], ["coins", 64, 0.7], ["raw_redclaw", 1, 0.18], ["pirate_cutlass", 1, 0.03], ["clue_scroll", 1, 0.1]]);
+    }
+    for (const spot of [
+      [116, 43],
+      [122, 38],
+      [132, 47],
+      [118, 54],
+      [135, 58],
+    ]) {
+      addEnemy("glass_marauder", "Glass marauder", spot[0], spot[1], {
+        level: 30,
+        hp: 84,
+        attack: 20,
+        strength: 18,
+        defence: 16,
+        xp: 150,
+        aggro: 0.28,
+        respawn: 16,
+        wanderRadius: 1.65,
+        wanderSpeed: 0.36,
+        vigilType: "glass_marauder",
+      }, [["bones", 1, 0.55], ["coins", 86, 0.68], ["uncut_gem", 1, 0.16], ["cut_gem", 1, 0.08], ["silk", 1, 0.18], ["surestrike_pendant", 1, 0.035]]);
+    }
+    for (const spot of [
+      [112, 16],
+      [121, 4],
+      [134, 7],
+      [116, 22],
+      [138, 20],
+    ]) {
+      addEnemy("ridge_warden", "Ridge warden", spot[0], spot[1], {
+        level: 40,
+        hp: 116,
+        attack: 25,
+        strength: 24,
+        defence: 24,
+        xp: 235,
+        aggro: 0.36,
+        respawn: 22,
+        wanderRadius: 1.35,
+        wanderSpeed: 0.32,
+        vigilType: "ridge_warden",
+      }, [["big_bones", 1, 0.95], ["iron_ore", 2, 0.28], ["gold_ore", 1, 0.2], ["oath_sigil", 2, 0.16], ["clue_scroll", 1, 0.16], ["crypt_platelegs", 1, 0.025]]);
+    }
+    for (const spot of [
+      [12, 146],
+      [40, 142],
+      [43, 158],
+    ]) {
+      addEnemy("orchard_spirit", "Orchard spirit", spot[0], spot[1], {
+        level: 32,
+        hp: 86,
+        attack: 18,
+        strength: 19,
+        defence: 17,
+        xp: 150,
+        aggro: 0.12,
+        respawn: 20,
+        wanderRadius: 1.35,
+        wanderSpeed: 0.28,
+        vigilType: "orchard_spirit",
+      }, [["oak_logs", 3, 0.55], ["mirthleaf_seed", 2, 0.24], ["ectoplasm", 1, 0.25], ["cut_gem", 1, 0.05], ["clue_scroll", 1, 0.08]]);
+    }
+    for (const spot of [
+      [141, 72],
+      [156, 82],
+      [151, 93],
+    ]) {
+      addEnemy("glass_marauder", "Glass marauder", spot[0], spot[1], {
+        level: 30,
+        hp: 84,
+        attack: 20,
+        strength: 18,
+        defence: 16,
+        xp: 150,
+        aggro: 0.18,
+        respawn: 18,
+        wanderRadius: 1.45,
+        wanderSpeed: 0.34,
+        vigilType: "glass_marauder",
+      }, [["bones", 1, 0.55], ["coins", 86, 0.68], ["uncut_gem", 1, 0.16], ["cut_gem", 1, 0.08], ["silk", 1, 0.18], ["surestrike_pendant", 1, 0.035]]);
+    }
+    for (const spot of [
+      [137, 136],
+      [158, 134],
+      [162, 145],
+    ]) {
+      addEnemy("reef_raider", "Reef raider", spot[0], spot[1], {
+        level: 24,
+        hp: 70,
+        attack: 17,
+        strength: 16,
+        defence: 12,
+        xp: 122,
+        aggro: 0.14,
+        respawn: 16,
+        wanderRadius: 1.35,
+        wanderSpeed: 0.34,
+        vigilType: "reef_raider",
+      }, [["bones", 1, 0.65], ["coins", 64, 0.7], ["raw_redclaw", 1, 0.18], ["pirate_cutlass", 1, 0.03], ["clue_scroll", 1, 0.1]]);
+    }
+    for (const spot of [
+      [137, 27],
+      [156, 7],
+      [162, 25],
+    ]) {
+      addEnemy("ridge_warden", "Ridge warden", spot[0], spot[1], {
+        level: 40,
+        hp: 116,
+        attack: 25,
+        strength: 24,
+        defence: 24,
+        xp: 235,
+        aggro: 0.24,
+        respawn: 24,
+        wanderRadius: 1.2,
+        wanderSpeed: 0.3,
+        vigilType: "ridge_warden",
+      }, [["big_bones", 1, 0.95], ["iron_ore", 2, 0.28], ["gold_ore", 1, 0.2], ["oath_sigil", 2, 0.16], ["clue_scroll", 1, 0.16], ["crypt_platelegs", 1, 0.025]]);
+    }
   }
 
   function walkable(x, y) {
@@ -1827,7 +2212,8 @@
         const nKey = tileKey(nx, ny);
         if (closed.has(nKey) || !walkable(nx, ny)) continue;
         if (Math.abs(dx) && Math.abs(dy) && (!walkable(node.x + dx, node.y) || !walkable(node.x, node.y + dy))) continue;
-        const g = node.g + cost + (mapAt(nx, ny) === "path" ? -0.1 : 0);
+        const roadCost = mapAt(nx, ny) === "path" ? 0.58 : 1;
+        const g = node.g + cost * roadCost;
         const h = Math.hypot(end.x - nx, end.y - ny);
         const existing = seen.get(nKey);
         if (!existing || g < existing.g) {
@@ -2580,6 +2966,42 @@
       state.stats.visitedSouthport = true;
       addChat("Southport's docks smell like salt, tar, and side quests.");
     }
+    if (nextArea === "Stormbreak Coast" && !state.stats.visitedStormbreak) {
+      state.stats.visitedStormbreak = true;
+      addChat("Stormbreak Coast is all salt wind, gull-cry, and bad intentions.");
+    }
+    if (nextArea === "Reedmere Fen" && !state.stats.visitedReedmere) {
+      state.stats.visitedReedmere = true;
+      addChat("Reedmere Fen squelches under every step.");
+    }
+    if (nextArea === "Glass Flats" && !state.stats.visitedGlassFlats) {
+      state.stats.visitedGlassFlats = true;
+      addChat("Glass Flats glare back at the sun.");
+    }
+    if (nextArea === "Frostgate Pass" && !state.stats.visitedFrostgate) {
+      state.stats.visitedFrostgate = true;
+      addChat("Frostgate Pass bites through cheap boots.");
+    }
+    if (nextArea === "Old Orchard" && !state.stats.visitedOldOrchard) {
+      state.stats.visitedOldOrchard = true;
+      addChat("The Old Orchard creaks like it remembers better harvests.");
+    }
+    if (nextArea === "Amber Downs" && !state.stats.visitedAmberDowns) {
+      state.stats.visitedAmberDowns = true;
+      addChat("Amber Downs opens into long, dry fields and an honest horizon.");
+    }
+    if (nextArea === "Starfall Heath" && !state.stats.visitedStarfallHeath) {
+      state.stats.visitedStarfallHeath = true;
+      addChat("Starfall Heath is wide enough for weather to get ideas.");
+    }
+    if (nextArea === "Tideglass Quay" && !state.stats.visitedTideglassQuay) {
+      state.stats.visitedTideglassQuay = true;
+      addChat("Tideglass Quay hums with ropes, redclaw pots, and dock gossip.");
+    }
+    if (nextArea === "Pale Watch" && !state.stats.visitedPaleWatch) {
+      state.stats.visitedPaleWatch = true;
+      addChat("Pale Watch keeps a cold eye on the end of the road.");
+    }
     const cryptPressure = Math.max(0, (state.crypt?.awakened?.length || 0) - (state.crypt?.defeated?.length || 0));
     if (nextArea === "Old Graveyard" && cryptPressure > 0 && player.resolvePoints > 0) {
       player.resolvePoints = Math.max(0, player.resolvePoints - dt * (0.18 + cryptPressure * 0.08));
@@ -2588,6 +3010,15 @@
 
   function areaAt(x, y) {
     if (x < 22 && y < 28) return "Low Ash";
+    if (x > 137 && y < 34) return "Pale Watch";
+    if (x > 108 && y < 25) return "Frostgate Pass";
+    if (x > 136 && y > 64 && y < 96) return "Starfall Heath";
+    if (x > 112 && y > 33 && y < 64) return "Glass Flats";
+    if (x > 136 && y > 127) return "Tideglass Quay";
+    if (x > 108 && y > 99) return "Stormbreak Coast";
+    if (x < 46 && y > 138) return "Amber Downs";
+    if (x > 38 && x < 64 && y > 111) return "Reedmere Fen";
+    if (x < 36 && y > 108) return "Old Orchard";
     if (x > 52 && x < 79 && y > 84) return "Southport";
     if (x > 84 && y > 30 && y < 62) return "East Dunes";
     if (x > 82 && y < 25) return "North Ridge";
@@ -2613,6 +3044,16 @@
     return name === "Low Ash";
   }
 
+  function passiveAggroRange(enemy) {
+    if (state.player.path.length && !state.player.combatTarget && !isMultiCombatArea(areaAt(enemy.x, enemy.y))) {
+      return 0;
+    }
+    if (mapAt(Math.floor(state.player.x), Math.floor(state.player.y)) === "path" && !isMultiCombatArea(areaAt(enemy.x, enemy.y))) {
+      return Math.min(enemy.aggro, 0.55);
+    }
+    return enemy.aggro;
+  }
+
   function singleCombatAggressorId() {
     if (state.player.combatTarget) return state.player.combatTarget;
     let best = null;
@@ -2621,7 +3062,7 @@
       if (enemy.hp <= 0) continue;
       if (isMultiCombatArea(areaAt(enemy.x, enemy.y))) continue;
       const d = dist(enemy, state.player);
-      if (d < enemy.aggro && d < bestD) {
+      if (d < passiveAggroRange(enemy) && d < bestD) {
         best = enemy.id;
         bestD = d;
       }
@@ -2902,6 +3343,11 @@
     state.stats.hillGiantsSlain += enemy.type === "hill_giant" ? 1 : 0;
     state.stats.desertScorpionsSlain += enemy.type === "desert_scorpion" ? 1 : 0;
     state.stats.highwaymenSlain += enemy.type === "highwayman" ? 1 : 0;
+    state.stats.reefRaidersSlain += enemy.type === "reef_raider" ? 1 : 0;
+    state.stats.reedStalkersSlain += enemy.type === "reed_stalker" ? 1 : 0;
+    state.stats.glassMaraudersSlain += enemy.type === "glass_marauder" ? 1 : 0;
+    state.stats.ridgeWardensSlain += enemy.type === "ridge_warden" ? 1 : 0;
+    state.stats.orchardSpiritsSlain += enemy.type === "orchard_spirit" ? 1 : 0;
     for (const [itemId, qty, chance] of enemy.loot) {
       if (random() < chance) dropGroundItem(itemId, qty, enemy.x, enemy.y);
     }
@@ -2950,7 +3396,7 @@
       const d = dist(enemy, state.player);
       const playerTargetingEnemy = state.player.combatTarget === enemy.id;
       const allowedToEngage = playerTargetingEnemy || isMultiCombatArea(areaAt(enemy.x, enemy.y)) || enemy.id === singleAggressorId;
-      if ((d < enemy.aggro || playerTargetingEnemy) && allowedToEngage) {
+      if ((d < passiveAggroRange(enemy) || playerTargetingEnemy) && allowedToEngage) {
         if (d > 1.4) {
           const dx = (state.player.x - enemy.x) / d;
           const dy = (state.player.y - enemy.y) / d;
@@ -3033,6 +3479,7 @@
           squire: ["Take the flag. Bring it back. Simple until it isn't.", "Tokens buy lovely pointless armour."],
           island_trader: ["Bananas stack badly. Profit stacks nicely.", "Volcano spiders make poor customers."],
           tower_keeper: ["Silence hood for shrieks. Mire charms for stink.", "The tower pays in keys and bruises."],
+          frontier_shop: ["Far road prices. Far road bruises.", "Buy before the road changes its mind."],
           guard: ["Keep the peace."],
         };
         addBark(npc, choice(lines[npc.role] || ["Lovely weather."]));
@@ -3210,6 +3657,12 @@
       islandTraderDialogue(npc);
     } else if (npc.role === "sailor") {
       sailorDialogue(npc);
+    } else if (npc.role === "frontier_shop") {
+      openDialogue(npc.name, ["The far roads eat supplies and complain about the taste."], [
+        { label: "Trade far-road supplies", action: () => openFrontierShop() },
+        { label: "Ask about the edge", action: () => addChat(`${npc.name} says: the new road ring is long, quiet, and better stocked than your backpack.`) },
+        { label: "Close", action: () => closeModal() },
+      ]);
     } else if (npc.role === "tower_keeper") {
       towerKeeperDialogue(npc);
     } else if (npc.role === "fisher") {
@@ -3335,6 +3788,7 @@
 
   function sailorDialogue(npc) {
     const quest = state.quests.frontierLedger;
+    const survey = state.quests.farRoadSurvey;
     const travelChoices = [
       { label: "To Briarfall dock - 20gp", action: () => travelTo(54.5, 61.5, 20, "Briarfall dock") },
       {
@@ -3346,7 +3800,10 @@
         },
       },
       { label: "Trade dock supplies", action: () => openSouthportShop() },
-      { label: "Ask about the roads", action: () => addChat("Ren says: Westwood has giants, East Dunes has scorpions, and North Ridge has enough ore to ruin backs.") },
+      { label: "To Reedmere Fen - 30gp", action: () => travelTo(50.5, 124.5, 30, "Reedmere Fen") },
+      { label: "To Stormbreak Coast - 38gp", action: () => travelTo(124.5, 111.5, 38, "Stormbreak Coast") },
+      { label: "To Tideglass Quay - 48gp", action: () => travelTo(148.5, 139.5, 48, "Tideglass Quay") },
+      { label: "Ask about the roads", action: () => addChat(`${npc.name} says: the far ring is bigger now: Frostgate, Pale Watch, Starfall, Tideglass, Reedmere, and the Downs all need boots on them.`) },
       { label: "Close", action: () => closeModal() },
     ];
     if (quest.state === "not-started") {
@@ -3384,6 +3841,53 @@
           },
         },
         ...travelChoices.slice(0, 4),
+      ]);
+      return;
+    }
+    if (quest.state === "completed" && survey.state === "not-started") {
+      openDialogue(npc.name, ["The first ledger convinced the dock. Now I need a real far-road survey: Frostgate, Glass Flats, Reedmere, Stormbreak, the Old Orchard, Amber Downs, Starfall, Tideglass, and Pale Watch."], [
+        {
+          label: "Start Far Road Survey",
+          action: () => {
+            survey.state = "started";
+            addChat("Quest started: Far Road Survey.");
+            closeModal();
+          },
+        },
+        ...travelChoices,
+      ]);
+      return;
+    }
+    if (survey.state === "started") {
+      const visited = [
+        state.stats.visitedFrostgate,
+        state.stats.visitedGlassFlats,
+        state.stats.visitedReedmere,
+        state.stats.visitedStormbreak,
+        state.stats.visitedOldOrchard,
+        state.stats.visitedAmberDowns,
+        state.stats.visitedStarfallHeath,
+        state.stats.visitedTideglassQuay,
+        state.stats.visitedPaleWatch,
+      ].filter(Boolean).length;
+      const ready = visited >= 9;
+      openDialogue(npc.name, [ready ? "That is the whole road ring. The map finally has elbows." : `Survey notes: ${visited}/9 far-road regions visited.`], [
+        {
+          label: ready ? "Complete survey" : "Keep surveying",
+          action: () => {
+            if (ready) {
+              survey.state = "completed";
+              addInventory("coins", 680);
+              addInventory("clue_scroll", 1);
+              addInventory("energy_potion", 3);
+              gainXp("Agility", 340);
+              gainXp("Vigilance", 340);
+              addChat("Quest complete: Far Road Survey.");
+            }
+            closeModal();
+          },
+        },
+        ...travelChoices.slice(0, 7),
       ]);
       return;
     }
@@ -3800,13 +4304,18 @@
       { type: "mire_skitterer", label: "mire skitterers", amount: 6, minCombat: 12, xp: 95 },
       { type: "desert_scorpion", label: "desert scorpions", amount: 5, minCombat: 14, xp: 85 },
       { type: "highwayman", label: "highwaymen", amount: 5, minCombat: 16, xp: 95 },
+      { type: "reed_stalker", label: "reed stalkers", amount: 5, minCombat: 18, xp: 105 },
+      { type: "reef_raider", label: "reef raiders", amount: 5, minCombat: 20, xp: 115 },
       { type: "jungle_spider", label: "jungle spiders", amount: 8, minCombat: 16, xp: 105 },
       { type: "dusk_conjurer", label: "dusk conjurers", amount: 6, minCombat: 18, xp: 110 },
       { type: "keening_shade", label: "keening shades", amount: 4, minCombat: 20, xp: 115 },
       { type: "moss_brute", label: "moss brutes", amount: 4, minCombat: 24, xp: 140 },
       { type: "hill_giant", label: "hill giants", amount: 4, minCombat: 24, xp: 145 },
+      { type: "glass_marauder", label: "glass marauders", amount: 4, minCombat: 28, xp: 160 },
+      { type: "orchard_spirit", label: "orchard spirits", amount: 4, minCombat: 30, xp: 175 },
       { type: "iron_oathbreaker", label: "iron oathbreakers", amount: 4, minCombat: 28, xp: 175 },
       { type: "hollow_wight", label: "hollow wights", amount: 3, minCombat: 30, xp: 220 },
+      { type: "ridge_warden", label: "ridge wardens", amount: 3, minCombat: 38, xp: 240 },
       { type: "miasma_wraith", label: "miasma wraiths", amount: 2, minCombat: 42, xp: 260 },
       { type: "rift_fiend", label: "rift fiends", amount: 2, minCombat: 38, xp: 260 },
     ].filter((task) => combat >= task.minCombat || vigil >= Math.floor(task.minCombat / 2));
@@ -3949,6 +4458,24 @@
         { id: "bread", price: 9 },
         { id: "energy_potion", price: 38 },
         { id: "antipoison", price: 48 },
+      ],
+    };
+  }
+
+  function openFrontierShop() {
+    state.modal = {
+      type: "shop",
+      title: "Far Road Supplies",
+      rects: [],
+      stock: [
+        { id: "bread", price: 9, qty: 3 },
+        { id: "cake", price: 28 },
+        { id: "energy_potion", price: 42 },
+        { id: "antipoison", price: 50 },
+        { id: "brine_charm", price: 16, qty: 3 },
+        { id: "bronze_arrow", price: 2, qty: 50 },
+        { id: "vial_of_water", price: 16, qty: 2 },
+        { id: "redclaw_cage", price: 25 },
       ],
     };
   }
@@ -5219,6 +5746,20 @@
       ctx.moveTo(sx, sy - 8);
       ctx.lineTo(sx, sy + 8);
       ctx.stroke();
+    } else if (terrain === "snow" && hash(x, y, 7) > 0.58) {
+      ctx.strokeStyle = "rgba(255,255,255,0.32)";
+      ctx.beginPath();
+      ctx.moveTo(sx - 10, sy - 2);
+      ctx.lineTo(sx + 10, sy - 5);
+      ctx.stroke();
+    } else if (terrain === "moor" && hash(x, y, 7) > 0.54) {
+      ctx.strokeStyle = "rgba(167,190,107,0.22)";
+      ctx.beginPath();
+      ctx.moveTo(sx - 4, sy + 8);
+      ctx.lineTo(sx - 2, sy - 5);
+      ctx.moveTo(sx + 6, sy + 6);
+      ctx.lineTo(sx + 4, sy - 4);
+      ctx.stroke();
     } else if (terrain === "path" && hash(x, y, 8) > 0.72) {
       ctx.fillStyle = "rgba(64,44,28,0.22)";
       ctx.fillRect(sx - 2, sy - 2, 4, 3);
@@ -5677,7 +6218,7 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "vigil" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "sigilist" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "sailor" ? "#315f75" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
+    const color = npc.role === "vigil" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "sigilist" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "sailor" ? "#315f75" : npc.role === "frontier_shop" ? "#6f5b32" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
     if (npc.role === "vigil") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
@@ -5686,6 +6227,7 @@
     if (npc.role === "squire") drawText("cw", screen.x + 17, screen.y - 45, { color: "#f0d25d", outline: "#000", size: 10, align: "center" });
     if (npc.role === "island_trader") drawText("gp", screen.x + 17, screen.y - 45, { color: "#ffe36a", outline: "#000", size: 10, align: "center" });
     if (npc.role === "sailor") drawText("ship", screen.x + 20, screen.y - 45, { color: "#7fd7ff", outline: "#000", size: 8, align: "center" });
+    if (npc.role === "frontier_shop") drawText("road", screen.x + 20, screen.y - 45, { color: "#ffe0a0", outline: "#000", size: 8, align: "center" });
     if (npc.role === "tower_keeper") drawText("tk", screen.x + 17, screen.y - 45, { color: "#a8f5ff", outline: "#000", size: 10, align: "center" });
   }
 
@@ -5733,6 +6275,11 @@
       hill_giant: "#786143",
       desert_scorpion: "#b87938",
       highwayman: "#4d3b28",
+      reef_raider: "#315f75",
+      reed_stalker: "#4f7140",
+      glass_marauder: "#b88a42",
+      ridge_warden: "#58666b",
+      orchard_spirit: "#6d7f43",
     };
     ctx.save();
     if (enemy.hitFlash > 0) ctx.globalAlpha = 0.5 + Math.sin(state.time * 80) * 0.25;
@@ -5846,6 +6393,33 @@
     } else if (enemy.type === "highwayman") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c7a174", 0.98);
       drawText("Stand!", screen.x, screen.y - 63, { color: "#ffe0a0", outline: "#000", size: 8, align: "center" });
+    } else if (enemy.type === "reef_raider") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c7a174", 1.0);
+      drawText("brine", screen.x, screen.y - 63, { color: "#9be8ff", outline: "#000", size: 8, align: "center" });
+    } else if (enemy.type === "glass_marauder") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#d6b47c", 1.03);
+      drawText("*", screen.x + 17, screen.y - 47, { color: "#ffe6a0", outline: "#000", size: 14, align: "center" });
+    } else if (enemy.type === "ridge_warden") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c5d4d8", 1.22);
+      ctx.strokeStyle = "#d7edf4";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(screen.x - 18, screen.y - 48);
+      ctx.lineTo(screen.x + 18, screen.y - 20);
+      ctx.stroke();
+    } else if (enemy.type === "orchard_spirit") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#b8d06f", 1.1);
+      drawText("leaf", screen.x, screen.y - 62, { color: "#d9ff9a", outline: "#000", size: 8, align: "center" });
+    } else if (enemy.type === "reed_stalker") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#89a86c", 1.02);
+      ctx.strokeStyle = "#a7c776";
+      ctx.lineWidth = 2;
+      for (let i = -2; i <= 2; i += 1) {
+        ctx.beginPath();
+        ctx.moveTo(screen.x + i * 7, screen.y - 12);
+        ctx.lineTo(screen.x + i * 6, screen.y - 46 - Math.abs(i) * 4);
+        ctx.stroke();
+      }
     } else if (enemy.type === "mire_skitterer") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
@@ -6105,7 +6679,7 @@
     for (let yy = 0; yy < WORLD_H; yy += 1) {
       for (let xx = 0; xx < WORLD_W; xx += 1) {
         const terrain = mapAt(xx, yy);
-        const color = terrain === "water" ? "#1f6ca0" : terrain === "path" ? "#a17a45" : terrain === "town" ? "#b4a68c" : terrain === "stone" ? "#787871" : terrain === "swamp" ? "#506c3f" : terrain === "field" ? "#827934" : terrain === "dirt" ? "#735534" : terrain === "sand" ? "#b9a561" : "#39702c";
+        const color = terrain === "water" ? "#1f6ca0" : terrain === "path" ? "#a17a45" : terrain === "town" ? "#b4a68c" : terrain === "stone" ? "#787871" : terrain === "swamp" ? "#506c3f" : terrain === "moor" ? "#48563a" : terrain === "snow" ? "#c9d8d5" : terrain === "field" ? "#827934" : terrain === "dirt" ? "#735534" : terrain === "sand" ? "#b9a561" : "#39702c";
         ctx.fillStyle = color;
         ctx.fillRect(ox + xx * scale, oy + yy * scale, Math.ceil(scale), Math.ceil(scale));
       }
@@ -6399,7 +6973,7 @@
           action: () => moveToTile(Math.floor(item.x), Math.floor(item.y), { kind: "groundItem", id: item.id }),
         });
       } else if (picked.kind === "npc") {
-        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" || item.role === "sigilist" || item.role === "tower_keeper" ? "Trade" : item.role === "squire" ? "Join / Rewards" : item.role === "vigil" ? "Talk-to / Assignment" : "Talk-to";
+        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" || item.role === "sigilist" || item.role === "frontier_shop" || item.role === "tower_keeper" ? "Trade" : item.role === "squire" ? "Join / Rewards" : item.role === "vigil" ? "Talk-to / Assignment" : "Talk-to";
         options.push({ label: `${primary} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "npc", id: item.id }) });
       } else if (picked.kind === "enemy") {
         options.push({ label: `Attack ${item.name} (level ${item.level})`, action: () => approachOrAttackEnemy(item) });
@@ -6759,7 +7333,7 @@
     for (let yy = 0; yy < WORLD_H; yy += 1) {
       for (let xx = 0; xx < WORLD_W; xx += 1) {
         const terrain = mapAt(xx, yy);
-        ctx.fillStyle = terrain === "water" ? "#226b96" : terrain === "path" ? "#a17a45" : terrain === "town" ? "#b4a68c" : terrain === "stone" ? "#777873" : terrain === "swamp" ? "#506c3f" : terrain === "field" ? "#827934" : terrain === "dirt" ? "#735534" : terrain === "sand" ? "#b9a561" : "#39702c";
+        ctx.fillStyle = terrain === "water" ? "#226b96" : terrain === "path" ? "#a17a45" : terrain === "town" ? "#b4a68c" : terrain === "stone" ? "#777873" : terrain === "swamp" ? "#506c3f" : terrain === "moor" ? "#48563a" : terrain === "snow" ? "#c9d8d5" : terrain === "field" ? "#827934" : terrain === "dirt" ? "#735534" : terrain === "sand" ? "#b9a561" : "#39702c";
         ctx.fillRect(ox + xx * scale, oy + yy * scale, Math.ceil(scale), Math.ceil(scale));
       }
     }
@@ -6774,7 +7348,8 @@
       ctx.fill();
       ctx.strokeStyle = "#101010";
       ctx.stroke();
-      drawText(destination.label, px + 8, py - 8, { color: destination.color, outline: "#000", size: 9, align: "left" });
+      const mapLabelSize = WORLD_W > 150 ? 7 : 9;
+      drawText(fitLine(destination.label, 72, mapLabelSize), px + 8, py - 8, { color: destination.color, outline: "#000", size: mapLabelSize, align: "left" });
     }
     const playerX = ox + state.player.x * scale;
     const playerY = oy + state.player.y * scale;
@@ -6785,18 +7360,22 @@
     drawText("You", playerX + 9, playerY + 8, { color: "#ffffff", outline: "#000", size: 10, align: "left" });
 
     const listX = x + 488;
-    let listY = y + 78;
-    const rowH = 21;
-    for (const destination of MAP_DESTINATIONS) {
-      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 8, w: 202, h: 19 };
+    const listY = y + 78;
+    const compactList = MAP_DESTINATIONS.length > 26;
+    const rowH = compactList ? 26 : 15;
+    const colW = compactList ? 101 : 202;
+    for (let i = 0; i < MAP_DESTINATIONS.length; i += 1) {
+      const destination = MAP_DESTINATIONS[i];
+      const col = compactList ? i % 2 : 0;
+      const row = compactList ? Math.floor(i / 2) : i;
+      const rect = { kind: "mapDestination", destination, x: listX + col * colW, y: listY + row * rowH - 8, w: compactList ? 96 : 202, h: compactList ? 24 : 14 };
       state.modal.rects.push(rect);
       ctx.fillStyle = "#2d2013";
       ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
       ctx.strokeStyle = "#70552d";
       ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-      drawText(destination.label, listX + 8, listY, { color: destination.color, outline: "#000", size: 9, align: "left" });
-      drawText(destination.note, listX + 8, listY + 9, { color: "#cdbb8a", outline: "#000", size: 6, align: "left" });
-      listY += rowH;
+      drawText(fitLine(destination.label, rect.w - 12, compactList ? 7 : 8), rect.x + 6, rect.y + 9, { color: destination.color, outline: "#000", size: compactList ? 7 : 8, align: "left" });
+      drawText(fitLine(destination.note, rect.w - 12, 5), rect.x + 6, rect.y + (compactList ? 18 : 14), { color: "#cdbb8a", outline: "#000", size: 5, align: "left" });
     }
   }
 
@@ -7341,7 +7920,7 @@
         const screen = screenOf(enemy);
         const area = areaAt(enemy.x, enemy.y);
         const distance = dist(enemy, state.player);
-        return { id: enemy.id, name: enemy.name, type: enemy.type, vigilType: enemy.vigilType, requiredProtection: enemy.requiredProtection || null, protected: hasVigilanceProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, aggro: enemy.aggro, distance: Number(distance.toFixed(2)), engaging: state.player.combatTarget === enemy.id || isMultiCombatArea(area) || enemy.id === renderSingleAggressorId, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
+        return { id: enemy.id, name: enemy.name, type: enemy.type, vigilType: enemy.vigilType, requiredProtection: enemy.requiredProtection || null, protected: hasVigilanceProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, aggro: enemy.aggro, passiveAggro: passiveAggroRange(enemy), distance: Number(distance.toFixed(2)), engaging: state.player.combatTarget === enemy.id || isMultiCombatArea(area) || enemy.id === renderSingleAggressorId, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
       });
     const nearbyNpcs = state.npcs
       .filter((npc) => dist(npc, state.player) < 7)
@@ -7439,6 +8018,15 @@
         cropsHarvested: state.stats.cropsHarvested,
         farmingContractsCompleted: state.stats.farmingContractsCompleted,
         visitedSouthport: state.stats.visitedSouthport,
+        visitedStormbreak: state.stats.visitedStormbreak,
+        visitedReedmere: state.stats.visitedReedmere,
+        visitedGlassFlats: state.stats.visitedGlassFlats,
+        visitedFrostgate: state.stats.visitedFrostgate,
+        visitedOldOrchard: state.stats.visitedOldOrchard,
+        visitedAmberDowns: state.stats.visitedAmberDowns,
+        visitedStarfallHeath: state.stats.visitedStarfallHeath,
+        visitedTideglassQuay: state.stats.visitedTideglassQuay,
+        visitedPaleWatch: state.stats.visitedPaleWatch,
         essenceMined: state.stats.essenceMined,
         sigilsCrafted: state.stats.sigilsCrafted,
         galeSigilsCrafted: state.stats.galeSigilsCrafted,
@@ -7463,6 +8051,11 @@
         hillGiantsSlain: state.stats.hillGiantsSlain,
         desertScorpionsSlain: state.stats.desertScorpionsSlain,
         highwaymenSlain: state.stats.highwaymenSlain,
+        reefRaidersSlain: state.stats.reefRaidersSlain,
+        reedStalkersSlain: state.stats.reedStalkersSlain,
+        glassMaraudersSlain: state.stats.glassMaraudersSlain,
+        ridgeWardensSlain: state.stats.ridgeWardensSlain,
+        orchardSpiritsSlain: state.stats.orchardSpiritsSlain,
         towerChestsOpened: state.stats.towerChestsOpened,
         websCut: state.stats.websCut,
         herbsHarvested: state.stats.herbsHarvested,
