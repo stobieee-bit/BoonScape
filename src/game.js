@@ -15,8 +15,8 @@
   const TILE_H = 24;
   const HALF_W = TILE_W / 2;
   const HALF_H = TILE_H / 2;
-  const WORLD_W = 168;
-  const WORLD_H = 168;
+  const WORLD_W = 200;
+  const WORLD_H = 200;
   const MAX_CHAT = 10;
 
   const tabs = ["inventory", "skills", "quests", "equipment", "magic", "settings"];
@@ -625,7 +625,13 @@
       visitedStarfallHeath: false,
       visitedTideglassQuay: false,
       visitedPaleWatch: false,
+      visitedBramblewall: false,
+      visitedCopperpine: false,
+      visitedSunward: false,
+      visitedGloamfen: false,
+      visitedWhitecap: false,
       visitedAshlands: false,
+      surveyBeaconsMapped: 0,
       websCut: 0,
     },
     vigil: { task: null, streak: 0, points: 0 },
@@ -710,6 +716,8 @@
     { id: "frostgate", label: "Reach Frostgate Pass", done: () => Boolean(state.stats.visitedFrostgate) },
     { id: "amber", label: "Reach Amber Downs", done: () => Boolean(state.stats.visitedAmberDowns) },
     { id: "tideglass", label: "Reach Tideglass Quay", done: () => Boolean(state.stats.visitedTideglassQuay) },
+    { id: "sunward", label: "Reach Sunward Shoals", done: () => Boolean(state.stats.visitedSunward) },
+    { id: "beacon", label: "Map a frontier beacon", done: () => state.stats.surveyBeaconsMapped > 0 },
     { id: "giant", label: "Defeat a hill giant", done: () => state.stats.hillGiantsSlain > 0 },
     { id: "scorpion", label: "Defeat a desert scorpion", done: () => state.stats.desertScorpionsSlain > 0 },
     { id: "reef", label: "Defeat a reef raider", done: () => state.stats.reefRaidersSlain > 0 },
@@ -749,6 +757,11 @@
     { id: "starfall", label: "Starfall Heath", x: 148, y: 78, note: "wide moor and signal stones", color: "#b8d77a" },
     { id: "tideglass", label: "Tideglass Quay", x: 148, y: 139, note: "deep pier, redclaws, ferries", color: "#8bdff0" },
     { id: "palewatch", label: "Pale Watch", x: 148, y: 18, note: "snow watch and high ore", color: "#e2f6ff" },
+    { id: "bramblewall", label: "Bramblewall", x: 9, y: 100, note: "hedge road and root bridge", color: "#8fd06d" },
+    { id: "copperpine", label: "Copperpine Reach", x: 28, y: 184, note: "pines, oaks, southern ore", color: "#c0d56c" },
+    { id: "sunward", label: "Sunward Shoals", x: 102, y: 184, note: "wide beach and fishing", color: "#f2d482" },
+    { id: "gloamfen", label: "Gloamfen Break", x: 184, y: 107, note: "swamp pier and herbs", color: "#88c173" },
+    { id: "whitecap", label: "Whitecap Crown", x: 184, y: 16, note: "snow road and gold", color: "#e8fbff" },
   ];
 
   const BESTIARY = [
@@ -765,14 +778,14 @@
     { type: "desert_scorpion", name: "Desert scorpion", level: 14, location: "East Dunes", drops: "tails, antipoison", tip: "poisons lightly" },
     { type: "highwayman", name: "Highwayman", level: 18, location: "East Dunes", drops: "coins, cake, clues", tip: "thinly spaced ambushes" },
     { type: "hill_giant", name: "Hill giant", level: 28, location: "Westwood / North Ridge", drops: "big bones, roots, club", tip: "slow heavy target" },
-    { type: "orchard_spirit", name: "Orchard spirit", level: 32, location: "Old Orchard / Amber Downs", drops: "oak logs, seeds, ectoplasm", tip: "woodcutters dislike them" },
-    { type: "reed_stalker", name: "Reed stalker", level: 22, location: "Reedmere Fen", drops: "herbs, brine charms", tip: "poisons lightly" },
-    { type: "reef_raider", name: "Reef raider", level: 24, location: "Stormbreak / Tideglass", drops: "coins, redclaws, clues", tip: "safe shoreline task" },
+    { type: "orchard_spirit", name: "Orchard spirit", level: 32, location: "Old Orchard / Copperpine", drops: "oak logs, seeds, ectoplasm", tip: "woodcutters dislike them" },
+    { type: "reed_stalker", name: "Reed stalker", level: 22, location: "Reedmere / Gloamfen", drops: "herbs, brine charms", tip: "poisons lightly" },
+    { type: "reef_raider", name: "Reef raider", level: 24, location: "Stormbreak / Sunward", drops: "coins, redclaws, clues", tip: "safe shoreline task" },
     { type: "glass_marauder", name: "Glass marauder", level: 30, location: "Glass Flats / Starfall", drops: "gems, silk, coins", tip: "spaced along the flats" },
     { type: "ridge_warden", name: "Ridge warden", level: 40, location: "Frostgate / Pale Watch", drops: "ore, big bones, oath sigils", tip: "hard northern task" },
     { type: "miasma_wraith", name: "Miasma wraith", level: 46, location: "Gloamspire", drops: "herbs, mystic loot", tip: "wear a mire charm" },
     { type: "dusk_conjurer", name: "Dusk conjurer", level: 20, location: "Low Ash", drops: "rift, talismans, staff", tip: "keep Resolve ready" },
-    { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
+    { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood / Bramblewall", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
     { type: "iron_oathbreaker", name: "Iron oathbreaker", level: 33, location: "Low Ash", drops: "oathbreaker helm, legs", tip: "armoured target" },
     { type: "hollow_wight", name: "Hollow wight", level: 34, location: "Mire Hollow", drops: "clues, amulet", tip: "Vigilance quest prey" },
     { type: "crypt_brother", name: "Oath warden", level: 38, location: "Oath Crypts", drops: "chest charge, grave sigils", tip: "wake three, loot once" },
@@ -1237,7 +1250,7 @@
         const westwood = Math.hypot((x - 20) / 1.15, y - 86);
         const ridge = Math.hypot((x - 96) / 1.45, y - 14);
         const southHarbor = x > 52 && x < 82 && y > 99 + Math.sin(x * 0.19) * 2;
-        const southCoast = y > 158 + Math.sin(x * 0.15) * 3;
+        const southCoast = y > 190 + Math.sin(x * 0.15) * 3;
         const oldOrchard = Math.hypot((x - 19) / 1.25, (y - 124) / 0.95);
         const reedmere = Math.hypot((x - 50) / 1.35, (y - 124) / 1.0);
         const stormbreak = Math.hypot((x - 124) / 1.35, (y - 111) / 1.0);
@@ -1247,9 +1260,14 @@
         const starfallHeath = Math.hypot((x - 148) / 1.4, (y - 78) / 0.95);
         const tideglassQuay = Math.hypot((x - 148) / 1.3, (y - 139) / 0.9);
         const paleWatch = Math.hypot((x - 148) / 1.45, (y - 18) / 0.85);
+        const bramblewall = Math.hypot((x - 9) / 0.9, (y - 100) / 1.35);
+        const copperpine = Math.hypot((x - 28) / 1.45, (y - 184) / 0.9);
+        const sunward = Math.hypot((x - 102) / 1.5, (y - 184) / 0.8);
+        const gloamfen = Math.hypot((x - 184) / 1.1, (y - 107) / 1.25);
+        const whitecap = Math.hypot((x - 184) / 1.25, (y - 16) / 0.8);
         if (southCoast) setTile(x, y, "water");
         else if (southHarbor) setTile(x, y, "water");
-        else if ((y > 152 || (x > 52 && x < 82 && y > 94)) && mapAt(x, y) === "grass") setTile(x, y, "sand");
+        else if ((y > 184 || (x > 52 && x < 82 && y > 94)) && mapAt(x, y) === "grass") setTile(x, y, "sand");
         if (eastDune < 17) setTile(x, y, eastDune < 8 ? "sand" : mapAt(x, y) === "grass" ? "sand" : mapAt(x, y));
         if (westwood < 15 && mapAt(x, y) === "grass") setTile(x, y, "field");
         if (ridge < 15) setTile(x, y, ridge < 9 ? "stone" : "dirt");
@@ -1262,6 +1280,11 @@
         if (starfallHeath < 21 && mapAt(x, y) !== "water") setTile(x, y, starfallHeath < 10 ? "moor" : "field");
         if (tideglassQuay < 20 && mapAt(x, y) !== "water") setTile(x, y, tideglassQuay < 8 ? "town" : tideglassQuay < 14 ? "sand" : "dirt");
         if (paleWatch < 22 && mapAt(x, y) !== "water") setTile(x, y, paleWatch < 11 ? "snow" : "stone");
+        if (bramblewall < 20 && mapAt(x, y) !== "water") setTile(x, y, bramblewall < 8 ? "moor" : "field");
+        if (copperpine < 22 && mapAt(x, y) !== "water") setTile(x, y, copperpine < 9 ? "field" : "moor");
+        if (sunward < 21 && mapAt(x, y) !== "water") setTile(x, y, sunward < 8 ? "town" : "sand");
+        if (gloamfen < 22 && mapAt(x, y) !== "water") setTile(x, y, gloamfen < 12 ? "swamp" : "moor");
+        if (whitecap < 23 && mapAt(x, y) !== "water") setTile(x, y, whitecap < 12 ? "snow" : "stone");
       }
     }
     setRect(57, 88, 17, 8, "town");
@@ -1292,6 +1315,16 @@
     setRect(142, 146, 14, 5, "sand");
     setRect(138, 10, 22, 17, "snow");
     setRect(144, 15, 10, 5, "town");
+    setRect(4, 92, 13, 18, "moor");
+    setRect(6, 97, 6, 5, "dirt");
+    setRect(16, 176, 24, 14, "field");
+    setRect(23, 181, 10, 5, "town");
+    setRect(90, 178, 24, 13, "town");
+    setRect(88, 188, 30, 4, "sand");
+    setRect(176, 98, 17, 19, "swamp");
+    setRect(181, 104, 8, 5, "town");
+    setRect(174, 7, 20, 19, "snow");
+    setRect(180, 13, 9, 5, "town");
     drawRoad(64, 61, 64, 94, 1);
     drawRoad(64, 93, 97, 45, 1);
     drawRoad(72, 30, 97, 45, 1);
@@ -1312,6 +1345,15 @@
     drawRoad(148, 78, 148, 139, 1);
     drawRoad(124, 10, 148, 18, 1);
     drawRoad(148, 18, 148, 78, 1);
+    drawRoad(19, 85, 9, 100, 1);
+    drawRoad(9, 100, 18, 124, 1);
+    drawRoad(26, 150, 28, 184, 1);
+    drawRoad(28, 184, 102, 184, 1);
+    drawRoad(102, 184, 148, 139, 1);
+    drawRoad(148, 139, 184, 107, 1);
+    drawRoad(148, 78, 184, 107, 1);
+    drawRoad(148, 78, 184, 16, 1);
+    drawRoad(148, 18, 184, 16, 1);
 
     addScenery("bank_booth", "Bank booth", 34, 30, { width: 4, height: 1, action: "bank" });
     addScenery("chest", "Bank chest", 37, 30, { action: "bank" });
@@ -1409,6 +1451,30 @@
     addScenery("furnace", "Pale Watch furnace", 146, 17, { action: "smelt" });
     addScenery("anvil", "Pale Watch anvil", 151, 18, { action: "smith" });
     addScenery("range", "Pale Watch brazier", 149, 15, { action: "cook" });
+    addScenery("quest_sign", "Bramblewall post", 9, 100, { action: "examine" });
+    addScenery("stepping_stones", "Bramble root bridge", 8, 103, { action: "agility", level: 18, xp: 112, restore: 16, failDamage: 6, cooldown: 3.0 });
+    addScenery("ruins", "Hedge survey cairn", 12, 96, { action: "survey", interactRange: 2.6 });
+    addScenery("quest_sign", "Copperpine milepost", 28, 184, { action: "examine" });
+    addScenery("well", "Copperpine pump", 30, 182, { action: "water" });
+    addScenery("range", "Copperpine pitch fire", 25, 183, { action: "cook" });
+    addScenery("balance_log", "Pinefall balance log", 34, 181, { action: "agility", level: 22, xp: 136, restore: 18, failDamage: 8, cooldown: 3.2 });
+    addScenery("ruins", "Copperpine survey cairn", 24, 179, { action: "survey", interactRange: 2.6 });
+    addScenery("quest_sign", "Sunward tide board", 102, 184, { action: "examine" });
+    addScenery("dock", "Sunward plank pier", 96, 190, { action: "fish", interactRange: 2.8 });
+    addScenery("island_dock", "Sunward redclaw racks", 111, 190, { action: "fish_redclaw", interactRange: 2.8 });
+    addScenery("range", "Sunward beach fire", 103, 181, { action: "cook" });
+    addScenery("market_stall", "Sunward shell stall", 107, 182, { action: "steal", level: 28 });
+    addScenery("ruins", "Sunward survey cairn", 99, 181, { action: "survey", interactRange: 2.6 });
+    addScenery("quest_sign", "Gloamfen breakpost", 184, 107, { action: "examine" });
+    addScenery("dock", "Gloamfen plankwalk", 189, 112, { action: "fish", interactRange: 2.8 });
+    addScenery("well", "Gloamfen rain barrel", 183, 105, { action: "water" });
+    addScenery("range", "Gloamfen ember pit", 186, 104, { action: "cook" });
+    addScenery("ruins", "Gloamfen survey cairn", 181, 109, { action: "survey", interactRange: 2.6 });
+    addScenery("quest_sign", "Whitecap crown sign", 184, 16, { action: "examine" });
+    addScenery("furnace", "Whitecap furnace", 181, 15, { action: "smelt" });
+    addScenery("anvil", "Whitecap anvil", 187, 16, { action: "smith" });
+    addScenery("rope_swing", "Whitecap rope span", 190, 19, { action: "agility", level: 30, xp: 172, restore: 22, failDamage: 10, cooldown: 3.6 });
+    addScenery("ruins", "Whitecap survey cairn", 181, 11, { action: "survey", interactRange: 2.6 });
 
     for (let i = 0; i < 85; i += 1) {
       const x = 7 + Math.floor(hash(i, 3) * 23);
@@ -1542,6 +1608,47 @@
     ]) {
       addResource("redclaw_spot", spot[0], spot[1]);
     }
+    for (let i = 0; i < 112; i += 1) {
+      const x = 4 + Math.floor(hash(i, 409) * 43);
+      const y = 166 + Math.floor(hash(i, 419) * 28);
+      if (["grass", "field", "moor"].includes(mapAt(x, y))) addResource(hash(i, 421) > 0.4 ? "oak_tree" : "tree", x, y);
+    }
+    for (let i = 0; i < 76; i += 1) {
+      const x = 2 + Math.floor(hash(i, 431) * 22);
+      const y = 84 + Math.floor(hash(i, 433) * 36);
+      if (["grass", "field", "moor"].includes(mapAt(x, y))) addResource(hash(i, 439) > 0.7 ? "oak_tree" : "tree", x, y);
+    }
+    for (let i = 0; i < 86; i += 1) {
+      const x = 170 + Math.floor(hash(i, 443) * 27);
+      const y = 4 + Math.floor(hash(i, 449) * 30);
+      if (["snow", "stone", "dirt"].includes(mapAt(x, y))) {
+        const roll = hash(i, 457);
+        addResource(roll > 0.48 ? "gold_rock" : roll > 0.22 ? "iron_rock" : roll > 0.1 ? "tin_rock" : "copper_rock", x, y);
+      }
+    }
+    for (let i = 0; i < 54; i += 1) {
+      const x = 80 + Math.floor(hash(i, 461) * 46);
+      const y = 174 + Math.floor(hash(i, 463) * 21);
+      if (["sand", "town", "dirt"].includes(mapAt(x, y))) {
+        const roll = hash(i, 467);
+        if (roll > 0.7) addResource("gold_rock", x, y);
+      }
+    }
+    for (const spot of [
+      [93, 190],
+      [100, 191],
+      [109, 190],
+      [181, 113],
+      [188, 115],
+    ]) {
+      addResource("fishing_spot", spot[0], spot[1]);
+    }
+    for (const spot of [
+      [108, 192],
+      [116, 190],
+    ]) {
+      addResource("redclaw_spot", spot[0], spot[1]);
+    }
 
     addNpc("banker", "Banker Niles", "banker", 35, 31);
     addNpc("shopkeeper", "Shopkeeper Marnie", "shop", 45, 32);
@@ -1573,6 +1680,12 @@
     addNpc("tideglass_factor", "Tideglass Factor", "frontier_shop", 147, 138);
     addNpc("tideglass_sailor", "Sailor Wren", "sailor", 145, 137);
     addNpc("pale_watch_keeper", "Pale Watch Keeper", "frontier_shop", 148, 17);
+    addNpc("bramble_warden", "Bramblewall Warden", "frontier_shop", 9, 99);
+    addNpc("copperpine_reeve", "Copperpine Reeve", "frontier_shop", 28, 183);
+    addNpc("sunward_factor", "Sunward Factor", "frontier_shop", 102, 183);
+    addNpc("sunward_sailor", "Sailor Vale", "sailor", 99, 183);
+    addNpc("gloamfen_keeper", "Gloamfen Keeper", "frontier_shop", 184, 106);
+    addNpc("whitecap_keeper", "Whitecap Keeper", "frontier_shop", 184, 15);
 
     for (const [i, spot] of [
       [22, 56],
@@ -2136,6 +2249,107 @@
         respawn: 24,
         wanderRadius: 1.2,
         wanderSpeed: 0.3,
+        vigilType: "ridge_warden",
+      }, [["big_bones", 1, 0.95], ["iron_ore", 2, 0.28], ["gold_ore", 1, 0.2], ["oath_sigil", 2, 0.16], ["clue_scroll", 1, 0.16], ["crypt_platelegs", 1, 0.025]]);
+    }
+    for (const spot of [
+      [5, 93],
+      [16, 111],
+      [3, 116],
+      [18, 94],
+    ]) {
+      addEnemy("moss_brute", "Moss brute", spot[0], spot[1], {
+        level: 28,
+        hp: 80,
+        attack: 16,
+        strength: 17,
+        defence: 14,
+        xp: 130,
+        aggro: 0.18,
+        respawn: 18,
+        wanderRadius: 1.2,
+        wanderSpeed: 0.28,
+        vigilType: "moss_brute",
+      }, [["bones", 1, 0.9], ["coins", 55, 0.55], ["mirthleaf_seed", 2, 0.18], ["strength_potion", 1, 0.12], ["steel_sword", 1, 0.04]]);
+    }
+    for (const spot of [
+      [12, 180],
+      [44, 182],
+      [36, 193],
+      [20, 192],
+    ]) {
+      addEnemy("orchard_spirit", "Orchard spirit", spot[0], spot[1], {
+        level: 32,
+        hp: 86,
+        attack: 18,
+        strength: 19,
+        defence: 17,
+        xp: 150,
+        aggro: 0.12,
+        respawn: 22,
+        wanderRadius: 1.25,
+        wanderSpeed: 0.26,
+        vigilType: "orchard_spirit",
+      }, [["oak_logs", 3, 0.55], ["mirthleaf_seed", 2, 0.24], ["ectoplasm", 1, 0.25], ["cut_gem", 1, 0.05], ["clue_scroll", 1, 0.08]]);
+    }
+    for (const spot of [
+      [92, 178],
+      [116, 183],
+      [125, 191],
+    ]) {
+      addEnemy("reef_raider", "Reef raider", spot[0], spot[1], {
+        level: 24,
+        hp: 70,
+        attack: 17,
+        strength: 16,
+        defence: 12,
+        xp: 122,
+        aggro: 0.12,
+        respawn: 18,
+        wanderRadius: 1.2,
+        wanderSpeed: 0.3,
+        vigilType: "reef_raider",
+      }, [["bones", 1, 0.65], ["coins", 64, 0.7], ["raw_redclaw", 1, 0.18], ["pirate_cutlass", 1, 0.03], ["clue_scroll", 1, 0.1]]);
+    }
+    for (const spot of [
+      [176, 101],
+      [193, 111],
+      [181, 119],
+      [196, 99],
+    ]) {
+      addEnemy("reed_stalker", "Reed stalker", spot[0], spot[1], {
+        level: 22,
+        hp: 62,
+        attack: 14,
+        strength: 15,
+        defence: 12,
+        xp: 105,
+        aggro: 0.14,
+        poisonDamage: 2,
+        poisonChance: 0.12,
+        respawn: 16,
+        wanderRadius: 1.25,
+        wanderSpeed: 0.3,
+        vigilType: "reed_stalker",
+      }, [["bones", 1, 0.45], ["grimy_mirthleaf", 1, 0.28], ["mirthleaf_seed", 1, 0.18], ["brine_charm", 1, 0.14], ["antipoison", 1, 0.08]]);
+    }
+    for (const spot of [
+      [176, 7],
+      [193, 10],
+      [190, 29],
+      [173, 27],
+    ]) {
+      addEnemy("ridge_warden", "Ridge warden", spot[0], spot[1], {
+        level: 40,
+        hp: 116,
+        attack: 25,
+        strength: 24,
+        defence: 24,
+        xp: 235,
+        aggro: 0.2,
+        respawn: 26,
+        wanderRadius: 1.1,
+        wanderSpeed: 0.28,
         vigilType: "ridge_warden",
       }, [["big_bones", 1, 0.95], ["iron_ore", 2, 0.28], ["gold_ore", 1, 0.2], ["oath_sigil", 2, 0.16], ["clue_scroll", 1, 0.16], ["crypt_platelegs", 1, 0.025]]);
     }
@@ -3002,6 +3216,26 @@
       state.stats.visitedPaleWatch = true;
       addChat("Pale Watch keeps a cold eye on the end of the road.");
     }
+    if (nextArea === "Bramblewall" && !state.stats.visitedBramblewall) {
+      state.stats.visitedBramblewall = true;
+      addChat("Bramblewall is more hedge than road, but the road survives.");
+    }
+    if (nextArea === "Copperpine Reach" && !state.stats.visitedCopperpine) {
+      state.stats.visitedCopperpine = true;
+      addChat("Copperpine Reach smells of sap, pitch, and wet boots.");
+    }
+    if (nextArea === "Sunward Shoals" && !state.stats.visitedSunward) {
+      state.stats.visitedSunward = true;
+      addChat("Sunward Shoals throws bright sand into every seam of your gear.");
+    }
+    if (nextArea === "Gloamfen Break" && !state.stats.visitedGloamfen) {
+      state.stats.visitedGloamfen = true;
+      addChat("Gloamfen Break burbles under the planks.");
+    }
+    if (nextArea === "Whitecap Crown" && !state.stats.visitedWhitecap) {
+      state.stats.visitedWhitecap = true;
+      addChat("Whitecap Crown glitters with ice and expensive ore.");
+    }
     const cryptPressure = Math.max(0, (state.crypt?.awakened?.length || 0) - (state.crypt?.defeated?.length || 0));
     if (nextArea === "Old Graveyard" && cryptPressure > 0 && player.resolvePoints > 0) {
       player.resolvePoints = Math.max(0, player.resolvePoints - dt * (0.18 + cryptPressure * 0.08));
@@ -3010,14 +3244,19 @@
 
   function areaAt(x, y) {
     if (x < 22 && y < 28) return "Low Ash";
+    if (x > 170 && y < 34) return "Whitecap Crown";
     if (x > 137 && y < 34) return "Pale Watch";
     if (x > 108 && y < 25) return "Frostgate Pass";
+    if (x > 172 && y > 91 && y < 124) return "Gloamfen Break";
     if (x > 136 && y > 64 && y < 96) return "Starfall Heath";
     if (x > 112 && y > 33 && y < 64) return "Glass Flats";
     if (x > 136 && y > 127) return "Tideglass Quay";
     if (x > 108 && y > 99) return "Stormbreak Coast";
+    if (x > 82 && x < 126 && y > 173) return "Sunward Shoals";
+    if (x < 50 && y > 168) return "Copperpine Reach";
     if (x < 46 && y > 138) return "Amber Downs";
     if (x > 38 && x < 64 && y > 111) return "Reedmere Fen";
+    if (x < 22 && y > 82 && y < 122) return "Bramblewall";
     if (x < 36 && y > 108) return "Old Orchard";
     if (x > 52 && x < 79 && y > 84) return "Southport";
     if (x > 84 && y > 30 && y < 62) return "East Dunes";
@@ -3803,7 +4042,8 @@
       { label: "To Reedmere Fen - 30gp", action: () => travelTo(50.5, 124.5, 30, "Reedmere Fen") },
       { label: "To Stormbreak Coast - 38gp", action: () => travelTo(124.5, 111.5, 38, "Stormbreak Coast") },
       { label: "To Tideglass Quay - 48gp", action: () => travelTo(148.5, 139.5, 48, "Tideglass Quay") },
-      { label: "Ask about the roads", action: () => addChat(`${npc.name} says: the far ring is bigger now: Frostgate, Pale Watch, Starfall, Tideglass, Reedmere, and the Downs all need boots on them.`) },
+      { label: "To Sunward Shoals - 55gp", action: () => travelTo(102.5, 184.5, 55, "Sunward Shoals") },
+      { label: "Ask about the roads", action: () => addChat(`${npc.name} says: the far ring is bigger now: Whitecap, Gloamfen, Sunward, Copperpine, Bramblewall, and all the old roads in between.`) },
       { label: "Close", action: () => closeModal() },
     ];
     if (quest.state === "not-started") {
@@ -3845,7 +4085,7 @@
       return;
     }
     if (quest.state === "completed" && survey.state === "not-started") {
-      openDialogue(npc.name, ["The first ledger convinced the dock. Now I need a real far-road survey: Frostgate, Glass Flats, Reedmere, Stormbreak, the Old Orchard, Amber Downs, Starfall, Tideglass, and Pale Watch."], [
+      openDialogue(npc.name, ["The first ledger convinced the dock. Now I need a real far-road survey: Frostgate, Glass Flats, Reedmere, Stormbreak, Old Orchard, Amber Downs, Starfall, Tideglass, Pale Watch, Bramblewall, Copperpine, Sunward, Gloamfen, and Whitecap."], [
         {
           label: "Start Far Road Survey",
           action: () => {
@@ -3869,25 +4109,30 @@
         state.stats.visitedStarfallHeath,
         state.stats.visitedTideglassQuay,
         state.stats.visitedPaleWatch,
+        state.stats.visitedBramblewall,
+        state.stats.visitedCopperpine,
+        state.stats.visitedSunward,
+        state.stats.visitedGloamfen,
+        state.stats.visitedWhitecap,
       ].filter(Boolean).length;
-      const ready = visited >= 9;
-      openDialogue(npc.name, [ready ? "That is the whole road ring. The map finally has elbows." : `Survey notes: ${visited}/9 far-road regions visited.`], [
+      const ready = visited >= 14;
+      openDialogue(npc.name, [ready ? "That is the whole road ring. The map finally has elbows." : `Survey notes: ${visited}/14 far-road regions visited.`], [
         {
           label: ready ? "Complete survey" : "Keep surveying",
           action: () => {
             if (ready) {
               survey.state = "completed";
-              addInventory("coins", 680);
+              addInventory("coins", 940);
               addInventory("clue_scroll", 1);
-              addInventory("energy_potion", 3);
-              gainXp("Agility", 340);
-              gainXp("Vigilance", 340);
+              addInventory("energy_potion", 4);
+              gainXp("Agility", 520);
+              gainXp("Vigilance", 520);
               addChat("Quest complete: Far Road Survey.");
             }
             closeModal();
           },
         },
-        ...travelChoices.slice(0, 7),
+        ...travelChoices.slice(0, 8),
       ]);
       return;
     }
@@ -4572,6 +4817,8 @@
       useBannerSupply();
     } else if (action === "banner_scoreboard") {
       addChat(bannerfallScoreText());
+    } else if (action === "survey") {
+      surveyBeacon(obj);
     } else if (action === "ash") {
       addChat("The ditch marks Low Ash. Everything there hits harder.", "danger");
     } else if (action === "rift_altar") {
@@ -4579,6 +4826,19 @@
       state.player.hp = Math.min(maxHp(), state.player.hp + 15);
       addChat("Rift energy restores your Resolve.");
     } else addChat(`You examine the ${obj.name}.`);
+  }
+
+  function surveyBeacon(obj) {
+    if (obj.readyAt && obj.readyAt > state.time) {
+      addChat("The survey cairn has fresh chalk marks already.");
+      return;
+    }
+    obj.readyAt = state.time + 60;
+    state.stats.surveyBeaconsMapped += 1;
+    gainXp("Agility", 32);
+    gainXp("Vigilance", 44);
+    if (state.stats.surveyBeaconsMapped % 3 === 0) addInventory("coins", 36);
+    addChat(`You map the ${obj.name}. Frontier beacons mapped: ${state.stats.surveyBeaconsMapped}.`);
   }
 
   function nearestResource(type) {
@@ -6137,6 +6397,7 @@
       drawText("*", screen.x, screen.y - 38, { color: "#c18cff", outline: "#000", size: 20, align: "center" });
     } else if (obj.type === "ruins") {
       drawBox(screen.x, screen.y - 14, 62, 22, "#51463d", "#1b1714");
+      if (obj.action === "survey") drawText("MAP", screen.x, screen.y - 32, { color: "#ffe39b", outline: "#000", size: 9, align: "center" });
     } else if (obj.type === "chest") {
       drawBox(screen.x, screen.y - 18, 40, 24, "#5e3924", "#20110a");
       ctx.strokeStyle = "#d9b45f";
@@ -6981,7 +7242,7 @@
         const label = item.type.includes("tree") ? "Chop" : item.type === "essence_rock" ? "Mine-essence" : item.type.includes("rock") ? "Mine" : item.type === "redclaw_spot" ? "Cage" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_redclaw" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "sigilcraft" ? "Craft-sigil-at" : item.action === "tower_door" ? "Enter" : item.action === "tower_chest" ? "Open" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "bannerfall" ? "Enter" : item.action === "banner_flag" ? "Use-flag" : item.action === "banner_supply" ? "Take-from" : item.action === "banner_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_redclaw" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "sigilcraft" ? "Craft-sigil-at" : item.action === "tower_door" ? "Enter" : item.action === "tower_chest" ? "Open" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "bannerfall" ? "Enter" : item.action === "banner_flag" ? "Use-flag" : item.action === "banner_supply" ? "Take-from" : item.action === "banner_scoreboard" ? "Read" : item.action === "survey" ? "Map" : item.action === "examine" ? "Look-at" : "Use";
         options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
@@ -7041,6 +7302,7 @@
     if (kind === "scenery" && item.action === "crypt") return `${item.name}: a slab for one of the oath wardens. ${cryptStatusText()}.`;
     if (kind === "scenery" && item.action === "crypt_chest") return `The crypt chest is sealed by old combat nonsense. ${cryptStatusText()}.`;
     if (kind === "scenery" && item.action?.startsWith("banner")) return `${item.name}: ${bannerfallScoreText()}`;
+    if (kind === "scenery" && item.action === "survey") return `${item.name}: chalked, sighted, and waiting to be mapped for the far-road ledgers.`;
     if (kind === "scenery" && item.type === "sigilist_tower") return "A squat tower full of essence dust, glowing circles, and bad robes.";
     if (kind === "scenery" && item.type === "scarecrow") return "It has the posture of a moderator and the wardrobe of a farmer.";
     if (kind === "scenery" && item.type === "seed_sacks") return "Seed sacks stacked with absolute dial-up confidence.";
@@ -7348,7 +7610,7 @@
       ctx.fill();
       ctx.strokeStyle = "#101010";
       ctx.stroke();
-      const mapLabelSize = WORLD_W > 150 ? 7 : 9;
+      const mapLabelSize = WORLD_W > 180 ? 6 : WORLD_W > 150 ? 7 : 9;
       drawText(fitLine(destination.label, 72, mapLabelSize), px + 8, py - 8, { color: destination.color, outline: "#000", size: mapLabelSize, align: "left" });
     }
     const playerX = ox + state.player.x * scale;
@@ -7454,18 +7716,20 @@
     const done = diaryCompletedCount();
     drawText("Briarfall Diary", x + 20, y + 30, { color: "#6feaff", outline: "#000", size: 20, align: "left" });
     drawText(`${done}/${DIARY_TASKS.length} tasks complete`, x + 20, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
-    const taskColW = (w - 56) / 2;
+    const taskCols = DIARY_TASKS.length > 36 ? 3 : 2;
+    const rowGap = taskCols === 3 ? 22 : 27;
+    const taskColW = (w - 40 - (taskCols - 1) * 10) / taskCols;
     DIARY_TASKS.forEach((task, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const rowX = x + 20 + col * (taskColW + 16);
-      const rowY = y + 88 + row * 27;
+      const col = i % taskCols;
+      const row = Math.floor(i / taskCols);
+      const rowX = x + 20 + col * (taskColW + 10);
+      const rowY = y + 88 + row * rowGap;
       ctx.fillStyle = i % 2 ? "#25180d" : "#2c1d10";
-      ctx.fillRect(rowX, rowY - 13, taskColW, 22);
+      ctx.fillRect(rowX, rowY - 13, taskColW, rowGap - 5);
       ctx.strokeStyle = "#4d3a20";
-      ctx.strokeRect(rowX, rowY - 13, taskColW, 22);
-      drawText(task.done() ? "*" : "-", rowX + 12, rowY - 2, { color: task.done() ? "#78e05f" : "#a89468", outline: "#000", size: 10, align: "left" });
-      drawText(fitLine(task.label, taskColW - 40, 9), rowX + 30, rowY - 2, { color: task.done() ? "#ffe9a8" : "#cdbb8a", outline: "#000", size: 9, align: "left" });
+      ctx.strokeRect(rowX, rowY - 13, taskColW, rowGap - 5);
+      drawText(task.done() ? "*" : "-", rowX + 8, rowY - 3, { color: task.done() ? "#78e05f" : "#a89468", outline: "#000", size: 9, align: "left" });
+      drawText(fitLine(task.label, taskColW - 28, taskCols === 3 ? 7 : 9), rowX + 23, rowY - 3, { color: task.done() ? "#ffe9a8" : "#cdbb8a", outline: "#000", size: taskCols === 3 ? 7 : 9, align: "left" });
     });
     if (done === DIARY_TASKS.length && !state.diaryRewardClaimed) {
       const claim = { kind: "diaryClaim", x: x + 154, y: y + h - 52, w: 212, h: 32 };
@@ -7672,6 +7936,7 @@
       if (item.action === "banana") return [item.name, item.readyAt && item.readyAt > state.time ? "Growing back" : "Pick banana"];
       if (item.action === "web") return [item.name, item.readyAt && item.readyAt > state.time ? "Regrowing" : "Cut spider silk", "Requires knife"];
       if (item.action === "island_shop") return [item.name, "Trade island supplies"];
+      if (item.action === "survey") return [item.name, item.readyAt && item.readyAt > state.time ? "Recently mapped" : "Map frontier beacon", "Agility + Vigilance XP"];
       if (item.action === "examine") return [item.name, "Examine"];
       return [item.name, item.action === "steal" ? "Steal-from" : "Use"];
     }
@@ -8027,6 +8292,12 @@
         visitedStarfallHeath: state.stats.visitedStarfallHeath,
         visitedTideglassQuay: state.stats.visitedTideglassQuay,
         visitedPaleWatch: state.stats.visitedPaleWatch,
+        visitedBramblewall: state.stats.visitedBramblewall,
+        visitedCopperpine: state.stats.visitedCopperpine,
+        visitedSunward: state.stats.visitedSunward,
+        visitedGloamfen: state.stats.visitedGloamfen,
+        visitedWhitecap: state.stats.visitedWhitecap,
+        surveyBeaconsMapped: state.stats.surveyBeaconsMapped,
         essenceMined: state.stats.essenceMined,
         sigilsCrafted: state.stats.sigilsCrafted,
         galeSigilsCrafted: state.stats.galeSigilsCrafted,
