@@ -15,8 +15,8 @@
   const TILE_H = 24;
   const HALF_W = TILE_W / 2;
   const HALF_H = TILE_H / 2;
-  const WORLD_W = 80;
-  const WORLD_H = 80;
+  const WORLD_W = 112;
+  const WORLD_H = 112;
   const MAX_CHAT = 10;
 
   const tabs = ["inventory", "skills", "quests", "equipment", "magic", "settings"];
@@ -237,6 +237,8 @@
     silk: { name: "Silk", color: "#efe4b0", icon: "sk", value: 34 },
     spider_silk: { name: "Spider silk", stackable: true, color: "#dfe7d3", icon: "ss", value: 18 },
     fur: { name: "Fur", color: "#8f6848", icon: "fr", value: 28 },
+    limpwurt_root: { name: "Limpwurt root", stackable: true, color: "#d1b560", icon: "lr", value: 26 },
+    scorpion_tail: { name: "Scorpion tail", stackable: true, color: "#d48a36", icon: "st", value: 22 },
     attack_potion: { name: "Attack potion", color: "#8b4dcc", icon: "ap", value: 42, boostSkill: "Attack", boostFlat: 3, boostPct: 0.1 },
     strength_potion: { name: "Strength potion", color: "#d65d4c", icon: "sp", value: 54, boostSkill: "Strength", boostFlat: 3, boostPct: 0.1 },
     defence_potion: { name: "Defence potion", color: "#6b8fd9", icon: "dp", value: 50, boostSkill: "Defence", boostFlat: 3, boostPct: 0.1 },
@@ -295,6 +297,16 @@
       attack: 18,
       strength: 24,
       requirements: { Attack: 30, Strength: 25 },
+    },
+    giant_club: {
+      name: "Giant club",
+      slot: "weapon",
+      color: "#83613d",
+      icon: "gc",
+      value: 760,
+      attack: 8,
+      strength: 22,
+      requirements: { Attack: 20, Strength: 30 },
     },
     crypt_staff: {
       name: "Crypt staff",
@@ -530,6 +542,11 @@
         state: "not-started",
         text: "Slayer Master Vann wants a key from the north Slayer Tower.",
       },
+      frontierLedger: {
+        title: "The Frontier Ledger",
+        state: "not-started",
+        text: "Southport's sailor wants proof that the outer roads are open again.",
+      },
     },
     stats: {
       bankUses: 0,
@@ -562,6 +579,9 @@
       lobstersCooked: 0,
       bansheesSlain: 0,
       crawlingHandsSlain: 0,
+      desertScorpionsSlain: 0,
+      highwaymenSlain: 0,
+      hillGiantsSlain: 0,
       spectersSlain: 0,
       towerChestsOpened: 0,
       mapsOpened: 0,
@@ -583,6 +603,7 @@
       castleFlagsCaptured: 0,
       slayerTasksCompleted: 0,
       stallsStolen: 0,
+      visitedSouthport: false,
       visitedWilderness: false,
       websCut: 0,
     },
@@ -662,6 +683,9 @@
     { id: "map", label: "Open the world map", done: () => state.stats.mapsOpened > 0 },
     { id: "event", label: "Claim a random event", done: () => state.stats.randomEventsCompleted > 0 },
     { id: "wilderness", label: "Step into Low Wilderness", done: () => Boolean(state.stats.visitedWilderness) },
+    { id: "southport", label: "Reach Southport docks", done: () => Boolean(state.stats.visitedSouthport) },
+    { id: "giant", label: "Defeat a hill giant", done: () => state.stats.hillGiantsSlain > 0 },
+    { id: "scorpion", label: "Defeat a desert scorpion", done: () => state.stats.desertScorpionsSlain > 0 },
     { id: "castle_flag", label: "Capture a castle flag", done: () => state.stats.castleFlagsCaptured > 0 },
     { id: "crypt", label: "Loot the crypt chest", done: () => state.stats.cryptChestsOpened > 0 },
     { id: "wight", label: "Defeat the Deep wight", done: () => state.stats.deepWightsSlain > 0 },
@@ -684,6 +708,10 @@
     { id: "mosswood", label: "Mosswood", x: 16, y: 18, note: "brutes and oaks", color: "#9bd36f" },
     { id: "wildy", label: "Low Wilderness", x: 11, y: 12, note: "chaos altar, danger", color: "#ff8e77" },
     { id: "cowfield", label: "Cow Field", x: 23, y: 53, note: "hides and beef", color: "#fff0c5" },
+    { id: "southport", label: "Southport", x: 64, y: 93, note: "docks, sailors, coast road", color: "#7fd7ff" },
+    { id: "eastdunes", label: "East Dunes", x: 97, y: 45, note: "scorpions and tollmen", color: "#eac76f" },
+    { id: "northridge", label: "North Ridge", x: 95, y: 13, note: "ore, giants, cold roads", color: "#d4d7d4" },
+    { id: "westwood", label: "Westwood", x: 19, y: 85, note: "oaks and big bones", color: "#9bd36f" },
   ];
 
   const BESTIARY = [
@@ -697,6 +725,9 @@
     { type: "crawling_hand", name: "Crawling hand", level: 8, location: "Slayer Tower", drops: "tower keys, gloves", tip: "entry tower task" },
     { type: "banshee", name: "Banshee", level: 23, location: "Slayer Tower", drops: "keys, ectoplasm", tip: "wear earmuffs" },
     { type: "jungle_spider", name: "Jungle spider", level: 24, location: "Karamel Isle", drops: "bananas, herbs, silk", tip: "poisons; pack antipoison" },
+    { type: "desert_scorpion", name: "Desert scorpion", level: 14, location: "East Dunes", drops: "tails, antipoison", tip: "poisons lightly" },
+    { type: "highwayman", name: "Highwayman", level: 18, location: "East Dunes", drops: "coins, cake, clues", tip: "thinly spaced ambushes" },
+    { type: "hill_giant", name: "Hill giant", level: 28, location: "Westwood / North Ridge", drops: "big bones, roots, club", tip: "slow heavy target" },
     { type: "aberrant_specter", name: "Aberrant specter", level: 46, location: "Slayer Tower", drops: "herbs, mystic loot", tip: "wear a nose peg" },
     { type: "dark_wizard", name: "Dark wizard", level: 20, location: "Low Wilderness", drops: "chaos, talismans, staff", tip: "keep prayer ready" },
     { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
@@ -1026,6 +1057,7 @@
   }
 
   function addResource(type, x, y, extra = {}) {
+    if (state.resources.some((resource) => resource.x === x && resource.y === y)) return null;
     const resource = {
       id: `${type}-${state.resources.length}`,
       type,
@@ -1157,6 +1189,36 @@
     setRect(69, 28, 7, 5, "dirt");
     drawRoad(64, 36, 72, 30, 1);
 
+    for (let y = 0; y < WORLD_H; y += 1) {
+      for (let x = 0; x < WORLD_W; x += 1) {
+        const eastDune = Math.hypot((x - 98) / 1.25, y - 46);
+        const westwood = Math.hypot((x - 20) / 1.15, y - 86);
+        const ridge = Math.hypot((x - 96) / 1.45, y - 14);
+        const southCoast = y > 99 + Math.sin(x * 0.19) * 2;
+        if (southCoast) setTile(x, y, "water");
+        else if (y > 94 && mapAt(x, y) === "grass") setTile(x, y, "sand");
+        if (eastDune < 17) setTile(x, y, eastDune < 8 ? "sand" : mapAt(x, y) === "grass" ? "sand" : mapAt(x, y));
+        if (westwood < 15 && mapAt(x, y) === "grass") setTile(x, y, "field");
+        if (ridge < 15) setTile(x, y, ridge < 9 ? "stone" : "dirt");
+      }
+    }
+    setRect(57, 88, 17, 8, "town");
+    setRect(60, 96, 12, 3, "sand");
+    setRect(62, 88, 5, 4, "stone");
+    setRect(88, 34, 20, 24, "sand");
+    setRect(93, 41, 10, 7, "dirt");
+    setRect(101, 49, 4, 3, "water");
+    setRect(84, 5, 24, 17, "stone");
+    setRect(91, 10, 9, 5, "dirt");
+    setRect(8, 75, 27, 22, "field");
+    setRect(16, 82, 8, 5, "dirt");
+    drawRoad(64, 61, 64, 94, 1);
+    drawRoad(64, 93, 97, 45, 1);
+    drawRoad(72, 30, 97, 45, 1);
+    drawRoad(72, 13, 95, 13, 1);
+    drawRoad(23, 53, 19, 85, 1);
+    drawRoad(19, 85, 64, 93, 1);
+
     addScenery("bank_booth", "Bank booth", 34, 30, { width: 4, height: 1, action: "bank" });
     addScenery("chest", "Bank chest", 37, 30, { action: "bank" });
     addScenery("shop_counter", "General store counter", 45, 31, { action: "shop" });
@@ -1207,6 +1269,18 @@
     addScenery("chaos_altar", "Chaos altar", 11, 12, { action: "chaos_altar" });
     addScenery("chaos_rift", "Chaos rift", 14, 14, { action: "runecraft", rune: "chaos", interactRange: 2.7 });
     addScenery("ruins", "Burnt ruins", 17, 20, { action: "examine" });
+    addScenery("dock", "Southport jetty", 64, 97, { action: "fish", interactRange: 2.8 });
+    addScenery("island_dock", "Southport lobster pier", 70, 97, { action: "fish_lobster", interactRange: 2.8 });
+    addScenery("quest_sign", "Southport ledger board", 60, 90, { action: "quests" });
+    addScenery("market_stall", "Southport fish stall", 70, 90, { action: "steal", level: 8 });
+    addScenery("range", "Southport cookfire", 67, 91, { action: "cook" });
+    addScenery("well", "Southport well", 59, 92, { action: "water" });
+    addScenery("quest_sign", "Westwood trail sign", 19, 85, { action: "examine" });
+    addScenery("ruins", "Giant's broken table", 23, 88, { action: "examine" });
+    addScenery("quest_sign", "Dunes warning sign", 90, 37, { action: "examine" });
+    addScenery("ruins", "Desert waystone", 97, 45, { action: "examine" });
+    addScenery("quest_sign", "North ridge sign", 89, 12, { action: "examine" });
+    addScenery("ruins", "Ridge cairn", 95, 13, { action: "examine" });
 
     for (let i = 0; i < 85; i += 1) {
       const x = 7 + Math.floor(hash(i, 3) * 23);
@@ -1247,6 +1321,36 @@
     ]) {
       addResource("lobster_spot", spot[0], spot[1]);
     }
+    for (let i = 0; i < 72; i += 1) {
+      const x = 7 + Math.floor(hash(i, 203) * 29);
+      const y = 74 + Math.floor(hash(i, 211) * 24);
+      if (mapAt(x, y) === "grass" || mapAt(x, y) === "field") {
+        addResource(hash(i, 227) > 0.48 ? "oak_tree" : "tree", x, y);
+      }
+    }
+    for (let i = 0; i < 58; i += 1) {
+      const x = 84 + Math.floor(hash(i, 251) * 24);
+      const y = 5 + Math.floor(hash(i, 271) * 20);
+      if (mapAt(x, y) === "stone" || mapAt(x, y) === "dirt") {
+        const roll = hash(i, 283);
+        addResource(roll > 0.62 ? "gold_rock" : roll > 0.36 ? "iron_rock" : roll > 0.18 ? "tin_rock" : "copper_rock", x, y);
+      }
+    }
+    for (const spot of [
+      [59, 98],
+      [63, 99],
+      [68, 99],
+      [74, 98],
+    ]) {
+      addResource("fishing_spot", spot[0], spot[1]);
+    }
+    for (const spot of [
+      [65, 101],
+      [71, 101],
+      [75, 100],
+    ]) {
+      addResource("lobster_spot", spot[0], spot[1]);
+    }
 
     addNpc("banker", "Banker Niles", "banker", 35, 31);
     addNpc("shopkeeper", "Shopkeeper Marnie", "shop", 45, 32);
@@ -1265,6 +1369,8 @@
     addNpc("tower_keeper", "Keeper Maev", "tower_keeper", 70, 11);
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
+    addNpc("southport_sailor", "Sailor Ren", "sailor", 64, 91);
+    addNpc("ridge_prospector", "Prospector Gale", "guard", 92, 12);
 
     for (const [i, spot] of [
       [22, 56],
@@ -1402,12 +1508,12 @@
       slayerType: "lesser_demon",
     }, [["big_bones", 1, 1], ["chaos_rune", 8, 0.55], ["law_rune", 2, 0.18], ["clue_scroll", 1, 0.28], ["strength_potion", 1, 0.16], ["rune_scimitar", 1, 0.035], ["slayer_helm", 1, 0.03]]);
     for (const spot of [
-      [52, 47],
-      [56, 49],
-      [60, 47],
-      [53, 53],
-      [58, 55],
-      [62, 52],
+      [51, 54],
+      [56, 56],
+      [61, 55],
+      [50, 60],
+      [55, 61],
+      [57, 58],
     ]) {
       addEnemy("grave_skeleton", "Grave skeleton", spot[0], spot[1], {
         level: 12,
@@ -1422,11 +1528,11 @@
       }, [["bones", 1, 0.95], ["coins", 18, 0.4], ["attack_potion", 1, 0.08], ["iron_sword", 1, 0.06]]);
     }
     for (const spot of [
-      [61, 39],
-      [67, 38],
-      [73, 40],
       [64, 46],
-      [71, 49],
+      [69, 48],
+      [74, 41],
+      [72, 51],
+      [66, 52],
     ]) {
       addEnemy("cave_crawler", "Cave crawler", spot[0], spot[1], {
         level: 16,
@@ -1435,17 +1541,17 @@
         strength: 9,
         defence: 7,
         xp: 80,
-        aggro: 2.4,
+        aggro: 1.15,
         respawn: 10,
         wanderRadius: 1.7,
         slayerType: "cave_crawler",
       }, [["bones", 1, 0.7], ["uncut_gem", 1, 0.08], ["energy_potion", 1, 0.1], ["coins", 24, 0.5]]);
     }
     for (const spot of [
-      [76, 42],
-      [78, 47],
-      [72, 50],
-      [66, 48],
+      [76, 43],
+      [78, 48],
+      [72, 52],
+      [63, 51],
     ]) {
       addEnemy("salt_slug", "Salt slug", spot[0], spot[1], {
         level: 18,
@@ -1454,7 +1560,7 @@
         strength: 11,
         defence: 12,
         xp: 90,
-        aggro: 2.2,
+        aggro: 1.0,
         respawn: 12,
         wanderRadius: 1.6,
         slayerType: "salt_slug",
@@ -1517,14 +1623,14 @@
         slayerType: "aberrant_specter",
       }, [["grimy_mirthleaf", 2, 0.45], ["tower_key", 1, 0.22], ["ectoplasm", 3, 0.7], ["mystic_wand", 1, 0.035], ["clue_scroll", 1, 0.18]]);
     }
-    addEnemy("deep_wight", "Deep wight", 69, 46, {
+    addEnemy("deep_wight", "Deep wight", 72, 48, {
       level: 34,
       hp: 115,
       attack: 20,
       strength: 21,
       defence: 18,
       xp: 240,
-      aggro: 2.0,
+      aggro: 0.95,
       respawn: 28,
       wanderRadius: 1.2,
       slayerType: "deep_wight",
@@ -1585,6 +1691,69 @@
       respawn: 36,
       slayerType: "lesser_demon",
     }, [["big_bones", 1, 1], ["chaos_rune", 7, 0.48], ["law_rune", 2, 0.16], ["raw_lobster", 1, 0.24], ["rune_scimitar", 1, 0.035]]);
+    for (const spot of [
+      [13, 88],
+      [22, 83],
+      [30, 91],
+      [91, 14],
+      [101, 18],
+    ]) {
+      addEnemy("hill_giant", "Hill giant", spot[0], spot[1], {
+        level: 28,
+        hp: 96,
+        attack: 17,
+        strength: 23,
+        defence: 14,
+        xp: 155,
+        aggro: 0.85,
+        respawn: 20,
+        wanderRadius: 1.45,
+        wanderSpeed: 0.42,
+        slayerType: "hill_giant",
+      }, [["big_bones", 1, 1], ["coins", 72, 0.6], ["limpwurt_root", 1, 0.32], ["strength_potion", 1, 0.08], ["giant_club", 1, 0.035]]);
+    }
+    for (const spot of [
+      [90, 41],
+      [98, 42],
+      [104, 48],
+      [94, 55],
+      [101, 57],
+    ]) {
+      addEnemy("desert_scorpion", "Desert scorpion", spot[0], spot[1], {
+        level: 14,
+        hp: 44,
+        attack: 10,
+        strength: 9,
+        defence: 10,
+        xp: 72,
+        aggro: 0.7,
+        respawn: 12,
+        wanderRadius: 1.9,
+        wanderSpeed: 0.46,
+        poisonDamage: 2,
+        poisonChance: 0.14,
+        slayerType: "desert_scorpion",
+      }, [["bones", 1, 0.45], ["coins", 24, 0.45], ["scorpion_tail", 1, 0.6], ["antipoison", 1, 0.12], ["uncut_gem", 1, 0.06]]);
+    }
+    for (const spot of [
+      [87, 35],
+      [103, 38],
+      [91, 58],
+      [106, 54],
+    ]) {
+      addEnemy("highwayman", "Highwayman", spot[0], spot[1], {
+        level: 18,
+        hp: 56,
+        attack: 14,
+        strength: 13,
+        defence: 9,
+        xp: 92,
+        aggro: 1.2,
+        respawn: 14,
+        wanderRadius: 2.0,
+        slayerType: "highwayman",
+      }, [["bones", 1, 0.6], ["coins", 48, 0.72], ["cake", 1, 0.16], ["silk", 1, 0.12], ["clue_scroll", 1, 0.08], ["iron_sword", 1, 0.035]]);
+    }
   }
 
   function walkable(x, y) {
@@ -2260,6 +2429,10 @@
       state.stats.visitedWilderness = true;
       addChat("Warning! Low Wilderness is dangerous.", "danger");
     }
+    if (nextArea === "Southport" && !state.stats.visitedSouthport) {
+      state.stats.visitedSouthport = true;
+      addChat("Southport's docks smell like salt, tar, and side quests.");
+    }
     const cryptPressure = Math.max(0, (state.crypt?.awakened?.length || 0) - (state.crypt?.defeated?.length || 0));
     if (nextArea === "Old Graveyard" && cryptPressure > 0 && player.prayerPoints > 0) {
       player.prayerPoints = Math.max(0, player.prayerPoints - dt * (0.18 + cryptPressure * 0.08));
@@ -2268,9 +2441,13 @@
 
   function areaAt(x, y) {
     if (x < 22 && y < 28) return "Low Wilderness";
+    if (x > 52 && x < 79 && y > 84) return "Southport";
+    if (x > 84 && y > 30 && y < 62) return "East Dunes";
+    if (x > 82 && y < 25) return "North Ridge";
+    if (x < 36 && y > 72) return "Westwood";
     if (x > 66 && y > 7 && y < 19) return "Slayer Tower";
     if (x > 64 && y > 22 && y < 39) return "Castle Wars";
-    if (x > 68 && y > 67) return "Karamel Isle";
+    if (x > 68 && x < 82 && y > 67 && y < 82) return "Karamel Isle";
     if (Math.hypot(x - 60, y - 38) < 5) return "Slayer Lodge";
     if (Math.hypot(x - 66, y - 43) < 11) return "Crawler Hollow";
     if (Math.hypot(x - 62, y - 18) < 12) return "Greyrock Mine";
@@ -2575,6 +2752,9 @@
     state.stats.crawlingHandsSlain += enemy.type === "crawling_hand" ? 1 : 0;
     state.stats.bansheesSlain += enemy.type === "banshee" ? 1 : 0;
     state.stats.spectersSlain += enemy.type === "aberrant_specter" ? 1 : 0;
+    state.stats.hillGiantsSlain += enemy.type === "hill_giant" ? 1 : 0;
+    state.stats.desertScorpionsSlain += enemy.type === "desert_scorpion" ? 1 : 0;
+    state.stats.highwaymenSlain += enemy.type === "highwayman" ? 1 : 0;
     for (const [itemId, qty, chance] of enemy.loot) {
       if (random() < chance) dropGroundItem(itemId, qty, enemy.x, enemy.y);
     }
@@ -2881,6 +3061,8 @@
       castleSquireDialogue(npc);
     } else if (npc.role === "island_trader") {
       islandTraderDialogue(npc);
+    } else if (npc.role === "sailor") {
+      sailorDialogue(npc);
     } else if (npc.role === "tower_keeper") {
       towerKeeperDialogue(npc);
     } else if (npc.role === "fisher") {
@@ -2894,6 +3076,7 @@
             if (canPay) state.stats.islandTrips += 1;
           },
         },
+        { label: "To Southport - 22gp", action: () => travelTo(64.5, 92.5, 22, "Southport") },
         {
           label: "Buy lobster pot - 20gp",
           action: () => {
@@ -3001,6 +3184,63 @@
       return;
     }
     openDialogue(npc.name, ["Karamel Isle exports fish, fruit, and questionable confidence."], choices);
+  }
+
+  function sailorDialogue(npc) {
+    const quest = state.quests.frontierLedger;
+    const travelChoices = [
+      { label: "To Boonshire dock - 20gp", action: () => travelTo(54.5, 61.5, 20, "Boonshire dock") },
+      {
+        label: "To Karamel Isle - 28gp",
+        action: () => {
+          const canPay = inventoryCount("coins") >= 28;
+          travelTo(73.5, 72.5, 28, "Karamel Isle");
+          if (canPay) state.stats.islandTrips += 1;
+        },
+      },
+      { label: "Trade dock supplies", action: () => openSouthportShop() },
+      { label: "Ask about the roads", action: () => addChat("Ren says: Westwood has giants, East Dunes has scorpions, and North Ridge has enough ore to ruin backs.") },
+      { label: "Close", action: () => closeModal() },
+    ];
+    if (quest.state === "not-started") {
+      openDialogue(npc.name, ["The frontier ledger is blank. Bring me a scorpion tail and a giant's big bones so traders believe the roads are open."], [
+        {
+          label: "Start The Frontier Ledger",
+          action: () => {
+            quest.state = "started";
+            addChat("Quest started: The Frontier Ledger.");
+            closeModal();
+          },
+        },
+        ...travelChoices,
+      ]);
+      return;
+    }
+    if (quest.state === "started") {
+      const ready = inventoryCount("scorpion_tail") >= 1 && inventoryCount("big_bones") >= 1;
+      openDialogue(npc.name, [ready ? "That is enough proof for any dock ledger." : `Ledger proof: ${inventoryCount("scorpion_tail")}/1 scorpion tail, ${inventoryCount("big_bones")}/1 big bones.`], [
+        {
+          label: ready ? "Complete quest" : "Keep exploring",
+          action: () => {
+            if (ready) {
+              removeItem(state.player.inventory, "scorpion_tail", 1);
+              removeItem(state.player.inventory, "big_bones", 1);
+              quest.state = "completed";
+              addInventory("coins", 260);
+              addInventory("lobster_pot", 1);
+              addInventory("energy_potion", 1);
+              gainXp("Slayer", 180);
+              gainXp("Fishing", 120);
+              addChat("Quest complete: The Frontier Ledger.");
+            }
+            closeModal();
+          },
+        },
+        ...travelChoices.slice(0, 4),
+      ]);
+      return;
+    }
+    openDialogue(npc.name, ["Southport has room, roads, and a worrying number of things with claws."], travelChoices);
   }
 
   function wizardDialogue(npc) {
@@ -3411,10 +3651,13 @@
       { type: "crawling_hand", label: "crawling hands", amount: 5, minCombat: 8, xp: 60 },
       { type: "salt_slug", label: "salt slugs", amount: 5, minCombat: 12, xp: 80 },
       { type: "cave_crawler", label: "cave crawlers", amount: 6, minCombat: 12, xp: 95 },
+      { type: "desert_scorpion", label: "desert scorpions", amount: 5, minCombat: 14, xp: 85 },
+      { type: "highwayman", label: "highwaymen", amount: 5, minCombat: 16, xp: 95 },
       { type: "jungle_spider", label: "jungle spiders", amount: 8, minCombat: 16, xp: 105 },
       { type: "dark_wizard", label: "dark wizards", amount: 6, minCombat: 18, xp: 110 },
       { type: "banshee", label: "banshees", amount: 4, minCombat: 20, xp: 115 },
       { type: "moss_brute", label: "moss brutes", amount: 4, minCombat: 24, xp: 140 },
+      { type: "hill_giant", label: "hill giants", amount: 4, minCombat: 24, xp: 145 },
       { type: "black_knight", label: "black knights", amount: 4, minCombat: 28, xp: 175 },
       { type: "deep_wight", label: "deep wights", amount: 3, minCombat: 30, xp: 220 },
       { type: "aberrant_specter", label: "aberrant specters", amount: 2, minCombat: 42, xp: 260 },
@@ -3543,6 +3786,22 @@
         { id: "lobster", price: 118 },
         { id: "antipoison", price: 52 },
         { id: "energy_potion", price: 42 },
+      ],
+    };
+  }
+
+  function openSouthportShop() {
+    state.modal = {
+      type: "shop",
+      title: "Southport Supplies",
+      rects: [],
+      stock: [
+        { id: "lobster_pot", price: 24 },
+        { id: "raw_shrimp", price: 7, qty: 3 },
+        { id: "raw_trout", price: 26 },
+        { id: "bread", price: 9 },
+        { id: "energy_potion", price: 38 },
+        { id: "antipoison", price: 48 },
       ],
     };
   }
@@ -4525,6 +4784,10 @@
         { id: "tower", hint: "Where a northern tower whispers through wool and rotten air.", x: 72, y: 12, radius: 3.2, xp: 170 },
         { id: "moss", hint: "The green brutes guard a quiet western wood.", x: 15, y: 17, radius: 4.8, xp: 180 },
         { id: "chaos", hint: "Where purple stone hums beyond the ditch.", x: 11, y: 12, radius: 4.2, xp: 210 },
+        { id: "southport", hint: "At the far south, tarred planks count every fish tale.", x: 64, y: 97, radius: 4.2, xp: 190 },
+        { id: "dunes", hint: "A dry waystone watches claws and toll roads.", x: 97, y: 45, radius: 4.2, xp: 205 },
+        { id: "ridge", hint: "Cold stones stack where the north road runs out.", x: 95, y: 13, radius: 3.8, xp: 220 },
+        { id: "westwood", hint: "Where the oaks thicken and the tables are giant-sized.", x: 23, y: 88, radius: 4.4, xp: 200 },
       ]);
       addChat(`Clue scroll: ${state.clue.hint}`);
       return;
@@ -4548,12 +4811,12 @@
     const coins = 70 + Math.floor(random() * 180);
     addInventory("coins", coins);
     const roll = random();
-    if (roll > 0.985) addInventory("rune_scimitar", 1);
+    if (roll > 0.985) addInventory(choice(["rune_scimitar", "giant_club"]), 1);
     else if (roll > 0.94) addInventory("team_cape", 1);
     else if (roll > 0.92) addInventory("slayer_helm", 1);
     else if (roll > 0.88) addInventory(choice(["ghostly_robe", "mystic_wand"]), 1);
     else if (roll > 0.78) addInventory(choice(["amulet_of_accuracy", "power_amulet", "pirate_cutlass"]), 1);
-    else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster"]), 1);
+    else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster", "limpwurt_root", "scorpion_tail"]), 1);
     else if (roll > 0.46) addInventory(choice(["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "bow_string"]), 1);
     else if (roll > 0.28) addInventory("death_rune", 2 + Math.floor(random() * 5));
     else addInventory("broad_arrow", 20 + Math.floor(random() * 25));
@@ -5267,7 +5530,7 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
+    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "sailor" ? "#315f75" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
     if (npc.role === "slayer") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
@@ -5275,6 +5538,7 @@
     if (npc.role === "wizard") drawText("*", screen.x + 15, screen.y - 45, { color: "#d9d2ff", outline: "#000", size: 16, align: "center" });
     if (npc.role === "squire") drawText("cw", screen.x + 17, screen.y - 45, { color: "#f0d25d", outline: "#000", size: 10, align: "center" });
     if (npc.role === "island_trader") drawText("gp", screen.x + 17, screen.y - 45, { color: "#ffe36a", outline: "#000", size: 10, align: "center" });
+    if (npc.role === "sailor") drawText("ship", screen.x + 20, screen.y - 45, { color: "#7fd7ff", outline: "#000", size: 8, align: "center" });
     if (npc.role === "tower_keeper") drawText("tk", screen.x + 17, screen.y - 45, { color: "#a8f5ff", outline: "#000", size: 10, align: "center" });
   }
 
@@ -5319,6 +5583,9 @@
       deep_wight: "#5860a8",
       lesser_demon: "#8e2f32",
       moss_brute: "#557b3e",
+      hill_giant: "#786143",
+      desert_scorpion: "#b87938",
+      highwayman: "#4d3b28",
     };
     ctx.save();
     if (enemy.hitFlash > 0) ctx.globalAlpha = 0.5 + Math.sin(state.time * 80) * 0.25;
@@ -5402,6 +5669,36 @@
       ctx.stroke();
     } else if (enemy.type === "moss_brute") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#7b9f58", 1.25);
+    } else if (enemy.type === "hill_giant") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#b7966b", 1.38);
+      ctx.strokeStyle = "#5c3a21";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(screen.x + 17, screen.y - 22);
+      ctx.lineTo(screen.x + 39, screen.y - 54);
+      ctx.stroke();
+      drawText("big", screen.x + 20, screen.y - 62, { color: "#f1d98b", outline: "#000", size: 8, align: "center" });
+    } else if (enemy.type === "desert_scorpion") {
+      ctx.fillStyle = colors[enemy.type];
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 15, 22, 11, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#6a3d1d";
+      ctx.lineWidth = 3;
+      for (let i = -2; i <= 2; i += 1) {
+        ctx.beginPath();
+        ctx.moveTo(screen.x + i * 7, screen.y - 9);
+        ctx.lineTo(screen.x + i * 11, screen.y + 3);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(screen.x - 8, screen.y - 23);
+      ctx.quadraticCurveTo(screen.x - 3, screen.y - 47, screen.x + 14, screen.y - 41);
+      ctx.stroke();
+      drawText("*", screen.x + 17, screen.y - 43, { color: "#ffcf74", outline: "#000", size: 13, align: "center" });
+    } else if (enemy.type === "highwayman") {
+      drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c7a174", 0.98);
+      drawText("Stand!", screen.x, screen.y - 63, { color: "#ffe0a0", outline: "#000", size: 8, align: "center" });
     } else if (enemy.type === "cave_crawler") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
@@ -5661,7 +5958,7 @@
     for (let yy = 0; yy < WORLD_H; yy += 1) {
       for (let xx = 0; xx < WORLD_W; xx += 1) {
         const terrain = mapAt(xx, yy);
-        const color = terrain === "water" ? "#1f6ca0" : terrain === "path" ? "#a17a45" : terrain === "town" ? "#b4a68c" : terrain === "stone" ? "#787871" : terrain === "swamp" ? "#506c3f" : "#39702c";
+        const color = terrain === "water" ? "#1f6ca0" : terrain === "path" ? "#a17a45" : terrain === "town" ? "#b4a68c" : terrain === "stone" ? "#787871" : terrain === "swamp" ? "#506c3f" : terrain === "field" ? "#827934" : terrain === "dirt" ? "#735534" : terrain === "sand" ? "#b9a561" : "#39702c";
         ctx.fillStyle = color;
         ctx.fillRect(ox + xx * scale, oy + yy * scale, Math.ceil(scale), Math.ceil(scale));
       }
@@ -6069,7 +6366,7 @@
     ctx.strokeRect(CHAT.x + 4, CHAT.y + 4, CHAT.w - 8, CHAT.h - 8);
     ctx.fillStyle = "#18100a";
     ctx.fillRect(CHAT.x + 12, CHAT.y + 12, CHAT.w - 24, CHAT.h - 24);
-    const lines = state.chat.slice(-6);
+    const lines = state.modal?.type === "dialogue" ? state.chat.slice(-2) : state.chat.slice(-6);
     let y = CHAT.y + 36;
     drawText("Game", CHAT.x + 24, CHAT.y + 25, { color: "#ffd86b", outline: "#000", size: 12, align: "left" });
     for (const line of lines) {
@@ -6228,11 +6525,11 @@
     state.modal.rects.push(close);
     drawButton(close, "x");
     const groups = [
-      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "pirate_cutlass", "wight_blade", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "earmuffs", "nose_peg", "leather_gloves", "wizard_hat", "black_helm", "iron_platelegs", "team_cape", "spider_cape", "ghostly_robe", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff", "mystic_wand"]],
-      ["Skilling", ["logs", "oak_logs", "copper_ore", "tin_ore", "iron_ore", "gold_ore", "bronze_bar", "iron_bar", "gold_bar", "cowhide", "leather_body", "silk", "fur"]],
+      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "pirate_cutlass", "wight_blade", "giant_club", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "earmuffs", "nose_peg", "leather_gloves", "wizard_hat", "black_helm", "iron_platelegs", "team_cape", "spider_cape", "ghostly_robe", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff", "mystic_wand"]],
+      ["Skilling", ["logs", "oak_logs", "copper_ore", "tin_ore", "iron_ore", "gold_ore", "bronze_bar", "iron_bar", "gold_bar", "cowhide", "leather_body", "silk", "fur", "limpwurt_root"]],
       ["Food", ["bread", "cake", "spinach_roll", "banana", "raw_shrimp", "cooked_shrimp", "raw_trout", "cooked_trout", "raw_lobster", "lobster", "raw_beef", "cooked_beef", "burnt_fish", "burnt_meat"]],
       ["Potions", ["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "energy_potion", "antipoison"]],
-      ["Treasure", ["slayer_gem", "bag_of_salt", "tower_key", "ectoplasm", "spider_silk", "lobster_pot", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "achievement_cape"]],
+      ["Treasure", ["slayer_gem", "bag_of_salt", "tower_key", "ectoplasm", "spider_silk", "scorpion_tail", "lobster_pot", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "achievement_cape"]],
       ["Runes", ["air_rune", "mind_rune", "chaos_rune", "law_rune", "death_rune"]],
     ];
     let yy = y + 82;
@@ -6341,17 +6638,17 @@
     drawText("You", playerX + 9, playerY + 8, { color: "#ffffff", outline: "#000", size: 10, align: "left" });
 
     const listX = x + 488;
-    let listY = y + 80;
-    const rowH = 27;
+    let listY = y + 78;
+    const rowH = 21;
     for (const destination of MAP_DESTINATIONS) {
-      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 10, w: 202, h: 24 };
+      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 8, w: 202, h: 19 };
       state.modal.rects.push(rect);
       ctx.fillStyle = "#2d2013";
       ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
       ctx.strokeStyle = "#70552d";
       ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-      drawText(destination.label, listX + 10, listY, { color: destination.color, outline: "#000", size: 10, align: "left" });
-      drawText(destination.note, listX + 10, listY + 12, { color: "#cdbb8a", outline: "#000", size: 7, align: "left" });
+      drawText(destination.label, listX + 8, listY, { color: destination.color, outline: "#000", size: 9, align: "left" });
+      drawText(destination.note, listX + 8, listY + 9, { color: "#cdbb8a", outline: "#000", size: 6, align: "left" });
       listY += rowH;
     }
   }
@@ -6937,6 +7234,7 @@
     const collection = collectionCount();
     return JSON.stringify({
       coordinateSystem: "World tiles: x increases southeast, y increases southwest. Canvas origin is top-left.",
+      world: { width: WORLD_W, height: WORLD_H },
       mode: state.modal?.type || "playing",
       player: {
         x: Number(state.player.x.toFixed(2)),
@@ -6987,6 +7285,7 @@
         bowsFletched: state.stats.bowsFletched,
         cropsHarvested: state.stats.cropsHarvested,
         farmingContractsCompleted: state.stats.farmingContractsCompleted,
+        visitedSouthport: state.stats.visitedSouthport,
         essenceMined: state.stats.essenceMined,
         runesCrafted: state.stats.runesCrafted,
         airRunesCrafted: state.stats.airRunesCrafted,
@@ -7008,6 +7307,9 @@
         crawlingHandsSlain: state.stats.crawlingHandsSlain,
         bansheesSlain: state.stats.bansheesSlain,
         spectersSlain: state.stats.spectersSlain,
+        hillGiantsSlain: state.stats.hillGiantsSlain,
+        desertScorpionsSlain: state.stats.desertScorpionsSlain,
+        highwaymenSlain: state.stats.highwaymenSlain,
         towerChestsOpened: state.stats.towerChestsOpened,
         websCut: state.stats.websCut,
         herbsHarvested: state.stats.herbsHarvested,
