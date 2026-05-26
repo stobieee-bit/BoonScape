@@ -33,10 +33,10 @@
     "Attack",
     "Strength",
     "Defence",
-    "Hitpoints",
+    "Vitality",
     "Ranged",
     "Magic",
-    "Prayer",
+    "Resolve",
     "Mining",
     "Smithing",
     "Fishing",
@@ -44,37 +44,37 @@
     "Woodcutting",
     "Firemaking",
     "Crafting",
-    "Thieving",
+    "Pilfering",
     "Agility",
     "Fletching",
-    "Runecrafting",
+    "Sigilcraft",
     "Farming",
-    "Herblore",
-    "Slayer",
+    "Herbalism",
+    "Vigilance",
   ];
 
   const SKILL_GUIDES = {
-    Attack: ["1 Bronze sword", "5 Iron sword", "10 Accurate stance", "20 Black knights", "30 Deep wight attempts"],
-    Strength: ["1 Bread-fueled bravery", "10 Higher melee hits", "20 Moss brute training", "35 Demon-worthy swings"],
-    Defence: ["1 Wooden shield", "5 Bronze helm", "10 Leather body", "25 Black helm", "40 Achievement cape"],
-    Hitpoints: ["10 Starting health", "15 Safer graveyard trips", "25 Survive crawlers", "40 Stand near demons"],
-    Ranged: ["1 Shortbow", "5 Bronze arrows", "15 Broad arrows", "30 Kite cave crawlers"],
-    Magic: ["1 Home Teleport", "1 Wind Poke", "5 Low Alchemy", "13 Fire Bolt", "20 Crumble undead", "25 Staff boosts"],
-    Prayer: ["1 Bury bones", "4 Thick Skin", "7 Burst Strength", "10 Sharp Eye", "15 Rapid Heal"],
+    Attack: ["1 Bronze sword", "5 Iron sword", "10 Accurate stance", "20 Iron oathbreakers", "30 Hollow wight attempts"],
+    Strength: ["1 Bread-fueled bravery", "10 Higher melee hits", "20 Moss brute training", "35 Fiend-worthy swings"],
+    Defence: ["1 Wooden shield", "5 Bronze helm", "10 Leather body", "25 Oathbreaker helm", "40 Concord mantle"],
+    Vitality: ["10 Starting health", "15 Safer graveyard trips", "25 Survive skitterers", "40 Stand near fiends"],
+    Ranged: ["1 Shortbow", "5 Bronze arrows", "15 Ward arrows", "30 Kite mire skitterers"],
+    Magic: ["1 Home Teleport", "1 Gale Poke", "5 Coin Spark", "13 Cinder Bolt", "20 Bone Rattle", "25 Staff boosts"],
+    Resolve: ["1 Bury bones", "4 Thick Skin", "7 Burst Strength", "10 Sharp Eye", "15 Rapid Heal"],
     Mining: ["1 Copper/Tin", "15 Iron ore", "30 Gold ore", "35 Better clue odds in mine"],
     Smithing: ["1 Bronze bar/sword", "15 Iron bars/sword", "20 Gold bars", "25 Efficient furnace work"],
-    Fishing: ["1 Shrimp spots", "20 Trout at Lake Mollusk", "35 Lobsters on Karamel Isle"],
-    Cooking: ["1 Shrimp/Beef", "15 Fewer burns", "20 Trout", "35 Lobsters"],
+    Fishing: ["1 Shrimp spots", "20 Trout at Lake Mollusk", "35 Redclaws on Saffron Cay"],
+    Cooking: ["1 Shrimp/Beef", "15 Fewer burns", "20 Trout", "35 Redclaws"],
     Woodcutting: ["1 Normal trees", "15 Oak trees", "25 Better firemaking supplies"],
     Firemaking: ["1 Logs", "15 Oak logs", "30 Town warmth and diary credit"],
-    Crafting: ["1 Cowhide work", "5 Leather body / gold rings", "12 Cut gems", "20 Power amulets"],
-    Thieving: ["1 Cake stall", "5 Silk stall rolls", "15 Better odds", "25 Wilderness pockets someday"],
+    Crafting: ["1 Cowhide work", "5 Leather body / gold rings", "12 Cut gems", "20 Prism pendants"],
+    Pilfering: ["1 Cake stall", "5 Silk stall rolls", "15 Better odds", "25 Ashlands pockets someday"],
     Agility: ["1 Balance log", "5 Rope swing", "12 Stepping stones", "20 Faster run recovery", "35 Shortcut stamina"],
-    Fletching: ["1 Arrow shafts", "1 Bronze arrows", "5 Shortbows", "15 Oak shortbows", "25 Broad arrow wisdom"],
-    Runecrafting: ["1 Air runes", "2 Mind runes", "15 Chaos runes", "25 Law runes", "35 Multiple rune whispers"],
+    Fletching: ["1 Arrow shafts", "1 Bronze arrows", "5 Shortbows", "15 Oak shortbows", "25 Ward arrow wisdom"],
+    Sigilcraft: ["1 Gale sigils", "2 Whisper sigils", "15 Rift sigils", "25 Oath sigils", "35 Multiple sigil whispers"],
     Farming: ["1 Potato patch", "5 Mirthleaf herbs", "10 Better yields", "20 Lower disease chance", "35 Farmhands nod politely"],
-    Herblore: ["1 Clean mirthleaf", "1 Mix attack potions", "5 Antipoison", "8 Energy mixtures", "15 Stronger brews someday"],
-    Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "20 Banshees need earmuffs", "30 Deep wight", "35 Specters need nose peg", "38 Lesser demons"],
+    Herbalism: ["1 Clean mirthleaf", "1 Mix attack potions", "5 Antipoison", "8 Energy mixtures", "15 Stronger brews someday"],
+    Vigilance: ["1 Rat/imp contracts", "10 Bone/skitterer contracts", "20 Keening shades need silence hoods", "30 Hollow wight", "35 Miasma wraiths need mire charms", "38 Rift fiends"],
   };
 
   const terrainColors = {
@@ -181,47 +181,47 @@
       requirements: { Defence: 5 },
     },
     leather_gloves: { name: "Leather gloves", color: "#8a5a36", icon: "lg", value: 18 },
-    slayer_helm: {
-      name: "Slayer helm",
+    vigil_helm: {
+      name: "Vigil helm",
       slot: "helm",
       color: "#26313a",
-      icon: "sl",
+      icon: "vh",
       value: 450,
       attack: 4,
       strength: 4,
       defence: 6,
-      slayerBoost: true,
-      slayerProtectAll: true,
-      requirements: { Defence: 10, Slayer: 15 },
+      vigilBoost: true,
+      vigilProtectAll: true,
+      requirements: { Defence: 10, Vigilance: 15 },
     },
-    earmuffs: {
-      name: "Earmuffs",
+    silence_hood: {
+      name: "Silence hood",
       slot: "helm",
       color: "#c8c5b5",
-      icon: "em",
+      icon: "sh",
       value: 55,
       defence: 1,
-      slayerProtection: "banshee",
+      vigilProtection: "keening_shade",
     },
-    nose_peg: {
-      name: "Nose peg",
+    mire_charm: {
+      name: "Mire charm",
       slot: "helm",
       color: "#d8ccb8",
-      icon: "np",
+      icon: "mc",
       value: 75,
       defence: 1,
-      slayerProtection: "specter",
+      vigilProtection: "miasma_wraith",
     },
-    amulet_of_accuracy: {
-      name: "Amulet of accuracy",
+    surestrike_pendant: {
+      name: "Surestrike pendant",
       slot: "amulet",
       color: "#55b8ff",
       icon: "aa",
       value: 180,
       attack: 5,
     },
-    broad_arrow: {
-      name: "Broad arrow",
+    ward_arrow: {
+      name: "Ward arrow",
       stackable: true,
       color: "#5fba79",
       icon: "ba",
@@ -255,7 +255,7 @@
     empty_vial: { name: "Empty vial", color: "#cfdfff", icon: "ev", value: 4 },
     compost: { name: "Compost", color: "#6a4a2d", icon: "cp", value: 10 },
     achievement_cape: {
-      name: "Achievement cape",
+      name: "Concord mantle",
       slot: "body",
       color: "#4d8be8",
       icon: "ac",
@@ -264,17 +264,17 @@
       strength: 3,
       defence: 8,
     },
-    wizard_hat: { name: "Wizard hat", slot: "helm", color: "#2a58a8", icon: "wh", value: 120, attack: 2, requirements: { Magic: 5 } },
-    black_helm: { name: "Black helm", slot: "helm", color: "#1d1d21", icon: "bh", value: 210, defence: 5, requirements: { Defence: 10 } },
+    sigilist_cap: { name: "Sigilist cap", slot: "helm", color: "#2a58a8", icon: "wh", value: 120, attack: 2, requirements: { Magic: 5 } },
+    oathbreaker_helm: { name: "Oathbreaker helm", slot: "helm", color: "#1d1d21", icon: "bh", value: 210, defence: 5, requirements: { Defence: 10 } },
     iron_platelegs: { name: "Iron platelegs", slot: "legs", color: "#aeb5b9", icon: "pl", value: 130, defence: 4, requirements: { Defence: 5 } },
     team_cape: { name: "Team cape", slot: "body", color: "#b63232", icon: "tc", value: 160, attack: 1, defence: 3 },
     spider_cape: { name: "Spider silk cape", slot: "body", color: "#dfe7d3", icon: "sp", value: 540, attack: 2, defence: 4, poisonResist: true, requirements: { Crafting: 12 } },
     ghostly_robe: { name: "Ghostly robe", slot: "body", color: "#bcd6dc", icon: "gr", value: 680, attack: 2, defence: 6, magicBoost: true, requirements: { Defence: 15, Magic: 10 } },
-    castle_ticket: { name: "Castle wars ticket", stackable: true, color: "#e0c45b", icon: "ct", value: 12 },
-    castle_bandage: { name: "Castle bandage", color: "#f2e7c7", icon: "cb", value: 8, food: 9 },
-    decorative_helm: { name: "Decorative helm", slot: "helm", color: "#d8d0a8", icon: "dh", value: 520, defence: 4, requirements: { Defence: 10 } },
-    decorative_sword: {
-      name: "Decorative sword",
+    banner_token: { name: "Bannerfall token", stackable: true, color: "#e0c45b", icon: "bt", value: 12 },
+    banner_bandage: { name: "Banner bandage", color: "#f2e7c7", icon: "cb", value: 8, food: 9 },
+    banner_helm: { name: "Banner helm", slot: "helm", color: "#d8d0a8", icon: "dh", value: 520, defence: 4, requirements: { Defence: 10 } },
+    banner_sword: {
+      name: "Banner sword",
       slot: "weapon",
       color: "#ddd5a6",
       icon: "ds",
@@ -283,8 +283,8 @@
       strength: 12,
       requirements: { Attack: 20 },
     },
-    decorative_shield: { name: "Decorative shield", slot: "shield", color: "#c8b75b", icon: "cw", value: 640, defence: 8, requirements: { Defence: 20 } },
-    decorative_platebody: { name: "Decorative platebody", slot: "body", color: "#c7c0a0", icon: "dp", value: 1120, defence: 12, requirements: { Defence: 25 } },
+    banner_shield: { name: "Banner shield", slot: "shield", color: "#c8b75b", icon: "cw", value: 640, defence: 8, requirements: { Defence: 20 } },
+    banner_platebody: { name: "Banner platebody", slot: "body", color: "#c7c0a0", icon: "dp", value: 1120, defence: 12, requirements: { Defence: 25 } },
     crypt_helm: { name: "Crypt helm", slot: "helm", color: "#4d5a5c", icon: "ch", value: 760, defence: 7, requirements: { Defence: 25 } },
     crypt_platebody: { name: "Crypt platebody", slot: "body", color: "#5b6768", icon: "cp", value: 1450, defence: 15, requirements: { Defence: 30 } },
     crypt_platelegs: { name: "Crypt platelegs", slot: "legs", color: "#687374", icon: "cl", value: 980, defence: 10, requirements: { Defence: 25 } },
@@ -321,8 +321,8 @@
     },
     ancient_page: { name: "Ancient page", color: "#bba66d", icon: "pg", value: 210 },
     mystic_wand: { name: "Mystic wand", slot: "weapon", color: "#78bff0", icon: "mw", value: 720, attack: 12, strength: 3, magicBoost: true, requirements: { Magic: 20 } },
-    rune_scimitar: {
-      name: "Rune scimitar",
+    aurel_sabre: {
+      name: "Aurel sabre",
       slot: "weapon",
       color: "#58bfd0",
       icon: "sc",
@@ -331,8 +331,8 @@
       strength: 20,
       requirements: { Attack: 40 },
     },
-    staff_of_air: {
-      name: "Staff of air",
+    gale_staff: {
+      name: "Gale staff",
       slot: "weapon",
       color: "#d9f1ff",
       icon: "st",
@@ -411,13 +411,13 @@
       value: 15,
       food: 5,
     },
-    lobster_pot: { name: "Lobster pot", color: "#d6c18f", icon: "lp", value: 28 },
-    raw_lobster: {
-      name: "Raw lobster",
+    redclaw_cage: { name: "Redclaw cage", color: "#d6c18f", icon: "lp", value: 28 },
+    raw_redclaw: {
+      name: "Raw redclaw",
       color: "#a6474b",
       icon: "rl",
       value: 55,
-      cookTo: "lobster",
+      cookTo: "redclaw",
       burnTo: "burnt_fish",
       cookingXp: 120,
       burnLevel: 42,
@@ -439,24 +439,24 @@
     gold_ore: { name: "Gold ore", color: "#d2a846", icon: "go", value: 42, ore: true },
     gold_bar: { name: "Gold bar", color: "#e0bd55", icon: "gb", value: 88, bar: true },
     gold_ring: { name: "Gold ring", color: "#dfc35b", icon: "gr", value: 120, slot: "amulet", attack: 1 },
-    power_amulet: { name: "Power amulet", color: "#65e8d2", icon: "pa", value: 360, slot: "amulet", attack: 3, strength: 3, defence: 3, requirements: { Crafting: 20 } },
-    slayer_gem: { name: "Slayer gem", color: "#65d6ff", icon: "sg", value: 1 },
-    bag_of_salt: { name: "Bag of salt", stackable: true, color: "#f3eee0", icon: "sa", value: 5 },
+    prism_pendant: { name: "Prism pendant", color: "#65e8d2", icon: "pa", value: 360, slot: "amulet", attack: 3, strength: 3, defence: 3, requirements: { Crafting: 20 } },
+    vigil_glass: { name: "Vigil glass", color: "#65d6ff", icon: "vg", value: 1 },
+    brine_charm: { name: "Brine charm", stackable: true, color: "#f3eee0", icon: "sa", value: 5 },
     tower_key: { name: "Tower key", color: "#b8a25a", icon: "tk", value: 90 },
     ectoplasm: { name: "Ectoplasm", stackable: true, color: "#9be8d2", icon: "ec", value: 22 },
-    rune_essence: { name: "Rune essence", stackable: true, color: "#d9d2ff", icon: "re", value: 5 },
-    rune_pouch: { name: "Rune pouch", color: "#57406f", icon: "rp", value: 120 },
-    air_talisman: { name: "Air talisman", color: "#dcecff", icon: "at", value: 45 },
-    mind_talisman: { name: "Mind talisman", color: "#efc0ff", icon: "mt", value: 58 },
-    chaos_talisman: { name: "Chaos talisman", color: "#7d59d8", icon: "ct", value: 180 },
-    law_talisman: { name: "Law talisman", color: "#f0dc68", icon: "lt", value: 260 },
-    air_rune: { name: "Air rune", stackable: true, color: "#e9f0ff", icon: "ar", value: 4 },
-    mind_rune: { name: "Mind rune", stackable: true, color: "#efc0ff", icon: "mr", value: 3 },
-    chaos_rune: { name: "Chaos rune", stackable: true, color: "#6146b4", icon: "cr", value: 48 },
-    law_rune: { name: "Law rune", stackable: true, color: "#d8c75a", icon: "lr", value: 90 },
-    death_rune: { name: "Death rune", stackable: true, color: "#2e2b33", icon: "dr", value: 120 },
+    glimmer_shard: { name: "Glimmer shard", stackable: true, color: "#d9d2ff", icon: "gl", value: 5 },
+    sigil_satchel: { name: "Sigil satchel", color: "#57406f", icon: "ss", value: 120 },
+    gale_focus: { name: "Gale focus", color: "#dcecff", icon: "gf", value: 45 },
+    whisper_focus: { name: "Whisper focus", color: "#efc0ff", icon: "wf", value: 58 },
+    rift_focus: { name: "Rift focus", color: "#7d59d8", icon: "rf", value: 180 },
+    oath_focus: { name: "Oath focus", color: "#f0dc68", icon: "of", value: 260 },
+    gale_sigil: { name: "Gale sigil", stackable: true, color: "#e9f0ff", icon: "ga", value: 4 },
+    whisper_sigil: { name: "Whisper sigil", stackable: true, color: "#efc0ff", icon: "wh", value: 3 },
+    rift_sigil: { name: "Rift sigil", stackable: true, color: "#6146b4", icon: "ri", value: 48 },
+    oath_sigil: { name: "Oath sigil", stackable: true, color: "#d8c75a", icon: "oa", value: 90 },
+    grave_sigil: { name: "Grave sigil", stackable: true, color: "#2e2b33", icon: "gv", value: 120 },
     banana: { name: "Banana", color: "#edd45a", icon: "bn", value: 6, food: 3 },
-    lobster: { name: "Lobster", color: "#d23e36", icon: "lb", value: 95, food: 12 },
+    redclaw: { name: "Redclaw", color: "#d23e36", icon: "lb", value: 95, food: 12 },
     pirate_cutlass: {
       name: "Pirate cutlass",
       slot: "weapon",
@@ -483,7 +483,7 @@
     clue: null,
     randomEvent: null,
     nextRandomEvent: 95,
-    areaName: "Boonshire",
+    areaName: "Briarfall",
     map: [],
     resources: [],
     scenery: [],
@@ -497,10 +497,10 @@
     collection: {},
     diaryRewardClaimed: false,
     quests: {
-      cooksErrand: {
-        title: "Cook's Errand",
+      lunchLedger: {
+        title: "Lunch Ledger",
         state: "not-started",
-        text: "The castle cook wants a cooked shrimp and ordinary logs.",
+        text: "The hall cook wants a cooked shrimp and ordinary logs.",
       },
       restlessBones: {
         title: "Restless Bones",
@@ -515,17 +515,17 @@
       wightHunt: {
         title: "Wight in the Hollow",
         state: "not-started",
-        text: "Slayer Master Vann wants proof that the Deep wight can be put down.",
+        text: "Huntwarden Mara wants proof that the Hollow wight can be put down.",
       },
       fletchersOrder: {
         title: "Fletcher's Order",
         state: "not-started",
         text: "Fletcher Rowan needs 15 bronze arrows for the town guard.",
       },
-      runeMysteries: {
-        title: "Rune Mysteries",
+      sigilMysteries: {
+        title: "Sigil Mysteries",
         state: "not-started",
-        text: "Wizard Elric wants proof that essence can be shaped into runes.",
+        text: "Sigilist Elric wants proof that essence can be shaped into sigils.",
       },
       gardenTrouble: {
         title: "Garden Trouble",
@@ -535,12 +535,12 @@
       islandRun: {
         title: "Island Supply Run",
         state: "not-started",
-        text: "Trader Kojo wants bananas and a lobster from Karamel Isle.",
+        text: "Trader Kojo wants bananas and a redclaw from Saffron Cay.",
       },
       towerWhispers: {
         title: "Tower of Whispers",
         state: "not-started",
-        text: "Slayer Master Vann wants a key from the north Slayer Tower.",
+        text: "Huntwarden Mara wants a key from the north Gloamspire.",
       },
       frontierLedger: {
         title: "The Frontier Ledger",
@@ -554,8 +554,8 @@
       casketsOpened: 0,
       cluesSolved: 0,
       cowhidesCrafted: 0,
-      darkWizardsSlain: 0,
-      deepWightsSlain: 0,
+      duskConjurersSlain: 0,
+      hollowWightsSlain: 0,
       ferriesTaken: 0,
       firesLit: 0,
       fishCaught: 0,
@@ -565,24 +565,24 @@
       chickensSlain: 0,
       cropsHarvested: 0,
       farmingContractsCompleted: 0,
-      goblinsSlain: 0,
+      fieldImpsSlain: 0,
       gemsCut: 0,
       herbsCleaned: 0,
       herbsHarvested: 0,
       jewelryCrafted: 0,
-      lesserDemonsSlain: 0,
+      riftFiendsSlain: 0,
       logsCut: 0,
       bananasPicked: 0,
       islandTrips: 0,
       jungleSpidersSlain: 0,
-      lobstersCaught: 0,
-      lobstersCooked: 0,
-      bansheesSlain: 0,
-      crawlingHandsSlain: 0,
+      redclawsCaught: 0,
+      redclawsCooked: 0,
+      keeningShadesSlain: 0,
+      graspingClawsSlain: 0,
       desertScorpionsSlain: 0,
       highwaymenSlain: 0,
       hillGiantsSlain: 0,
-      spectersSlain: 0,
+      miasmaWraithsSlain: 0,
       towerChestsOpened: 0,
       mapsOpened: 0,
       oresMined: 0,
@@ -591,26 +591,26 @@
       poisonsCured: 0,
       randomEventsCompleted: 0,
       essenceMined: 0,
-      runesCrafted: 0,
-      airRunesCrafted: 0,
-      mindRunesCrafted: 0,
-      chaosRunesCrafted: 0,
-      lawRunesCrafted: 0,
+      sigilsCrafted: 0,
+      galeSigilsCrafted: 0,
+      whisperSigilsCrafted: 0,
+      riftSigilsCrafted: 0,
+      oathSigilsCrafted: 0,
       cryptWightsDefeated: 0,
       cryptChestsOpened: 0,
-      castleWarsPlayed: 0,
-      castleWarsWon: 0,
-      castleFlagsCaptured: 0,
-      slayerTasksCompleted: 0,
+      bannerfallPlayed: 0,
+      bannerfallWon: 0,
+      bannersCaptured: 0,
+      vigilTasksCompleted: 0,
       stallsStolen: 0,
       visitedSouthport: false,
-      visitedWilderness: false,
+      visitedAshlands: false,
       websCut: 0,
     },
-    slayer: { task: null, streak: 0, points: 0 },
-    runePouch: { essence: 0, capacity: 12 },
+    vigil: { task: null, streak: 0, points: 0 },
+    sigilPouch: { essence: 0, capacity: 12 },
     crypt: { awakened: [], defeated: [], chestsOpened: 0, lastReward: null },
-    castleWars: { active: false, score: 0, enemyScore: 0, flagHeld: false, endsAt: 0, nextEnemyScore: 0, supplyReadyAt: 0, lastReward: null },
+    bannerfall: { active: false, score: 0, enemyScore: 0, flagHeld: false, endsAt: 0, nextEnemyScore: 0, supplyReadyAt: 0, lastReward: null },
     farmingContract: null,
     farmingPatches: {
       vegetable: { crop: null, plantedAt: 0, watered: false, diseased: false },
@@ -629,8 +629,8 @@
       damageFlash: 0,
       respawnFlash: 0,
       combatStyle: "balanced",
-      prayerMode: "none",
-      prayerPoints: 10,
+      resolveMode: "none",
+      resolvePoints: 10,
       boosts: {},
       boostDecay: 60,
       runEnergy: 100,
@@ -653,7 +653,7 @@
   };
 
   for (const skill of skillNames) {
-    state.player.skills[skill] = { xp: skill === "Hitpoints" ? xpForLevel(10) : 0 };
+    state.player.skills[skill] = { xp: skill === "Vitality" ? xpForLevel(10) : 0 };
   }
 
   const DIARY_TASKS = [
@@ -661,7 +661,7 @@
     { id: "bones", label: "Bury bones", done: () => state.stats.bonesBuried > 0 },
     { id: "fire", label: "Light a fire", done: () => state.stats.firesLit > 0 },
     { id: "fish", label: "Catch fish", done: () => state.stats.fishCaught > 0 },
-    { id: "lobster", label: "Catch a lobster", done: () => state.stats.lobstersCaught > 0 },
+    { id: "redclaw", label: "Catch a redclaw", done: () => state.stats.redclawsCaught > 0 },
     { id: "ore", label: "Mine ore", done: () => state.stats.oresMined > 0 },
     { id: "potion", label: "Drink a potion", done: () => state.stats.potionsDrunk > 0 },
     { id: "craft", label: "Craft leather", done: () => state.stats.cowhidesCrafted > 0 },
@@ -669,44 +669,44 @@
     { id: "thieving", label: "Steal from a market stall", done: () => state.stats.stallsStolen > 0 },
     { id: "agility", label: "Clear an agility obstacle", done: () => state.stats.agilityObstacles > 0 },
     { id: "fletching", label: "Fletch bronze arrows", done: () => state.stats.arrowsFletched > 0 },
-    { id: "runecrafting", label: "Craft runes at an altar", done: () => state.stats.runesCrafted > 0 },
+    { id: "sigilcraft", label: "Craft sigils at an altar", done: () => state.stats.sigilsCrafted > 0 },
     { id: "farming", label: "Harvest a farm patch", done: () => state.stats.cropsHarvested > 0 },
     { id: "banana", label: "Pick island bananas", done: () => state.stats.bananasPicked > 0 },
     { id: "web", label: "Cut an island spider web", done: () => state.stats.websCut > 0 },
-    { id: "tower", label: "Open the Slayer Tower chest", done: () => state.stats.towerChestsOpened > 0 },
-    { id: "banshee", label: "Defeat a banshee", done: () => state.stats.bansheesSlain > 0 },
+    { id: "tower", label: "Open the Gloamspire chest", done: () => state.stats.towerChestsOpened > 0 },
+    { id: "keening_shade", label: "Defeat a keening shade", done: () => state.stats.keeningShadesSlain > 0 },
     { id: "herblore", label: "Mix a potion", done: () => state.stats.potionsMixed > 0 },
     { id: "antipoison", label: "Cure poison", done: () => state.stats.poisonsCured > 0 },
     { id: "contract", label: "Complete a farming contract", done: () => state.stats.farmingContractsCompleted > 0 },
-    { id: "slayer", label: "Finish a Slayer task", done: () => state.stats.slayerTasksCompleted > 0 },
+    { id: "vigil", label: "Finish a Vigil contract", done: () => state.stats.vigilTasksCompleted > 0 },
     { id: "clue", label: "Solve a clue scroll", done: () => state.stats.cluesSolved > 0 },
     { id: "map", label: "Open the world map", done: () => state.stats.mapsOpened > 0 },
     { id: "event", label: "Claim a random event", done: () => state.stats.randomEventsCompleted > 0 },
-    { id: "wilderness", label: "Step into Low Wilderness", done: () => Boolean(state.stats.visitedWilderness) },
+    { id: "low_ash", label: "Step into Low Ash", done: () => Boolean(state.stats.visitedAshlands) },
     { id: "southport", label: "Reach Southport docks", done: () => Boolean(state.stats.visitedSouthport) },
     { id: "giant", label: "Defeat a hill giant", done: () => state.stats.hillGiantsSlain > 0 },
     { id: "scorpion", label: "Defeat a desert scorpion", done: () => state.stats.desertScorpionsSlain > 0 },
-    { id: "castle_flag", label: "Capture a castle flag", done: () => state.stats.castleFlagsCaptured > 0 },
+    { id: "banner_flag", label: "Capture a banner", done: () => state.stats.bannersCaptured > 0 },
     { id: "crypt", label: "Loot the crypt chest", done: () => state.stats.cryptChestsOpened > 0 },
-    { id: "wight", label: "Defeat the Deep wight", done: () => state.stats.deepWightsSlain > 0 },
+    { id: "wight", label: "Defeat the Hollow wight", done: () => state.stats.hollowWightsSlain > 0 },
   ];
 
   const MAP_DESTINATIONS = [
-    { id: "boonshire", label: "Boonshire", x: 39, y: 39, note: "bank, shops, quests", color: "#ffd86b" },
-    { id: "slayer", label: "Slayer Lodge", x: 60, y: 38, note: "assignments and rewards", color: "#74f1ff" },
-    { id: "wizard", label: "Wizard Tower", x: 52, y: 25, note: "essence and runecrafting", color: "#d5c7ff" },
+    { id: "briarfall", label: "Briarfall", x: 39, y: 39, note: "bank, shops, quests", color: "#ffd86b" },
+    { id: "vigil", label: "Vigil Lodge", x: 60, y: 38, note: "assignments and rewards", color: "#74f1ff" },
+    { id: "sigilist", label: "Sigilist Spire", x: 52, y: 25, note: "essence and sigilcraft", color: "#d5c7ff" },
     { id: "mine", label: "Greyrock Mine", x: 62, y: 18, note: "ore and furnace road", color: "#cfd3d6" },
     { id: "graveyard", label: "Old Graveyard", x: 55, y: 52, note: "skeletons and bones", color: "#e7dec4" },
-    { id: "crypts", label: "Brother Crypts", x: 58, y: 54, note: "wights and chest loot", color: "#b9c7c6" },
-    { id: "castlewars", label: "Castle Wars", x: 72, y: 30, note: "capture flags for tickets", color: "#f0d25d" },
+    { id: "crypts", label: "Oath Crypts", x: 58, y: 54, note: "wights and chest loot", color: "#b9c7c6" },
+    { id: "bannerfall", label: "Bannerfall", x: 72, y: 30, note: "capture flags for tokens", color: "#f0d25d" },
     { id: "lake", label: "Lake Mollusk", x: 64, y: 64, note: "fish and ferry", color: "#7fd7ff" },
-    { id: "karamel", label: "Karamel Isle", x: 73, y: 72, note: "30gp ferry, lobsters", color: "#ffe36a", ferryCost: 30 },
+    { id: "saffron", label: "Saffron Cay", x: 73, y: 72, note: "30gp ferry, redclaws", color: "#ffe36a", ferryCost: 30 },
     { id: "agility", label: "Agility Yard", x: 31, y: 24, note: "obstacles and run training", color: "#9dff8a" },
     { id: "farm", label: "Bess's Patches", x: 28, y: 44, note: "farming and herbs", color: "#b9e46a" },
-    { id: "hollow", label: "Crawler Hollow", x: 68, y: 43, note: "crawlers and wight", color: "#a0a8ff" },
-    { id: "tower", label: "Slayer Tower", x: 72, y: 12, note: "earmuffs, keys, specters", color: "#a8f5ff" },
+    { id: "hollow", label: "Mire Hollow", x: 68, y: 43, note: "skitterers and wight", color: "#a0a8ff" },
+    { id: "tower", label: "Gloamspire", x: 72, y: 12, note: "silence hoods, keys, miasma wraiths", color: "#a8f5ff" },
     { id: "mosswood", label: "Mosswood", x: 16, y: 18, note: "brutes and oaks", color: "#9bd36f" },
-    { id: "wildy", label: "Low Wilderness", x: 11, y: 12, note: "chaos altar, danger", color: "#ff8e77" },
+    { id: "ash", label: "Low Ash", x: 11, y: 12, note: "rift altar, danger", color: "#ff8e77" },
     { id: "cowfield", label: "Cow Field", x: 23, y: 53, note: "hides and beef", color: "#fff0c5" },
     { id: "southport", label: "Southport", x: 64, y: 93, note: "docks, sailors, coast road", color: "#7fd7ff" },
     { id: "eastdunes", label: "East Dunes", x: 97, y: 45, note: "scorpions and tollmen", color: "#eac76f" },
@@ -715,26 +715,26 @@
   ];
 
   const BESTIARY = [
-    { type: "chicken", name: "Chicken", level: 1, location: "Cow Field", drops: "feathers, raw chicken", tip: "classic arrow supply" },
+    { type: "chicken", name: "Chicken", level: 1, location: "Cow Field", drops: "feathers, raw chicken", tip: "reliable arrow supply" },
     { type: "giant_rat", name: "Giant rat", level: 2, location: "Cow Field", drops: "bones, coins", tip: "safe novice task" },
     { type: "pasture_cow", name: "Pasture cow", level: 2, location: "Cow Field", drops: "cowhide, beef", tip: "crafting starter" },
-    { type: "field_imp", name: "Field imp", level: 5, location: "West fields", drops: "runes, talismans, potato seeds", tip: "weak to melee" },
-    { type: "grave_skeleton", name: "Grave skeleton", level: 12, location: "Old Graveyard", drops: "bones, iron sword", tip: "prayer fuel" },
-    { type: "salt_slug", name: "Salt slug", level: 18, location: "Crawler Hollow", drops: "gems, salt", tip: "finish with salt" },
-    { type: "cave_crawler", name: "Cave crawler", level: 16, location: "Crawler Hollow", drops: "gems, coins", tip: "bring food" },
-    { type: "crawling_hand", name: "Crawling hand", level: 8, location: "Slayer Tower", drops: "tower keys, gloves", tip: "entry tower task" },
-    { type: "banshee", name: "Banshee", level: 23, location: "Slayer Tower", drops: "keys, ectoplasm", tip: "wear earmuffs" },
-    { type: "jungle_spider", name: "Jungle spider", level: 24, location: "Karamel Isle", drops: "bananas, herbs, silk", tip: "poisons; pack antipoison" },
+    { type: "field_imp", name: "Field imp", level: 5, location: "West fields", drops: "sigils, talismans, potato seeds", tip: "weak to melee" },
+    { type: "grave_skeleton", name: "Grave skeleton", level: 12, location: "Old Graveyard", drops: "bones, iron sword", tip: "Resolve fuel" },
+    { type: "brine_leech", name: "Brine leech", level: 18, location: "Mire Hollow", drops: "gems, salt", tip: "finish with salt" },
+    { type: "mire_skitterer", name: "Mire skitterer", level: 16, location: "Mire Hollow", drops: "gems, coins", tip: "bring food" },
+    { type: "grasping_claw", name: "Grasping claw", level: 8, location: "Gloamspire", drops: "tower keys, gloves", tip: "entry tower task" },
+    { type: "keening_shade", name: "Keening shade", level: 23, location: "Gloamspire", drops: "keys, ectoplasm", tip: "wear a silence hood" },
+    { type: "jungle_spider", name: "Jungle spider", level: 24, location: "Saffron Cay", drops: "bananas, herbs, silk", tip: "poisons; pack antipoison" },
     { type: "desert_scorpion", name: "Desert scorpion", level: 14, location: "East Dunes", drops: "tails, antipoison", tip: "poisons lightly" },
     { type: "highwayman", name: "Highwayman", level: 18, location: "East Dunes", drops: "coins, cake, clues", tip: "thinly spaced ambushes" },
     { type: "hill_giant", name: "Hill giant", level: 28, location: "Westwood / North Ridge", drops: "big bones, roots, club", tip: "slow heavy target" },
-    { type: "aberrant_specter", name: "Aberrant specter", level: 46, location: "Slayer Tower", drops: "herbs, mystic loot", tip: "wear a nose peg" },
-    { type: "dark_wizard", name: "Dark wizard", level: 20, location: "Low Wilderness", drops: "chaos, talismans, staff", tip: "keep prayer ready" },
+    { type: "miasma_wraith", name: "Miasma wraith", level: 46, location: "Gloamspire", drops: "herbs, mystic loot", tip: "wear a mire charm" },
+    { type: "dusk_conjurer", name: "Dusk conjurer", level: 20, location: "Low Ash", drops: "rift, talismans, staff", tip: "keep Resolve ready" },
     { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
-    { type: "black_knight", name: "Black knight", level: 33, location: "Low Wilderness", drops: "black helm, legs", tip: "armoured target" },
-    { type: "deep_wight", name: "Deep wight", level: 34, location: "Crawler Hollow", drops: "clues, amulet", tip: "Slayer quest prey" },
-    { type: "crypt_brother", name: "Crypt brother", level: 38, location: "Brother Crypts", drops: "chest charge, death runes", tip: "wake three, loot once" },
-    { type: "lesser_demon", name: "Lesser demon", level: 42, location: "Low Wilderness", drops: "rune scimitar", tip: "endgame task" },
+    { type: "iron_oathbreaker", name: "Iron oathbreaker", level: 33, location: "Low Ash", drops: "oathbreaker helm, legs", tip: "armoured target" },
+    { type: "hollow_wight", name: "Hollow wight", level: 34, location: "Mire Hollow", drops: "clues, amulet", tip: "Vigilance quest prey" },
+    { type: "crypt_brother", name: "Oath warden", level: 38, location: "Oath Crypts", drops: "chest charge, grave sigils", tip: "wake three, loot once" },
+    { type: "rift_fiend", name: "Rift fiend", level: 42, location: "Low Ash", drops: "Aurel sabre", tip: "endgame task" },
   ];
 
   const FARM_CROPS = {
@@ -771,15 +771,15 @@
     };
   }
 
-  const RUNECRAFTING_RECIPES = {
-    air: { name: "Air", rune: "air_rune", talisman: "air_talisman", level: 1, xp: 5, multipleEvery: 11, color: "#e9f0ff" },
-    mind: { name: "Mind", rune: "mind_rune", talisman: "mind_talisman", level: 2, xp: 6, multipleEvery: 14, color: "#efc0ff" },
-    chaos: { name: "Chaos", rune: "chaos_rune", talisman: "chaos_talisman", level: 15, xp: 10, multipleEvery: 18, color: "#9b75ff" },
-    law: { name: "Law", rune: "law_rune", talisman: "law_talisman", level: 25, xp: 12, multipleEvery: 22, color: "#f0dc68" },
+  const SIGILCRAFT_RECIPES = {
+    gale: { name: "Gale", sigil: "gale_sigil", talisman: "gale_focus", level: 1, xp: 5, multipleEvery: 11, color: "#e9f0ff" },
+    whisper: { name: "Whisper", sigil: "whisper_sigil", talisman: "whisper_focus", level: 2, xp: 6, multipleEvery: 14, color: "#efc0ff" },
+    rift: { name: "Rift", sigil: "rift_sigil", talisman: "rift_focus", level: 15, xp: 10, multipleEvery: 18, color: "#9b75ff" },
+    oath: { name: "Oath", sigil: "oath_sigil", talisman: "oath_focus", level: 25, xp: 12, multipleEvery: 22, color: "#f0dc68" },
   };
 
   const CRYPT_BROTHERS = {
-    mord: { name: "Mord the Splitter", type: "crypt_brother_mord", level: 30, hp: 82, attack: 19, strength: 23, defence: 14, x: 53, y: 53, weakness: "Prayer" },
+    mord: { name: "Mord the Splitter", type: "crypt_brother_mord", level: 30, hp: 82, attack: 19, strength: 23, defence: 14, x: 53, y: 53, weakness: "Resolve" },
     vell: { name: "Vell the Hollow", type: "crypt_brother_vell", level: 34, hp: 76, attack: 24, strength: 16, defence: 12, x: 58, y: 52, weakness: "Ranged" },
     kael: { name: "Kael the Still", type: "crypt_brother_kael", level: 38, hp: 94, attack: 20, strength: 22, defence: 19, x: 61, y: 55, weakness: "Magic" },
   };
@@ -852,11 +852,11 @@
   }
 
   function maxHp() {
-    return getLevel("Hitpoints") * 10;
+    return getLevel("Vitality") * 10;
   }
 
-  function maxPrayer() {
-    return Math.max(10, getLevel("Prayer") * 10);
+  function maxResolve() {
+    return Math.max(10, getLevel("Resolve") * 10);
   }
 
   function isPoisoned() {
@@ -875,11 +875,11 @@
     return base * (1 + Math.min(0.5, agilityRunBonus() * 0.01));
   }
 
-  function prayerBoost(kind) {
-    if (state.player.prayerPoints <= 0) return 1;
-    if (kind === "strength" && state.player.prayerMode === "burstStrength") return 1.12;
-    if (kind === "defence" && state.player.prayerMode === "thickSkin") return 1.15;
-    if (kind === "attack" && state.player.prayerMode === "sharpEye") return 1.1;
+  function resolveBoost(kind) {
+    if (state.player.resolvePoints <= 0) return 1;
+    if (kind === "strength" && state.player.resolveMode === "burstStrength") return 1.12;
+    if (kind === "defence" && state.player.resolveMode === "thickSkin") return 1.15;
+    if (kind === "attack" && state.player.resolveMode === "sharpEye") return 1.1;
     return 1;
   }
 
@@ -924,24 +924,24 @@
     addChat(`You drink the ${data.name}. ${skill} is boosted by ${boost}.`);
   }
 
-  function usingSlayerBoost(enemy) {
+  function usingVigilanceBoost(enemy) {
     const helm = state.player.equipment.helm;
-    const task = state.slayer.task;
-    return Boolean(helm && ITEMS[helm]?.slayerBoost && task && enemy && task.type === enemy.slayerType);
+    const task = state.vigil.task;
+    return Boolean(helm && ITEMS[helm]?.vigilBoost && task && enemy && task.type === enemy.vigilType);
   }
 
-  function slayerProtectionName(kind) {
-    if (kind === "banshee") return "earmuffs";
-    if (kind === "specter") return "a nose peg";
-    return "proper Slayer gear";
+  function vigilProtectionName(kind) {
+    if (kind === "keening_shade") return "a silence hood";
+    if (kind === "miasma_wraith") return "a mire charm";
+    return "proper Vigil gear";
   }
 
-  function hasSlayerProtection(enemy) {
+  function hasVigilanceProtection(enemy) {
     if (!enemy?.requiredProtection) return true;
     const helmId = state.player.equipment.helm;
     const helm = ITEMS[helmId];
     if (!helm) return false;
-    return Boolean(helm.slayerProtectAll || helm.slayerProtection === enemy.requiredProtection);
+    return Boolean(helm.vigilProtectAll || helm.vigilProtection === enemy.requiredProtection);
   }
 
   function gainXp(skill, amount) {
@@ -952,8 +952,8 @@
     if (after > before) {
       addChat(`Congratulations, your ${skill} level is now ${after}.`);
       playSfx("level");
-      if (skill === "Hitpoints") state.player.hp = Math.min(maxHp(), state.player.hp + 10);
-      if (skill === "Prayer") state.player.prayerPoints = maxPrayer();
+      if (skill === "Vitality") state.player.hp = Math.min(maxHp(), state.player.hp + 10);
+      if (skill === "Resolve") state.player.resolvePoints = maxResolve();
     }
   }
 
@@ -1096,7 +1096,7 @@
       attack: stats.attack,
       strength: stats.strength,
       defence: stats.defence,
-      slayerType: stats.slayerType || type,
+      vigilType: stats.vigilType || type,
       xp: stats.xp || stats.hp * 3,
       aggro: stats.aggro || 4,
       respawn: stats.respawn || 7,
@@ -1222,19 +1222,19 @@
     addScenery("bank_booth", "Bank booth", 34, 30, { width: 4, height: 1, action: "bank" });
     addScenery("chest", "Bank chest", 37, 30, { action: "bank" });
     addScenery("shop_counter", "General store counter", 45, 31, { action: "shop" });
-    addScenery("range", "Castle range", 33, 44, { action: "cook" });
+    addScenery("range", "Hall range", 33, 44, { action: "cook" });
     addScenery("altar", "Stone altar", 49, 46, { action: "pray" });
     addScenery("furnace", "Furnace", 53, 29, { action: "smelt" });
     addScenery("anvil", "Anvil", 55, 30, { action: "smith" });
-    addScenery("slayer_board", "Slayer board", 59, 37, { action: "slayer" });
+    addScenery("vigil_board", "Vigilance board", 59, 37, { action: "vigil" });
     addScenery("cave", "Damp cave entrance", 68, 43, { action: "cave" });
     addScenery("well", "Town well", 40, 39, { action: "water" });
     addScenery("quest_sign", "Quest noticeboard", 37, 38, { action: "quests" });
     addScenery("market_stall", "Market stall", 44, 36, { action: "steal", level: 1 });
     addScenery("fletching_table", "Fletching table", 43, 34, { action: "fletch" });
-    addScenery("wizard_tower", "Wizard tower", 52, 25, { action: "examine", interactRange: 2.5 });
-    addScenery("air_altar", "Air altar", 50, 25, { action: "runecraft", rune: "air", interactRange: 2.5 });
-    addScenery("mind_altar", "Mind altar", 54, 25, { action: "runecraft", rune: "mind", interactRange: 2.5 });
+    addScenery("sigilist_tower", "Sigilist spire", 52, 25, { action: "examine", interactRange: 2.5 });
+    addScenery("gale_altar", "Gale altar", 50, 25, { action: "sigilcraft", sigil: "gale", interactRange: 2.5 });
+    addScenery("whisper_altar", "Whisper altar", 54, 25, { action: "sigilcraft", sigil: "whisper", interactRange: 2.5 });
     addScenery("vegetable_patch", "Vegetable patch", 26, 44, { action: "farm", patchId: "vegetable", interactRange: 2.4 });
     addScenery("herb_patch", "Herb patch", 29, 44, { action: "farm", patchId: "herb", interactRange: 2.4 });
     addScenery("compost_bin", "Compost bin", 24, 42, { action: "compost", interactRange: 2.3 });
@@ -1244,10 +1244,10 @@
     addScenery("rope_swing", "Rope swing", 34, 23, { action: "agility", level: 5, xp: 58, restore: 10, failDamage: 5, cooldown: 3.0 });
     addScenery("stepping_stones", "Stepping stones", 29, 26, { action: "agility", level: 12, xp: 86, restore: 13, failDamage: 7, cooldown: 3.4 });
     addScenery("dock", "Fishing dock", 55, 61, { action: "fish" });
-    addScenery("slayer_tower", "Slayer Tower door", 71, 12, { action: "tower_door", interactRange: 2.8 });
-    addScenery("tower_chest", "Slayer Tower chest", 74, 13, { action: "tower_chest", interactRange: 2.5 });
+    addScenery("vigil_tower", "Gloamspire door", 71, 12, { action: "tower_door", interactRange: 2.8 });
+    addScenery("tower_chest", "Gloamspire chest", 74, 13, { action: "tower_chest", interactRange: 2.5 });
     addScenery("tower_notice", "Tower warning", 69, 10, { action: "examine", interactRange: 2.2 });
-    addScenery("island_dock", "Karamel dock", 72, 75, { action: "fish_lobster", interactRange: 2.8 });
+    addScenery("island_dock", "Saffron dock", 72, 75, { action: "fish_redclaw", interactRange: 2.8 });
     addScenery("banana_tree", "Banana tree", 72, 71, { action: "banana", interactRange: 2.4, readyAt: 0 });
     addScenery("banana_tree", "Banana tree", 75, 74, { action: "banana", interactRange: 2.4, readyAt: 0 });
     addScenery("volcano_entrance", "Volcano mouth", 75, 70, { action: "examine", interactRange: 2.8 });
@@ -1255,22 +1255,22 @@
     addScenery("spider_web", "Jungle web", 78, 73, { action: "web", interactRange: 2.1, readyAt: 0 });
     addScenery("island_stall", "Island supply stall", 73, 73, { action: "island_shop", interactRange: 2.4 });
     addScenery("range", "Island cookfire", 75, 73, { action: "cook" });
-    addScenery("law_altar", "Law altar", 64, 61, { action: "runecraft", rune: "law", interactRange: 2.5 });
+    addScenery("oath_altar", "Oath altar", 64, 61, { action: "sigilcraft", sigil: "oath", interactRange: 2.5 });
     addScenery("crypt_mound", "Mord's crypt", 53, 53, { action: "crypt", brother: "mord", interactRange: 2.7 });
     addScenery("crypt_mound", "Vell's crypt", 58, 52, { action: "crypt", brother: "vell", interactRange: 2.7 });
     addScenery("crypt_mound", "Kael's crypt", 61, 55, { action: "crypt", brother: "kael", interactRange: 2.7 });
     addScenery("crypt_chest", "Crypt chest", 58, 55, { action: "crypt_chest", interactRange: 2.7 });
-    addScenery("castle_portal", "Castle Wars portal", 69, 36, { action: "castle_wars", interactRange: 3.0 });
-    addScenery("castle_flag", "Boon flag", 68, 27, { action: "castle_flag", team: "home", interactRange: 2.5 });
-    addScenery("castle_flag", "Rival flag", 76, 34, { action: "castle_flag", team: "enemy", interactRange: 2.5 });
-    addScenery("castle_supply", "Castle supply table", 71, 30, { action: "castle_supply", interactRange: 2.4 });
-    addScenery("castle_scoreboard", "Castle Wars scoreboard", 72, 31, { action: "castle_scoreboard", interactRange: 2.4 });
-    addScenery("ditch", "Wilderness ditch", 24, 31, { action: "wildy" });
-    addScenery("chaos_altar", "Chaos altar", 11, 12, { action: "chaos_altar" });
-    addScenery("chaos_rift", "Chaos rift", 14, 14, { action: "runecraft", rune: "chaos", interactRange: 2.7 });
+    addScenery("banner_portal", "Bannerfall portal", 69, 36, { action: "bannerfall", interactRange: 3.0 });
+    addScenery("banner_flag", "Briar flag", 68, 27, { action: "banner_flag", team: "home", interactRange: 2.5 });
+    addScenery("banner_flag", "Rival flag", 76, 34, { action: "banner_flag", team: "enemy", interactRange: 2.5 });
+    addScenery("banner_supply", "Bannerfall supply table", 71, 30, { action: "banner_supply", interactRange: 2.4 });
+    addScenery("banner_scoreboard", "Bannerfall scoreboard", 72, 31, { action: "banner_scoreboard", interactRange: 2.4 });
+    addScenery("ditch", "Ash boundary", 24, 31, { action: "ash" });
+    addScenery("rift_altar", "Rift altar", 11, 12, { action: "rift_altar" });
+    addScenery("rift_font", "Rift font", 14, 14, { action: "sigilcraft", sigil: "rift", interactRange: 2.7 });
     addScenery("ruins", "Burnt ruins", 17, 20, { action: "examine" });
     addScenery("dock", "Southport jetty", 64, 97, { action: "fish", interactRange: 2.8 });
-    addScenery("island_dock", "Southport lobster pier", 70, 97, { action: "fish_lobster", interactRange: 2.8 });
+    addScenery("island_dock", "Southport redclaw pier", 70, 97, { action: "fish_redclaw", interactRange: 2.8 });
     addScenery("quest_sign", "Southport ledger board", 60, 90, { action: "quests" });
     addScenery("market_stall", "Southport fish stall", 70, 90, { action: "steal", level: 8 });
     addScenery("range", "Southport cookfire", 67, 91, { action: "cook" });
@@ -1319,7 +1319,7 @@
       [73, 77],
       [77, 75],
     ]) {
-      addResource("lobster_spot", spot[0], spot[1]);
+      addResource("redclaw_spot", spot[0], spot[1]);
     }
     for (let i = 0; i < 72; i += 1) {
       const x = 7 + Math.floor(hash(i, 203) * 29);
@@ -1349,22 +1349,22 @@
       [71, 101],
       [75, 100],
     ]) {
-      addResource("lobster_spot", spot[0], spot[1]);
+      addResource("redclaw_spot", spot[0], spot[1]);
     }
 
     addNpc("banker", "Banker Niles", "banker", 35, 31);
     addNpc("shopkeeper", "Shopkeeper Marnie", "shop", 45, 32);
-    addNpc("cook", "Castle Cook", "cook", 32, 45);
+    addNpc("cook", "Hall Cook", "cook", 32, 45);
     addNpc("priest", "Brother Alden", "priest", 49, 48);
     addNpc("smith", "Furnace Keeper Brigg", "smith", 52, 30);
-    addNpc("slayer_master", "Slayer Master Vann", "slayer", 60, 38);
+    addNpc("vigil_master", "Huntwarden Mara", "vigil", 60, 38);
     addNpc("guide", "Town Guide", "guide", 39, 38);
     addNpc("fisher", "Old Ferryman", "fisher", 54, 61);
     addNpc("apothecary", "Apothecary Herwin", "apothecary", 47, 45);
     addNpc("fletcher", "Fletcher Rowan", "fletcher", 43, 35);
-    addNpc("wizard", "Wizard Elric", "wizard", 52, 27);
+    addNpc("sigilist", "Sigilist Elric", "sigilist", 52, 27);
     addNpc("gardener", "Gardener Bess", "gardener", 27, 42);
-    addNpc("castle_squire", "Castle Squire", "squire", 70, 36);
+    addNpc("banner_marshal", "Banner Marshal", "squire", 70, 36);
     addNpc("island_trader", "Trader Kojo", "island_trader", 73, 72);
     addNpc("tower_keeper", "Keeper Maev", "tower_keeper", 70, 11);
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
@@ -1391,7 +1391,7 @@
         aggro: 0.15,
         respawn: 5,
         wanderRadius: 1.4,
-        slayerType: "chicken",
+        vigilType: "chicken",
       }, [["feather", 8 + (i % 3) * 2, 0.95], ["raw_chicken", 1, 0.8], ["bones", 1, 0.4]]);
     }
 
@@ -1412,7 +1412,7 @@
         xp: 18,
         aggro: 0.45,
         wanderRadius: 1.6,
-        slayerType: "giant_rat",
+        vigilType: "giant_rat",
       }, [["bones", 1, 0.6], ["coins", 3, 0.35]]);
     }
     for (const spot of [
@@ -1432,7 +1432,7 @@
         xp: 20,
         aggro: 0.2,
         wanderRadius: 1.7,
-        slayerType: "pasture_cow",
+        vigilType: "pasture_cow",
       }, [["bones", 1, 0.95], ["cowhide", 1, 0.9], ["raw_beef", 1, 0.65]]);
     }
     for (const spot of [
@@ -1452,8 +1452,8 @@
         xp: 30,
         aggro: 1.8,
         wanderRadius: 1.8,
-        slayerType: "field_imp",
-      }, [["coins", 8, 0.5], ["mind_rune", 4, 0.25], ["air_rune", 6, 0.25], ["air_talisman", 1, 0.07], ["potato_seed", 2, 0.18]]);
+        vigilType: "field_imp",
+      }, [["coins", 8, 0.5], ["whisper_sigil", 4, 0.25], ["gale_sigil", 6, 0.25], ["gale_focus", 1, 0.07], ["potato_seed", 2, 0.18]]);
     }
     for (const spot of [
       [6, 16],
@@ -1463,7 +1463,7 @@
       [13, 23],
       [18, 25],
     ]) {
-      addEnemy("dark_wizard", "Dark wizard", spot[0], spot[1], {
+      addEnemy("dusk_conjurer", "Dusk conjurer", spot[0], spot[1], {
         level: 20,
         hp: 58,
         attack: 19,
@@ -1473,8 +1473,8 @@
         aggro: 3.2,
         respawn: 12,
         wanderRadius: 2.0,
-        slayerType: "dark_wizard",
-      }, [["bones", 1, 0.7], ["chaos_rune", 2, 0.35], ["law_rune", 1, 0.08], ["chaos_talisman", 1, 0.06], ["mind_talisman", 1, 0.08], ["magic_potion", 1, 0.1], ["wizard_hat", 1, 0.07], ["staff_of_air", 1, 0.04]]);
+        vigilType: "dusk_conjurer",
+      }, [["bones", 1, 0.7], ["rift_sigil", 2, 0.35], ["oath_sigil", 1, 0.08], ["rift_focus", 1, 0.06], ["whisper_focus", 1, 0.08], ["magic_potion", 1, 0.1], ["sigilist_cap", 1, 0.07], ["gale_staff", 1, 0.04]]);
     }
     for (const spot of [
       [13, 9],
@@ -1482,7 +1482,7 @@
       [11, 15],
       [17, 18],
     ]) {
-      addEnemy("black_knight", "Black knight", spot[0], spot[1], {
+      addEnemy("iron_oathbreaker", "Iron oathbreaker", spot[0], spot[1], {
         level: 33,
         hp: 92,
         attack: 21,
@@ -1492,10 +1492,10 @@
         aggro: 3.1,
         respawn: 17,
         wanderRadius: 1.8,
-        slayerType: "black_knight",
-      }, [["big_bones", 1, 0.8], ["coins", 65, 0.55], ["defence_potion", 1, 0.12], ["black_helm", 1, 0.08], ["iron_platelegs", 1, 0.07], ["steel_sword", 1, 0.06]]);
+        vigilType: "iron_oathbreaker",
+      }, [["big_bones", 1, 0.8], ["coins", 65, 0.55], ["defence_potion", 1, 0.12], ["oathbreaker_helm", 1, 0.08], ["iron_platelegs", 1, 0.07], ["steel_sword", 1, 0.06]]);
     }
-    addEnemy("lesser_demon", "Lesser demon", 10, 11, {
+    addEnemy("rift_fiend", "Rift fiend", 10, 11, {
       level: 42,
       hp: 125,
       attack: 25,
@@ -1505,8 +1505,8 @@
       aggro: 5.2,
       respawn: 35,
       wanderRadius: 2.2,
-      slayerType: "lesser_demon",
-    }, [["big_bones", 1, 1], ["chaos_rune", 8, 0.55], ["law_rune", 2, 0.18], ["clue_scroll", 1, 0.28], ["strength_potion", 1, 0.16], ["rune_scimitar", 1, 0.035], ["slayer_helm", 1, 0.03]]);
+      vigilType: "rift_fiend",
+    }, [["big_bones", 1, 1], ["rift_sigil", 8, 0.55], ["oath_sigil", 2, 0.18], ["clue_scroll", 1, 0.28], ["strength_potion", 1, 0.16], ["aurel_sabre", 1, 0.035], ["vigil_helm", 1, 0.03]]);
     for (const spot of [
       [51, 54],
       [56, 56],
@@ -1524,7 +1524,7 @@
         xp: 65,
         aggro: 2.4,
         wanderRadius: 1.7,
-        slayerType: "grave_skeleton",
+        vigilType: "grave_skeleton",
       }, [["bones", 1, 0.95], ["coins", 18, 0.4], ["attack_potion", 1, 0.08], ["iron_sword", 1, 0.06]]);
     }
     for (const spot of [
@@ -1534,7 +1534,7 @@
       [72, 51],
       [66, 52],
     ]) {
-      addEnemy("cave_crawler", "Cave crawler", spot[0], spot[1], {
+      addEnemy("mire_skitterer", "Mire skitterer", spot[0], spot[1], {
         level: 16,
         hp: 50,
         attack: 10,
@@ -1544,7 +1544,7 @@
         aggro: 1.15,
         respawn: 10,
         wanderRadius: 1.7,
-        slayerType: "cave_crawler",
+        vigilType: "mire_skitterer",
       }, [["bones", 1, 0.7], ["uncut_gem", 1, 0.08], ["energy_potion", 1, 0.1], ["coins", 24, 0.5]]);
     }
     for (const spot of [
@@ -1553,7 +1553,7 @@
       [72, 52],
       [63, 51],
     ]) {
-      addEnemy("salt_slug", "Salt slug", spot[0], spot[1], {
+      addEnemy("brine_leech", "Brine leech", spot[0], spot[1], {
         level: 18,
         hp: 54,
         attack: 9,
@@ -1563,9 +1563,9 @@
         aggro: 1.0,
         respawn: 12,
         wanderRadius: 1.6,
-        slayerType: "salt_slug",
-        finisher: "bag_of_salt",
-      }, [["bones", 1, 0.55], ["coins", 32, 0.5], ["uncut_gem", 1, 0.1], ["bag_of_salt", 1, 0.2]]);
+        vigilType: "brine_leech",
+        finisher: "brine_charm",
+      }, [["bones", 1, 0.55], ["coins", 32, 0.5], ["uncut_gem", 1, 0.1], ["brine_charm", 1, 0.2]]);
     }
     for (const spot of [
       [67, 9],
@@ -1573,7 +1573,7 @@
       [75, 9],
       [78, 17],
     ]) {
-      addEnemy("crawling_hand", "Crawling hand", spot[0], spot[1], {
+      addEnemy("grasping_claw", "Grasping claw", spot[0], spot[1], {
         level: 8,
         hp: 32,
         attack: 5,
@@ -1583,14 +1583,14 @@
         aggro: 1.4,
         respawn: 9,
         wanderRadius: 1.2,
-        slayerType: "crawling_hand",
+        vigilType: "grasping_claw",
       }, [["bones", 1, 0.35], ["tower_key", 1, 0.12], ["ectoplasm", 1, 0.22], ["coins", 16, 0.45], ["leather_gloves", 1, 0.08]]);
     }
     for (const spot of [
       [72, 9],
       [77, 12],
     ]) {
-      addEnemy("banshee", "Banshee", spot[0], spot[1], {
+      addEnemy("keening_shade", "Keening shade", spot[0], spot[1], {
         level: 23,
         hp: 64,
         attack: 15,
@@ -1600,14 +1600,14 @@
         aggro: 2.1,
         respawn: 13,
         wanderRadius: 1.3,
-        requiredProtection: "banshee",
-        slayerType: "banshee",
-      }, [["bones", 1, 0.55], ["tower_key", 1, 0.18], ["ectoplasm", 2, 0.55], ["death_rune", 1, 0.12], ["ghostly_robe", 1, 0.035]]);
+        requiredProtection: "keening_shade",
+        vigilType: "keening_shade",
+      }, [["bones", 1, 0.55], ["tower_key", 1, 0.18], ["ectoplasm", 2, 0.55], ["grave_sigil", 1, 0.12], ["ghostly_robe", 1, 0.035]]);
     }
     for (const spot of [
       [75, 16],
     ]) {
-      addEnemy("aberrant_specter", "Aberrant specter", spot[0], spot[1], {
+      addEnemy("miasma_wraith", "Miasma wraith", spot[0], spot[1], {
         level: 46,
         hp: 118,
         attack: 27,
@@ -1617,13 +1617,13 @@
         aggro: 2.7,
         respawn: 22,
         wanderRadius: 1.2,
-        requiredProtection: "specter",
+        requiredProtection: "miasma_wraith",
         poisonDamage: 3,
         poisonChance: 0.18,
-        slayerType: "aberrant_specter",
+        vigilType: "miasma_wraith",
       }, [["grimy_mirthleaf", 2, 0.45], ["tower_key", 1, 0.22], ["ectoplasm", 3, 0.7], ["mystic_wand", 1, 0.035], ["clue_scroll", 1, 0.18]]);
     }
-    addEnemy("deep_wight", "Deep wight", 72, 48, {
+    addEnemy("hollow_wight", "Hollow wight", 72, 48, {
       level: 34,
       hp: 115,
       attack: 20,
@@ -1633,8 +1633,8 @@
       aggro: 0.95,
       respawn: 28,
       wanderRadius: 1.2,
-      slayerType: "deep_wight",
-    }, [["bones", 1, 1], ["coins", 120, 0.7], ["clue_scroll", 1, 0.35], ["ranging_potion", 1, 0.14], ["amulet_of_accuracy", 1, 0.08], ["team_cape", 1, 0.06], ["steel_sword", 1, 0.05]]);
+      vigilType: "hollow_wight",
+    }, [["bones", 1, 1], ["coins", 120, 0.7], ["clue_scroll", 1, 0.35], ["ranging_potion", 1, 0.14], ["surestrike_pendant", 1, 0.08], ["team_cape", 1, 0.06], ["steel_sword", 1, 0.05]]);
     for (const spot of [
       [12, 15],
       [17, 13],
@@ -1651,7 +1651,7 @@
         aggro: 3.1,
         respawn: 14,
         wanderRadius: 1.8,
-        slayerType: "moss_brute",
+        vigilType: "moss_brute",
       }, [["bones", 1, 0.9], ["coins", 55, 0.55], ["mirthleaf_seed", 2, 0.18], ["strength_potion", 1, 0.12], ["steel_sword", 1, 0.04]]);
     }
     for (const spot of [
@@ -1675,10 +1675,10 @@
         poisonDamage: 4,
         poisonChance: 0.28,
         respawn: 15,
-        slayerType: "jungle_spider",
+        vigilType: "jungle_spider",
       }, [["bones", 1, 0.45], ["banana", 1, 0.45], ["spider_silk", 2, 0.62], ["grimy_mirthleaf", 1, 0.12], ["coins", 42, 0.5], ["clue_scroll", 1, 0.08]]);
     }
-    addEnemy("lesser_demon", "Volcano demon", 76, 68, {
+    addEnemy("rift_fiend", "Volcano fiend", 76, 68, {
       level: 42,
       hp: 125,
       attack: 25,
@@ -1689,8 +1689,8 @@
       wanderRadius: 1.0,
       wanderSpeed: 0.2,
       respawn: 36,
-      slayerType: "lesser_demon",
-    }, [["big_bones", 1, 1], ["chaos_rune", 7, 0.48], ["law_rune", 2, 0.16], ["raw_lobster", 1, 0.24], ["rune_scimitar", 1, 0.035]]);
+      vigilType: "rift_fiend",
+    }, [["big_bones", 1, 1], ["rift_sigil", 7, 0.48], ["oath_sigil", 2, 0.16], ["raw_redclaw", 1, 0.24], ["aurel_sabre", 1, 0.035]]);
     for (const spot of [
       [13, 88],
       [22, 83],
@@ -1709,7 +1709,7 @@
         respawn: 20,
         wanderRadius: 1.45,
         wanderSpeed: 0.42,
-        slayerType: "hill_giant",
+        vigilType: "hill_giant",
       }, [["big_bones", 1, 1], ["coins", 72, 0.6], ["limpwurt_root", 1, 0.32], ["strength_potion", 1, 0.08], ["giant_club", 1, 0.035]]);
     }
     for (const spot of [
@@ -1732,7 +1732,7 @@
         wanderSpeed: 0.46,
         poisonDamage: 2,
         poisonChance: 0.14,
-        slayerType: "desert_scorpion",
+        vigilType: "desert_scorpion",
       }, [["bones", 1, 0.45], ["coins", 24, 0.45], ["scorpion_tail", 1, 0.6], ["antipoison", 1, 0.12], ["uncut_gem", 1, 0.06]]);
     }
     for (const spot of [
@@ -1751,7 +1751,7 @@
         aggro: 1.2,
         respawn: 14,
         wanderRadius: 2.0,
-        slayerType: "highwayman",
+        vigilType: "highwayman",
       }, [["bones", 1, 0.6], ["coins", 48, 0.72], ["cake", 1, 0.16], ["silk", 1, 0.12], ["clue_scroll", 1, 0.08], ["iron_sword", 1, 0.035]]);
     }
   }
@@ -1932,9 +1932,9 @@
     };
   }
 
-  function normalizeCastleWarsState() {
-    const cw = state.castleWars || {};
-    state.castleWars = {
+  function normalizeBannerfallState() {
+    const cw = state.bannerfall || {};
+    state.bannerfall = {
       active: Boolean(cw.active),
       score: Number(cw.score) || 0,
       enemyScore: Number(cw.enemyScore) || 0,
@@ -1950,22 +1950,169 @@
     return Object.fromEntries(Object.entries(state.stats).map(([key, value]) => [key, typeof value === "boolean" ? false : 0]));
   }
 
+  function legacyKey(...parts) {
+    return parts.join("");
+  }
+
+  const LEGACY_ITEM_IDS = new Map([
+    [legacyKey("slay", "er_helm"), "vigil_helm"],
+    [legacyKey("slay", "er_gem"), "vigil_glass"],
+    [legacyKey("ear", "muffs"), "silence_hood"],
+    [legacyKey("nose", "_peg"), "mire_charm"],
+    [legacyKey("broad", "_arrow"), "ward_arrow"],
+    [legacyKey("ru", "ne_scimitar"), "aurel_sabre"],
+    [legacyKey("ru", "ne_essence"), "glimmer_shard"],
+    [legacyKey("ru", "ne_pouch"), "sigil_satchel"],
+    [legacyKey("ai", "r_ru", "ne"), "gale_sigil"],
+    [legacyKey("mi", "nd_ru", "ne"), "whisper_sigil"],
+    [legacyKey("cha", "os_ru", "ne"), "rift_sigil"],
+    [legacyKey("la", "w_ru", "ne"), "oath_sigil"],
+    [legacyKey("dea", "th_ru", "ne"), "grave_sigil"],
+    [legacyKey("ai", "r_talis", "man"), "gale_focus"],
+    [legacyKey("mi", "nd_talis", "man"), "whisper_focus"],
+    [legacyKey("cha", "os_talis", "man"), "rift_focus"],
+    [legacyKey("la", "w_talis", "man"), "oath_focus"],
+    [legacyKey("staff", "_of_", "ai", "r"), "gale_staff"],
+    [legacyKey("wiz", "ard_hat"), "sigilist_cap"],
+    [legacyKey("bla", "ck_helm"), "oathbreaker_helm"],
+    [legacyKey("decor", "ative_helm"), "banner_helm"],
+    [legacyKey("decor", "ative_shield"), "banner_shield"],
+    [legacyKey("decor", "ative_sword"), "banner_sword"],
+    [legacyKey("decor", "ative_platebody"), "banner_platebody"],
+    [legacyKey("cast", "le_to", "ken"), "banner_token"],
+    [legacyKey("cast", "le_tic", "ket"), "banner_token"],
+    [legacyKey("lob", "ster_cage"), "redclaw_cage"],
+    [legacyKey("raw_", "lob", "ster"), "raw_redclaw"],
+    [legacyKey("lob", "ster"), "redclaw"],
+  ]);
+
+  const LEGACY_VIGIL_TYPES = new Map([
+    [legacyKey("dark", "_wiz", "ard"), "dusk_conjurer"],
+    [legacyKey("bla", "ck_knight"), "iron_oathbreaker"],
+    [legacyKey("less", "er_demon"), "rift_fiend"],
+    [legacyKey("cave", "_crawler"), "mire_skitterer"],
+    [legacyKey("salt", "_slug"), "brine_leech"],
+    [legacyKey("crawl", "ing_hand"), "grasping_claw"],
+    [legacyKey("ban", "shee"), "keening_shade"],
+    [legacyKey("aberr", "ant_spec", "ter"), "miasma_wraith"],
+    [legacyKey("deep", "_wight"), "hollow_wight"],
+  ]);
+
+  const VIGIL_TYPE_LABELS = {
+    dusk_conjurer: "dusk conjurers",
+    iron_oathbreaker: "iron oathbreakers",
+    rift_fiend: "rift fiends",
+    mire_skitterer: "mire skitterers",
+    brine_leech: "brine leeches",
+    grasping_claw: "grasping claws",
+    keening_shade: "keening shades",
+    miasma_wraith: "miasma wraiths",
+    hollow_wight: "hollow wights",
+  };
+
+  function migrateLegacyItemId(itemId) {
+    return LEGACY_ITEM_IDS.get(itemId) || itemId;
+  }
+
+  function migrateLegacyItemContainer(container) {
+    if (!Array.isArray(container)) return;
+    for (const item of container) {
+      if (item?.id) item.id = migrateLegacyItemId(item.id);
+    }
+  }
+
+  function migrateLegacyEquipment(equipment) {
+    if (!equipment || typeof equipment !== "object") return;
+    for (const slot of Object.keys(equipment)) {
+      if (equipment[slot]) equipment[slot] = migrateLegacyItemId(equipment[slot]);
+    }
+  }
+
+  function migrateLegacyCollection(collection) {
+    const next = {};
+    for (const [itemId, qty] of Object.entries(collection || {})) {
+      const migratedId = migrateLegacyItemId(itemId);
+      next[migratedId] = Math.max(Number(next[migratedId]) || 0, Number(qty) || 0);
+    }
+    return next;
+  }
+
+  function copyLegacySkill(skills, oldSkill, newSkill) {
+    if (!skills?.[oldSkill]) return;
+    if (!skills[newSkill] || (skills[oldSkill].xp || 0) > (skills[newSkill].xp || 0)) {
+      skills[newSkill] = skills[oldSkill];
+    }
+  }
+
+  function copyLegacyStat(stats, oldKey, newKey) {
+    const oldValue = Number(stats?.[oldKey]);
+    if (!Number.isFinite(oldValue)) return;
+    stats[newKey] = Math.max(Number(stats[newKey]) || 0, oldValue);
+  }
+
+  function migrateLegacyPlayerData(player) {
+    if (!player) return;
+    migrateLegacyItemContainer(player.inventory);
+    migrateLegacyItemContainer(player.bank);
+    migrateLegacyEquipment(player.equipment);
+    if (player[legacyKey("pray", "erMode")] && !player.resolveMode) player.resolveMode = player[legacyKey("pray", "erMode")];
+    if (Number.isFinite(player[legacyKey("pray", "erPoints")]) && !Number.isFinite(player.resolvePoints)) player.resolvePoints = player[legacyKey("pray", "erPoints")];
+    copyLegacySkill(player.skills, legacyKey("Hit", "points"), "Vitality");
+    copyLegacySkill(player.skills, legacyKey("Pr", "ay", "er"), "Resolve");
+    copyLegacySkill(player.skills, legacyKey("Thiev", "ing"), "Pilfering");
+    copyLegacySkill(player.skills, legacyKey("Ru", "ne", "crafting"), "Sigilcraft");
+    copyLegacySkill(player.skills, legacyKey("Her", "b", "lore"), "Herbalism");
+    copyLegacySkill(player.skills, legacyKey("Sl", "ay", "er"), "Vigilance");
+  }
+
+  function migrateLegacyStats(stats) {
+    copyLegacyStat(stats, legacyKey("gob", "linsSlain"), "fieldImpsSlain");
+    copyLegacyStat(stats, legacyKey("dark", "Wiz", "ardsSlain"), "duskConjurersSlain");
+    copyLegacyStat(stats, legacyKey("deep", "WightsSlain"), "hollowWightsSlain");
+    copyLegacyStat(stats, legacyKey("less", "erDe", "monsSlain"), "riftFiendsSlain");
+    copyLegacyStat(stats, legacyKey("crawl", "ingHandsSlain"), "graspingClawsSlain");
+    copyLegacyStat(stats, legacyKey("ban", "sheesSlain"), "keeningShadesSlain");
+    copyLegacyStat(stats, legacyKey("spec", "tersSlain"), "miasmaWraithsSlain");
+    copyLegacyStat(stats, legacyKey("ru", "nesCrafted"), "sigilsCrafted");
+    copyLegacyStat(stats, legacyKey("ai", "rRu", "nesCrafted"), "galeSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("mi", "ndRu", "nesCrafted"), "whisperSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("cha", "osRu", "nesCrafted"), "riftSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("la", "wRu", "nesCrafted"), "oathSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("ai", "rSigilsCrafted"), "galeSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("mi", "ndSigilsCrafted"), "whisperSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("cha", "osSigilsCrafted"), "riftSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("la", "wSigilsCrafted"), "oathSigilsCrafted");
+    copyLegacyStat(stats, legacyKey("cast", "leFlagsCaptured"), "bannersCaptured");
+  }
+
+  function migrateLegacyQuests(quests) {
+    const oldLunchKey = legacyKey("cooks", "Errand");
+    if (quests?.[oldLunchKey] && !quests.lunchLedger) quests.lunchLedger = quests[oldLunchKey];
+  }
+
+  function migrateLegacyVigil(vigil) {
+    if (!vigil?.task) return vigil;
+    vigil.task.type = LEGACY_VIGIL_TYPES.get(vigil.task.type) || vigil.task.type;
+    if (VIGIL_TYPE_LABELS[vigil.task.type]) vigil.task.label = VIGIL_TYPE_LABELS[vigil.task.type];
+    return vigil;
+  }
+
   function normalizePlayerState() {
     ensureSlots(state.player.inventory, 28);
     ensureSlots(state.player.bank, 48);
     normalizeFarmingPatches();
     normalizeCryptState();
-    normalizeCastleWarsState();
-    state.runePouch = {
-      essence: clamp(Number(state.runePouch?.essence) || 0, 0, Number(state.runePouch?.capacity) || 12),
-      capacity: Number(state.runePouch?.capacity) || 12,
+    normalizeBannerfallState();
+    state.sigilPouch = {
+      essence: clamp(Number(state.sigilPouch?.essence) || 0, 0, Number(state.sigilPouch?.capacity) || 12),
+      capacity: Number(state.sigilPouch?.capacity) || 12,
     };
     state.player.boosts = state.player.boosts || {};
     state.player.boostDecay = state.player.boostDecay || 60;
     state.player.poisonDamage = Math.max(0, Number(state.player.poisonDamage) || 0);
     state.player.poisonTick = Math.max(0, Number(state.player.poisonTick) || 0);
     for (const skill of skillNames) {
-      if (!state.player.skills[skill]) state.player.skills[skill] = { xp: skill === "Hitpoints" ? xpForLevel(10) : 0 };
+      if (!state.player.skills[skill]) state.player.skills[skill] = { xp: skill === "Vitality" ? xpForLevel(10) : 0 };
     }
     for (const [slot, itemId] of Object.entries(state.player.equipment)) {
       if (!itemId) continue;
@@ -2093,15 +2240,15 @@
       return;
     }
     if (diaryCompletedCount() < DIARY_TASKS.length) {
-      addChat("The Boonshire diary is not complete.");
+      addChat("The Briarfall diary is not complete.");
       return;
     }
     state.diaryRewardClaimed = true;
     addInventory("achievement_cape", 1);
-    addInventory("law_rune", 8);
+    addInventory("oath_sigil", 8);
     gainXp("Crafting", 250);
-    gainXp("Slayer", 250);
-    addChat("Boonshire Diary complete. Achievement cape unlocked!", "loot");
+    gainXp("Vigilance", 250);
+    addChat("Briarfall Diary complete. Concord mantle unlocked!", "loot");
   }
 
   function openWorldMap() {
@@ -2157,7 +2304,7 @@
     removeSlot(state.player.inventory, slot, 1);
     const roll = random();
     const reward = roll > 0.992
-      ? ["rune_scimitar", 1]
+      ? ["aurel_sabre", 1]
       : roll > 0.965
         ? [choice(["crypt_helm", "ancient_page", "mystic_wand"]), 1]
         : roll > 0.92
@@ -2165,11 +2312,11 @@
           : roll > 0.82
             ? ["clue_scroll", 1]
             : roll > 0.66
-              ? [choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster"]), 1]
+              ? [choice(["uncut_gem", "cut_gem", "gold_bar", "raw_redclaw"]), 1]
               : roll > 0.5
                 ? [choice(["attack_potion", "strength_potion", "defence_potion", "energy_potion"]), 1]
                 : roll > 0.32
-                  ? [choice(["law_rune", "death_rune"]), 2 + Math.floor(random() * 3)]
+                  ? [choice(["oath_sigil", "grave_sigil"]), 2 + Math.floor(random() * 3)]
                   : roll > 0.16
                     ? [choice(["spinach_roll", "bow_string"]), 1]
                     : ["coins", 80 + Math.floor(random() * 220)];
@@ -2184,7 +2331,7 @@
 
   function updateRandomEvents() {
     if (state.randomEvent || state.modal || state.time < state.nextRandomEvent) return;
-    if (state.castleWars.active) return;
+    if (state.bannerfall.active) return;
     if (state.player.combatTarget || state.player.path.length) return;
     const events = [
       {
@@ -2260,7 +2407,7 @@
     const atk = getLevel("Attack");
     const str = getLevel("Strength");
     const def = getLevel("Defence");
-    const hp = getLevel("Hitpoints");
+    const hp = getLevel("Vitality");
     const mag = getLevel("Magic");
     const rng = getLevel("Ranged");
     return Math.floor((def + hp + Math.floor((atk + str) * 1.3) + Math.floor(Math.max(mag, rng) * 0.5)) / 4);
@@ -2271,18 +2418,18 @@
     addInventory("coins", 45, true);
     addInventory("knife", 1, true);
     addInventory("chisel", 1, true);
-    addInventory("slayer_gem", 1, true);
-    addInventory("air_rune", 20, true);
-    addInventory("mind_rune", 10, true);
-    addInventory("air_talisman", 1, true);
+    addInventory("vigil_glass", 1, true);
+    addInventory("gale_sigil", 20, true);
+    addInventory("whisper_sigil", 10, true);
+    addInventory("gale_focus", 1, true);
     addInventory("potato_seed", 2, true);
     addInventory("empty_vial", 1, true);
     addInventory("grimy_mirthleaf", 1, true);
     addBank("logs", 8);
     addBank("feather", 30);
     addBank("bow_string", 2);
-    addBank("rune_essence", 10);
-    addBank("mind_talisman", 1);
+    addBank("glimmer_shard", 10);
+    addBank("whisper_focus", 1);
     addBank("potato_seed", 4);
     addBank("mirthleaf_seed", 3);
     addBank("empty_vial", 3);
@@ -2335,7 +2482,7 @@
     updateFires(dt);
     updateNpcs(dt);
     updateBarks(dt);
-    updateCastleWars(dt);
+    updateBannerfall(dt);
     updateRandomEvents();
     updateCamera();
   }
@@ -2406,14 +2553,14 @@
     } else if (!player.run) {
       player.runEnergy = Math.min(100, player.runEnergy + dt * runRestoreRate(0.6));
     }
-    if (player.prayerMode !== "none") {
-      player.prayerPoints = Math.max(0, player.prayerPoints - dt * 1.25);
-      if (player.prayerPoints <= 0) {
-        player.prayerMode = "none";
-        addChat("You have run out of Prayer points.");
+    if (player.resolveMode !== "none") {
+      player.resolvePoints = Math.max(0, player.resolvePoints - dt * 1.25);
+      if (player.resolvePoints <= 0) {
+        player.resolveMode = "none";
+        addChat("You have run out of Resolve points.");
       }
     }
-    if (player.prayerMode === "rapidHeal" && player.prayerPoints > 0 && player.hp < maxHp()) {
+    if (player.resolveMode === "rapidHeal" && player.resolvePoints > 0 && player.hp < maxHp()) {
       player.hp = Math.min(maxHp(), player.hp + dt * 1.8);
     }
     updatePoison(dt);
@@ -2425,45 +2572,45 @@
     const nextArea = areaAt(player.x, player.y);
     if (nextArea !== state.areaName && state.time > 2) addChat(`Now entering ${nextArea}.`);
     state.areaName = nextArea;
-    if (nextArea === "Low Wilderness" && !state.stats.visitedWilderness) {
-      state.stats.visitedWilderness = true;
-      addChat("Warning! Low Wilderness is dangerous.", "danger");
+    if (nextArea === "Low Ash" && !state.stats.visitedAshlands) {
+      state.stats.visitedAshlands = true;
+      addChat("Warning! Low Ash is dangerous.", "danger");
     }
     if (nextArea === "Southport" && !state.stats.visitedSouthport) {
       state.stats.visitedSouthport = true;
       addChat("Southport's docks smell like salt, tar, and side quests.");
     }
     const cryptPressure = Math.max(0, (state.crypt?.awakened?.length || 0) - (state.crypt?.defeated?.length || 0));
-    if (nextArea === "Old Graveyard" && cryptPressure > 0 && player.prayerPoints > 0) {
-      player.prayerPoints = Math.max(0, player.prayerPoints - dt * (0.18 + cryptPressure * 0.08));
+    if (nextArea === "Old Graveyard" && cryptPressure > 0 && player.resolvePoints > 0) {
+      player.resolvePoints = Math.max(0, player.resolvePoints - dt * (0.18 + cryptPressure * 0.08));
     }
   }
 
   function areaAt(x, y) {
-    if (x < 22 && y < 28) return "Low Wilderness";
+    if (x < 22 && y < 28) return "Low Ash";
     if (x > 52 && x < 79 && y > 84) return "Southport";
     if (x > 84 && y > 30 && y < 62) return "East Dunes";
     if (x > 82 && y < 25) return "North Ridge";
     if (x < 36 && y > 72) return "Westwood";
-    if (x > 66 && y > 7 && y < 19) return "Slayer Tower";
-    if (x > 64 && y > 22 && y < 39) return "Castle Wars";
-    if (x > 68 && x < 82 && y > 67 && y < 82) return "Karamel Isle";
-    if (Math.hypot(x - 60, y - 38) < 5) return "Slayer Lodge";
-    if (Math.hypot(x - 66, y - 43) < 11) return "Crawler Hollow";
+    if (x > 66 && y > 7 && y < 19) return "Gloamspire";
+    if (x > 64 && y > 22 && y < 39) return "Bannerfall";
+    if (x > 68 && x < 82 && y > 67 && y < 82) return "Saffron Cay";
+    if (Math.hypot(x - 60, y - 38) < 5) return "Vigil Lodge";
+    if (Math.hypot(x - 66, y - 43) < 11) return "Mire Hollow";
     if (Math.hypot(x - 62, y - 18) < 12) return "Greyrock Mine";
-    if (Math.hypot(x - 52, y - 25) < 7) return "Wizard Tower";
+    if (Math.hypot(x - 52, y - 25) < 7) return "Sigilist Spire";
     if (Math.hypot(x - 31, y - 24) < 7) return "Agility Yard";
     if (Math.hypot(x - 55, y - 52) < 12) return "Old Graveyard";
     if (Math.hypot(x - 28, y - 44) < 7) return "Bess's Patches";
     if (Math.hypot(x - 23, y - 53) < 9) return "Cow Field";
-    if (x > 30 && x < 56 && y > 27 && y < 48) return "Boonshire";
+    if (x > 30 && x < 56 && y > 27 && y < 48) return "Briarfall";
     if (Math.hypot(x - 64, y - 64) < 11) return "Lake Mollusk";
     if (Math.hypot(x - 16, y - 18) < 10) return "Mosswood";
-    return "Wilderness Road";
+    return "Outer Road";
   }
 
   function isMultiCombatArea(name) {
-    return name === "Low Wilderness";
+    return name === "Low Ash";
   }
 
   function singleCombatAggressorId() {
@@ -2564,22 +2711,22 @@
         duration: level >= 20 ? 3.6 : 2.7,
       };
       addChat("You cast a small net.");
-    } else if (resource.type === "lobster_spot") {
+    } else if (resource.type === "redclaw_spot") {
       if (getLevel("Fishing") < 35) {
-        addChat("You need Fishing level 35 to catch lobsters.");
+        addChat("You need Fishing level 35 to catch redclaws.");
         return;
       }
-      if (inventoryCount("lobster_pot") <= 0) {
-        addChat("You need a lobster pot.");
+      if (inventoryCount("redclaw_cage") <= 0) {
+        addChat("You need a redclaw pot.");
         return;
       }
       state.player.action = {
-        kind: "lobster_fishing",
+        kind: "redclaw_fishing",
         resourceId: resource.id,
         progress: 0,
         duration: 4.1,
       };
-      addChat("You lower the lobster pot.");
+      addChat("You lower the redclaw pot.");
     }
   }
 
@@ -2607,9 +2754,9 @@
       state.stats.oresMined += 1;
       resource.depleted = state.time + (item === "gold_ore" ? 15 : item === "iron_ore" ? 12 : 7);
     } else if (action.kind === "essence") {
-      if (!addInventory("rune_essence")) return;
+      if (!addInventory("glimmer_shard")) return;
       gainXp("Mining", 12);
-      gainXp("Runecrafting", 4);
+      gainXp("Sigilcraft", 4);
       state.stats.essenceMined += 1;
       resource.depleted = state.time + 2.2;
     } else if (action.kind === "fishing") {
@@ -2619,11 +2766,11 @@
       gainXp("Fishing", trout ? 60 : 25);
       state.stats.fishCaught += 1;
       resource.depleted = state.time + 1.5;
-    } else if (action.kind === "lobster_fishing") {
-      if (!addInventory("raw_lobster")) return;
+    } else if (action.kind === "redclaw_fishing") {
+      if (!addInventory("raw_redclaw")) return;
       gainXp("Fishing", 110);
       state.stats.fishCaught += 1;
-      state.stats.lobstersCaught += 1;
+      state.stats.redclawsCaught += 1;
       resource.depleted = state.time + 2.3;
     }
   }
@@ -2633,7 +2780,7 @@
     if (kind === "mining") return "Mining";
     if (kind === "essence") return "Mining";
     if (kind === "fishing") return "Fishing";
-    if (kind === "lobster_fishing") return "Fishing";
+    if (kind === "redclaw_fishing") return "Fishing";
     return "Attack";
   }
 
@@ -2656,22 +2803,22 @@
     player.path = [];
     if (player.attackTimer <= 0) {
       player.attackTimer = 1.8;
-      const ammo = inventoryCount("broad_arrow") > 0 ? "broad_arrow" : inventoryCount("bronze_arrow") > 0 ? "bronze_arrow" : null;
+      const ammo = inventoryCount("ward_arrow") > 0 ? "ward_arrow" : inventoryCount("bronze_arrow") > 0 ? "bronze_arrow" : null;
       if (usingRanged && !ammo) {
         addChat("You are out of arrows.");
         player.combatTarget = null;
         return;
       }
       if (usingRanged) removeItem(state.player.inventory, ammo, 1);
-      const offensiveLevel = (usingRanged ? effectiveLevel("Ranged") : effectiveLevel("Attack")) * prayerBoost("attack");
-      const powerLevel = (usingRanged ? effectiveLevel("Ranged") : effectiveLevel("Strength")) * prayerBoost("strength");
-      const slayerBonus = usingSlayerBoost(enemy) ? 1.16 : 1;
-      const protectedGear = hasSlayerProtection(enemy);
+      const offensiveLevel = (usingRanged ? effectiveLevel("Ranged") : effectiveLevel("Attack")) * resolveBoost("attack");
+      const powerLevel = (usingRanged ? effectiveLevel("Ranged") : effectiveLevel("Strength")) * resolveBoost("strength");
+      const vigilBonus = usingVigilanceBoost(enemy) ? 1.16 : 1;
+      const protectedGear = hasVigilanceProtection(enemy);
       const protectionPenalty = protectedGear ? 1 : 0.52;
-      if (!protectedGear) warnSlayerProtection(enemy);
-      const attackRoll = (offensiveLevel + equipmentBonus("attack")) * slayerBonus * protectionPenalty + random() * 12;
+      if (!protectedGear) warnVigilanceProtection(enemy);
+      const attackRoll = (offensiveLevel + equipmentBonus("attack")) * vigilBonus * protectionPenalty + random() * 12;
       const defenceRoll = enemy.defence + random() * 15;
-      const maxHit = Math.max(1, Math.floor(((powerLevel + equipmentBonus("strength")) * slayerBonus * protectionPenalty) / 3) + (ammo === "broad_arrow" ? 2 : 1));
+      const maxHit = Math.max(1, Math.floor(((powerLevel + equipmentBonus("strength")) * vigilBonus * protectionPenalty) / 3) + (ammo === "ward_arrow" ? 2 : 1));
       const hit = attackRoll > defenceRoll ? Math.floor(random() * (maxHit + 1)) : 0;
       if (hit > 0) {
         enemy.hp = Math.max(0, enemy.hp - hit);
@@ -2688,7 +2835,7 @@
         } else {
           gainXp(player.combatStyle, combatXp);
         }
-        gainXp("Hitpoints", Math.max(1, hit * 1.33));
+        gainXp("Vitality", Math.max(1, hit * 1.33));
       } else {
         addFloatingText(enemy.x, enemy.y, "0", "#d6d6d6");
       }
@@ -2714,16 +2861,16 @@
     addChat(`${sourceName} poisons you.`, "danger");
   }
 
-  function warnSlayerProtection(enemy) {
+  function warnVigilanceProtection(enemy) {
     if (!enemy?.requiredProtection) return;
     if (enemy.warningCooldown > 0) return;
     enemy.warningCooldown = 7;
-    if (enemy.requiredProtection === "banshee") {
-      addChat("The banshee shrieks through your skull. Earmuffs would help.", "danger");
-    } else if (enemy.requiredProtection === "specter") {
-      addChat("The specter chokes you with swamp stink. A nose peg would help.", "danger");
+    if (enemy.requiredProtection === "keening_shade") {
+      addChat("The keening shade shrieks through your skull. A silence hood would help.", "danger");
+    } else if (enemy.requiredProtection === "miasma_wraith") {
+      addChat("The miasma wraith chokes you with swamp stink. A mire charm would help.", "danger");
     } else {
-      addChat(`You need ${slayerProtectionName(enemy.requiredProtection)} for this task.`, "danger");
+      addChat(`You need ${vigilProtectionName(enemy.requiredProtection)} for this task.`, "danger");
     }
   }
 
@@ -2744,14 +2891,14 @@
     enemy.hp = 0;
     state.player.combatTarget = null;
     state.stats.chickensSlain += enemy.type === "chicken" ? 1 : 0;
-    state.stats.goblinsSlain += enemy.type === "field_imp" ? 1 : 0;
-    state.stats.darkWizardsSlain += enemy.type === "dark_wizard" ? 1 : 0;
-    state.stats.deepWightsSlain += enemy.type === "deep_wight" ? 1 : 0;
+    state.stats.fieldImpsSlain += enemy.type === "field_imp" ? 1 : 0;
+    state.stats.duskConjurersSlain += enemy.type === "dusk_conjurer" ? 1 : 0;
+    state.stats.hollowWightsSlain += enemy.type === "hollow_wight" ? 1 : 0;
     state.stats.jungleSpidersSlain += enemy.type === "jungle_spider" ? 1 : 0;
-    state.stats.lesserDemonsSlain += enemy.type === "lesser_demon" ? 1 : 0;
-    state.stats.crawlingHandsSlain += enemy.type === "crawling_hand" ? 1 : 0;
-    state.stats.bansheesSlain += enemy.type === "banshee" ? 1 : 0;
-    state.stats.spectersSlain += enemy.type === "aberrant_specter" ? 1 : 0;
+    state.stats.riftFiendsSlain += enemy.type === "rift_fiend" ? 1 : 0;
+    state.stats.graspingClawsSlain += enemy.type === "grasping_claw" ? 1 : 0;
+    state.stats.keeningShadesSlain += enemy.type === "keening_shade" ? 1 : 0;
+    state.stats.miasmaWraithsSlain += enemy.type === "miasma_wraith" ? 1 : 0;
     state.stats.hillGiantsSlain += enemy.type === "hill_giant" ? 1 : 0;
     state.stats.desertScorpionsSlain += enemy.type === "desert_scorpion" ? 1 : 0;
     state.stats.highwaymenSlain += enemy.type === "highwayman" ? 1 : 0;
@@ -2760,27 +2907,27 @@
     }
     if (random() < 0.025 + enemy.level * 0.001) dropGroundItem("clue_scroll", 1, enemy.x, enemy.y);
     handleCryptWightDefeat(enemy);
-    handleSlayerKill(enemy);
+    handleVigilanceKill(enemy);
     if (enemy.type === "grave_skeleton" && state.quests.restlessBones.state === "started") addChat("The priest will like those bones.");
-    if (enemy.type === "banshee" && state.quests.towerWhispers.state === "started") addChat("Vann wanted proof from the tower. Find a key and report back.");
+    if (enemy.type === "keening_shade" && state.quests.towerWhispers.state === "started") addChat("Mara wanted proof from the tower. Find a key and report back.");
   }
 
-  function handleSlayerKill(enemy) {
-    const task = state.slayer.task;
-    if (!task || task.type !== enemy.slayerType) return;
+  function handleVigilanceKill(enemy) {
+    const task = state.vigil.task;
+    if (!task || task.type !== enemy.vigilType) return;
     task.remaining -= 1;
-    gainXp("Slayer", Math.max(15, enemy.level * 4));
-    addChat(`Slayer task: ${task.remaining} ${task.label} left.`);
+    gainXp("Vigilance", Math.max(15, enemy.level * 4));
+    addChat(`Vigil contract: ${task.remaining} ${task.label} left.`);
     if (task.remaining <= 0) {
-      state.slayer.streak += 1;
-      state.stats.slayerTasksCompleted += 1;
-      state.slayer.points += 2 + Math.floor(state.slayer.streak / 5);
-      const coins = 50 + state.slayer.streak * 15;
+      state.vigil.streak += 1;
+      state.stats.vigilTasksCompleted += 1;
+      state.vigil.points += 2 + Math.floor(state.vigil.streak / 5);
+      const coins = 50 + state.vigil.streak * 15;
       addInventory("coins", coins);
       if (random() < 0.35) addInventory("clue_scroll", 1);
-      gainXp("Slayer", 80 + enemy.level * 6);
-      addChat(`Task complete. Slayer streak ${state.slayer.streak}.`);
-      state.slayer.task = null;
+      gainXp("Vigilance", 80 + enemy.level * 6);
+      addChat(`Task complete. Vigil streak ${state.vigil.streak}.`);
+      state.vigil.task = null;
     }
   }
 
@@ -2815,9 +2962,9 @@
           }
         } else if (enemy.attackTimer <= 0) {
           enemy.attackTimer = 2.2;
-          const defence = effectiveLevel("Defence") * prayerBoost("defence") + equipmentBonus("defence");
-          const wildBoost = areaAt(enemy.x, enemy.y) === "Low Wilderness" ? 1.12 : 1;
-          const missingProtection = !hasSlayerProtection(enemy);
+          const defence = effectiveLevel("Defence") * resolveBoost("defence") + equipmentBonus("defence");
+          const wildBoost = areaAt(enemy.x, enemy.y) === "Low Ash" ? 1.12 : 1;
+          const missingProtection = !hasVigilanceProtection(enemy);
           const protectionPressure = missingProtection ? 1.2 : 1;
           const roll = enemy.attack * wildBoost * protectionPressure + random() * 12;
           const block = defence + random() * 16;
@@ -2825,8 +2972,8 @@
           const gearHit = missingProtection ? 2 + Math.floor(random() * 5) : 0;
           const hit = Math.max(baseHit, gearHit);
           if (missingProtection) {
-            state.player.prayerPoints = Math.max(0, state.player.prayerPoints - 4);
-            warnSlayerProtection(enemy);
+            state.player.resolvePoints = Math.max(0, state.player.resolvePoints - 4);
+            warnVigilanceProtection(enemy);
           }
           if (hit > 0) {
             state.player.hp = Math.max(0, state.player.hp - hit);
@@ -2876,16 +3023,16 @@
           cook: ["Nothing says feast like shrimp."],
           priest: ["Bones remember.", "Mind the graveyard."],
           smith: ["Hot metal and poor decisions."],
-          slayer: ["Tasks build character.", "Bring me proof, not excuses."],
+          vigil: ["Tasks build character.", "Bring me proof, not excuses."],
           guide: ["Roads are safer. Mostly."],
           fisher: ["The trout know your name."],
           apothecary: ["Freshly labelled. Mostly.", "Drink responsibly, then irresponsibly."],
           fletcher: ["Straight shafts, straight profit."],
           gardener: ["Water once. Wait forever.", "Compost cures many sins."],
-          wizard: ["Essence hums. So do unpaid apprentices.", "Mind the altar sparks."],
-          squire: ["Take the flag. Bring it back. Simple until it isn't.", "Tickets buy lovely pointless armour."],
+          sigilist: ["Essence hums. So do unpaid apprentices.", "Keep clear of the altar sparks."],
+          squire: ["Take the flag. Bring it back. Simple until it isn't.", "Tokens buy lovely pointless armour."],
           island_trader: ["Bananas stack badly. Profit stacks nicely.", "Volcano spiders make poor customers."],
-          tower_keeper: ["Earmuffs for shrieks. Nose pegs for stink.", "The tower pays in keys and bruises."],
+          tower_keeper: ["Silence hood for shrieks. Mire charms for stink.", "The tower pays in keys and bruises."],
           guard: ["Keep the peace."],
         };
         addBark(npc, choice(lines[npc.role] || ["Lovely weather."]));
@@ -3043,8 +3190,8 @@
       priestDialogue(npc);
     } else if (npc.role === "smith") {
       smithDialogue(npc);
-    } else if (npc.role === "slayer") {
-      slayerDialogue(npc);
+    } else if (npc.role === "vigil") {
+      vigilDialogue(npc);
     } else if (npc.role === "apothecary") {
       openDialogue(npc.name, ["Potions for short-lived heroism. Side effects include confidence."], [
         { label: "Buy potions", action: () => openPotionShop() },
@@ -3055,10 +3202,10 @@
       fletcherDialogue(npc);
     } else if (npc.role === "gardener") {
       gardenerDialogue(npc);
-    } else if (npc.role === "wizard") {
-      wizardDialogue(npc);
+    } else if (npc.role === "sigilist") {
+      sigilistDialogue(npc);
     } else if (npc.role === "squire") {
-      castleSquireDialogue(npc);
+      bannerMarshalDialogue(npc);
     } else if (npc.role === "island_trader") {
       islandTraderDialogue(npc);
     } else if (npc.role === "sailor") {
@@ -3069,54 +3216,54 @@
       openDialogue(npc.name, ["Small net for shrimp by the bridge. Higher levels can fish trout at the lake. I also row shortcuts for coin."], [
         { label: "To Lake Mollusk - 12gp", action: () => travelTo(63.5, 62.5, 12, "Lake Mollusk") },
         {
-          label: "To Karamel Isle - 30gp",
+          label: "To Saffron Cay - 30gp",
           action: () => {
             const canPay = inventoryCount("coins") >= 30;
-            travelTo(73.5, 72.5, 30, "Karamel Isle");
+            travelTo(73.5, 72.5, 30, "Saffron Cay");
             if (canPay) state.stats.islandTrips += 1;
           },
         },
         { label: "To Southport - 22gp", action: () => travelTo(64.5, 92.5, 22, "Southport") },
         {
-          label: "Buy lobster pot - 20gp",
+          label: "Buy redclaw pot - 20gp",
           action: () => {
-            if (!spendCoins(20)) addChat("You need 20 coins for a lobster pot.");
-            else addInventory("lobster_pot", 1);
+            if (!spendCoins(20)) addChat("You need 20 coins for a redclaw pot.");
+            else addInventory("redclaw_cage", 1);
             closeModal();
           },
         },
         { label: "To Greyrock Mine - 18gp", action: () => travelTo(60.5, 20.5, 18, "Greyrock Mine") },
-        { label: "To Wilderness ditch - 25gp", action: () => travelTo(25.5, 32.5, 25, "the Wilderness ditch") },
+        { label: "To Ash boundary - 25gp", action: () => travelTo(25.5, 32.5, 25, "the Ash boundary") },
         { label: "Close", action: () => closeModal() },
       ]);
     } else if (npc.role === "guide") {
       openDialogue(npc.name, [
         "Click the ground to walk. Click creatures to fight. Skills are slow, numbers go up, and everyone pretends this is healthy.",
       ], [
-        { label: "Where do I start?", action: () => addChat("Try Cook's Errand, mine ore, or ask the Slayer Master for a task.") },
+        { label: "Where do I start?", action: () => addChat("Try Lunch Ledger, mine ore, or ask the Huntwarden for a task.") },
         { label: "Open world map", action: () => openWorldMap() },
         { label: "Close", action: () => closeModal() },
       ]);
     } else {
-      openDialogue(npc.name, ["Stay on the roads and keep an eye on your Hitpoints."], [{ label: "Close", action: () => closeModal() }]);
+      openDialogue(npc.name, ["Stay on the roads and keep an eye on your Vitality."], [{ label: "Close", action: () => closeModal() }]);
     }
   }
 
   function towerKeeperDialogue(npc) {
-    openDialogue(npc.name, ["Hands below, banshees above, specters in the damp room. Bring the right nonsense or leave with fewer thoughts."], [
+    openDialogue(npc.name, ["Claws below, keening shades above, miasma wraiths in the damp room. Bring the right nonsense or leave with fewer thoughts."], [
       {
-        label: "Buy earmuffs - 45gp",
+        label: "Buy silence hood - 45gp",
         action: () => {
-          if (!spendCoins(45)) addChat("You need 45 coins for earmuffs.");
-          else addInventory("earmuffs", 1);
+          if (!spendCoins(45)) addChat("You need 45 coins for a silence hood.");
+          else addInventory("silence_hood", 1);
           closeModal();
         },
       },
       {
-        label: "Buy nose peg - 65gp",
+        label: "Buy mire charm - 65gp",
         action: () => {
-          if (!spendCoins(65)) addChat("You need 65 coins for a nose peg.");
-          else addInventory("nose_peg", 1);
+          if (!spendCoins(65)) addChat("You need 65 coins for a mire charm.");
+          else addInventory("mire_charm", 1);
           closeModal();
         },
       },
@@ -3125,15 +3272,15 @@
     ]);
   }
 
-  function castleSquireDialogue(npc) {
-    const cw = state.castleWars;
+  function bannerMarshalDialogue(npc) {
+    const cw = state.bannerfall;
     const lines = cw.active
-      ? [`Match running: Boon ${cw.score} - Rival ${cw.enemyScore}.`, cw.flagHeld ? "You have their flag. Bring it home." : "Steal the rival flag and return to yours."]
-      : [`Tickets owned: ${inventoryCount("castle_ticket")}.`, "Fancy a game of flags, bandages, and selective memory?"];
+      ? [`Match running: Briar ${cw.score} - Rival ${cw.enemyScore}.`, cw.flagHeld ? "You have their flag. Bring it home." : "Steal the rival flag and return to yours."]
+      : [`Tokens owned: ${inventoryCount("banner_token")}.`, "Fancy a game of flags, bandages, and selective memory?"];
     openDialogue(npc.name, lines, [
-      { label: cw.active ? "Return to battlements" : "Join Castle Wars", action: () => startCastleWars() },
-      { label: "Rewards shop", action: () => openCastleShop() },
-      { label: "How does this work?", action: () => addChat("Squire says: take the rival flag, click your flag to score, first to three wins.") },
+      { label: cw.active ? "Return to battlements" : "Join Bannerfall", action: () => startBannerfall() },
+      { label: "Rewards shop", action: () => openBannerfallShop() },
+      { label: "How does this work?", action: () => addChat("Marshal says: take the rival flag, click your flag to score, first to three wins.") },
       { label: "Close", action: () => closeModal() },
     ]);
   }
@@ -3142,16 +3289,16 @@
     const quest = state.quests.islandRun;
     const choices = [
       { label: "Trade island supplies", action: () => openIslandShop() },
-      { label: "Ask about the island", action: () => addChat("Kojo says: pot lobsters at the dock, pick bananas inland, cut webs with a knife, and pack antipoison.") },
+      { label: "Ask about the island", action: () => addChat("Kojo says: pot redclaws at the dock, pick bananas inland, cut webs with a knife, and pack antipoison.") },
       { label: "Close", action: () => closeModal() },
     ];
     if (quest.state === "not-started") {
-      openDialogue(npc.name, ["Mainlanders keep ordering food and forgetting boats exist. Bring me three bananas and one cooked lobster."], [
+      openDialogue(npc.name, ["Mainlanders keep ordering food and forgetting boats exist. Bring me three bananas and one cooked redclaw."], [
         {
           label: "Start Island Supply Run",
           action: () => {
             quest.state = "started";
-            addInventory("lobster_pot", 1);
+            addInventory("redclaw_cage", 1);
             addChat("Quest started: Island Supply Run.");
             closeModal();
           },
@@ -3161,14 +3308,14 @@
       return;
     }
     if (quest.state === "started") {
-      const ready = inventoryCount("banana") >= 3 && inventoryCount("lobster") >= 1;
-      openDialogue(npc.name, [ready ? "That is a proper island crate." : `Supplies: ${inventoryCount("banana")}/3 bananas, ${inventoryCount("lobster")}/1 lobster.`], [
+      const ready = inventoryCount("banana") >= 3 && inventoryCount("redclaw") >= 1;
+      openDialogue(npc.name, [ready ? "That is a proper island crate." : `Supplies: ${inventoryCount("banana")}/3 bananas, ${inventoryCount("redclaw")}/1 redclaw.`], [
         {
           label: ready ? "Complete quest" : "Keep gathering",
           action: () => {
             if (ready) {
               removeItem(state.player.inventory, "banana", 3);
-              removeItem(state.player.inventory, "lobster", 1);
+              removeItem(state.player.inventory, "redclaw", 1);
               quest.state = "completed";
               addInventory("pirate_cutlass", 1);
               addInventory("coins", 180);
@@ -3183,18 +3330,18 @@
       ]);
       return;
     }
-    openDialogue(npc.name, ["Karamel Isle exports fish, fruit, and questionable confidence."], choices);
+    openDialogue(npc.name, ["Saffron Cay exports fish, fruit, and questionable confidence."], choices);
   }
 
   function sailorDialogue(npc) {
     const quest = state.quests.frontierLedger;
     const travelChoices = [
-      { label: "To Boonshire dock - 20gp", action: () => travelTo(54.5, 61.5, 20, "Boonshire dock") },
+      { label: "To Briarfall dock - 20gp", action: () => travelTo(54.5, 61.5, 20, "Briarfall dock") },
       {
-        label: "To Karamel Isle - 28gp",
+        label: "To Saffron Cay - 28gp",
         action: () => {
           const canPay = inventoryCount("coins") >= 28;
-          travelTo(73.5, 72.5, 28, "Karamel Isle");
+          travelTo(73.5, 72.5, 28, "Saffron Cay");
           if (canPay) state.stats.islandTrips += 1;
         },
       },
@@ -3227,9 +3374,9 @@
               removeItem(state.player.inventory, "big_bones", 1);
               quest.state = "completed";
               addInventory("coins", 260);
-              addInventory("lobster_pot", 1);
+              addInventory("redclaw_cage", 1);
               addInventory("energy_potion", 1);
-              gainXp("Slayer", 180);
+              gainXp("Vigilance", 180);
               gainXp("Fishing", 120);
               addChat("Quest complete: The Frontier Ledger.");
             }
@@ -3243,41 +3390,41 @@
     openDialogue(npc.name, ["Southport has room, roads, and a worrying number of things with claws."], travelChoices);
   }
 
-  function wizardDialogue(npc) {
-    const quest = state.quests.runeMysteries;
+  function sigilistDialogue(npc) {
+    const quest = state.quests.sigilMysteries;
     const choices = [
-      { label: "Trade rune supplies", action: () => openWizardShop() },
+      { label: "Trade sigil supplies", action: () => openSigilistShop() },
       { label: "Ask about essence", action: () => addChat("Elric says: mine essence in the tower, carry a talisman, then use an altar.") },
       { label: "Close", action: () => closeModal() },
     ];
     if (quest.state === "not-started") {
-      openDialogue(npc.name, ["The stones are humming again. Craft ten runes and I will admit that you are minimally mystical."], [
+      openDialogue(npc.name, ["The stones are humming again. Craft ten sigils and I will admit that you are minimally mystical."], [
         {
-          label: "Start Rune Mysteries",
+          label: "Start Sigil Mysteries",
           action: () => {
             quest.state = "started";
-            addInventory("rune_essence", 10);
-            addInventory("air_talisman", 1);
-            addChat("Quest started: Rune Mysteries.");
+            addInventory("glimmer_shard", 10);
+            addInventory("gale_focus", 1);
+            addChat("Quest started: Sigil Mysteries.");
             closeModal();
           },
         },
         ...choices,
       ]);
     } else if (quest.state === "started") {
-      const ready = state.stats.runesCrafted >= 10;
-      openDialogue(npc.name, [ready ? "Those runes are crude, but undeniably runes." : `Runes crafted: ${state.stats.runesCrafted}/10.`], [
+      const ready = state.stats.sigilsCrafted >= 10;
+      openDialogue(npc.name, [ready ? "Those sigils are crude, but undeniably sigils." : `Sigils crafted: ${state.stats.sigilsCrafted}/10.`], [
         {
           label: ready ? "Complete quest" : "Keep crafting",
           action: () => {
             if (ready) {
               quest.state = "completed";
-              addInventory("rune_pouch", 1);
-              addInventory("mind_talisman", 1);
-              addInventory("rune_essence", 12);
-              gainXp("Runecrafting", 160);
+              addInventory("sigil_satchel", 1);
+              addInventory("whisper_focus", 1);
+              addInventory("glimmer_shard", 12);
+              gainXp("Sigilcraft", 160);
               gainXp("Magic", 80);
-              addChat("Quest complete: Rune Mysteries.");
+              addChat("Quest complete: Sigil Mysteries.");
             }
             closeModal();
           },
@@ -3323,7 +3470,7 @@
               addInventory("mirthleaf_seed", 3);
               addInventory("compost", 2);
               gainXp("Farming", 180);
-              gainXp("Herblore", 120);
+              gainXp("Herbalism", 120);
               addChat("Quest complete: Garden Trouble.");
             }
             closeModal();
@@ -3366,14 +3513,14 @@
   }
 
   function cookDialogue(npc) {
-    const quest = state.quests.cooksErrand;
+    const quest = state.quests.lunchLedger;
     if (quest.state === "not-started") {
       openDialogue(npc.name, ["The banquet is ruined. I need cooked shrimp and logs for the range."], [
         {
-          label: "Start Cook's Errand",
+          label: "Start Lunch Ledger",
           action: () => {
             quest.state = "started";
-            addChat("Quest started: Cook's Errand.");
+            addChat("Quest started: Lunch Ledger.");
             closeModal();
           },
         },
@@ -3392,7 +3539,7 @@
               gainXp("Cooking", 150);
               gainXp("Woodcutting", 80);
               quest.state = "completed";
-              addChat("Quest complete: Cook's Errand.");
+              addChat("Quest complete: Lunch Ledger.");
             }
             closeModal();
           },
@@ -3427,7 +3574,7 @@
             if (ready) {
               quest.state = "completed";
               addInventory("coins", 120);
-              gainXp("Prayer", 220);
+              gainXp("Resolve", 220);
               addChat("Quest complete: Restless Bones.");
             }
             closeModal();
@@ -3436,7 +3583,7 @@
       ]);
     } else {
       openDialogue(npc.name, ["The graveyard is quieter now. The crypts, less so."], [
-        { label: "Ask about crypts", action: () => addChat(`Brother Alden says: wake each crypt brother, survive, then loot the chest. ${cryptStatusText()}.`) },
+        { label: "Ask about crypts", action: () => addChat(`Brother Alden says: wake each oath warden, survive, then loot the chest. ${cryptStatusText()}.`) },
         { label: "Close", action: () => closeModal() },
       ]);
     }
@@ -3525,36 +3672,36 @@
     }
   }
 
-  function slayerDialogue(npc) {
-    const task = state.slayer.task;
+  function vigilDialogue(npc) {
+    const task = state.vigil.task;
     const wightQuest = state.quests.wightHunt;
     const towerQuest = state.quests.towerWhispers;
     const lines = task
-      ? [`Your task is to kill ${task.remaining} more ${task.label}.`, `Streak: ${state.slayer.streak}. Points: ${state.slayer.points}.`]
+      ? [`Your task is to kill ${task.remaining} more ${task.label}.`, `Streak: ${state.vigil.streak}. Points: ${state.vigil.points}.`]
       : ["No task. That means you are currently wasting perfectly good violence."];
     const choices = [
       {
-        label: task ? "Ask about task" : "Get Slayer assignment",
+        label: task ? "Ask about task" : "Get Vigilance assignment",
         action: () => {
-          if (!state.slayer.task) assignSlayerTask();
-          else addChat(`The Slayer gem hums: ${task.remaining} ${task.label} left.`);
+          if (!state.vigil.task) assignVigilanceTask();
+          else addChat(`The Vigil glass hums: ${task.remaining} ${task.label} left.`);
           closeModal();
         },
       },
       {
         label: "Cancel task for 1 point",
         action: () => {
-          if (state.slayer.points >= 1 && state.slayer.task) {
-            state.slayer.points -= 1;
-            state.slayer.task = null;
-            addChat("Your Slayer task is cancelled.");
+          if (state.vigil.points >= 1 && state.vigil.task) {
+            state.vigil.points -= 1;
+            state.vigil.task = null;
+            addChat("Your Vigil contract is cancelled.");
           } else addChat("You cannot cancel right now.");
           closeModal();
         },
       },
       {
         label: "Rewards shop",
-        action: () => openSlayerShop(),
+        action: () => openVigilanceShop(),
       },
       {
         label: "Monster codex",
@@ -3566,22 +3713,22 @@
         label: "Wight hunt",
         action: () => {
           wightQuest.state = "started";
-          state.stats.deepWightsSlain = 0;
+          state.stats.hollowWightsSlain = 0;
           addChat("Quest started: Wight in the Hollow.");
           closeModal();
         },
       });
     } else if (wightQuest.state === "started") {
       choices.push({
-        label: state.stats.deepWightsSlain > 0 ? "Claim wight reward" : "Ask about wight",
+        label: state.stats.hollowWightsSlain > 0 ? "Claim wight reward" : "Ask about wight",
         action: () => {
-          if (state.stats.deepWightsSlain > 0) {
+          if (state.stats.hollowWightsSlain > 0) {
             wightQuest.state = "completed";
-            state.slayer.points += 3;
+            state.vigil.points += 3;
             addInventory("clue_scroll", 1);
-            gainXp("Slayer", 300);
+            gainXp("Vigilance", 300);
             addChat("Quest complete: Wight in the Hollow.");
-          } else addChat("Vann points toward Crawler Hollow: kill the Deep wight.");
+          } else addChat("Mara points toward Mire Hollow: kill the Hollow wight.");
           closeModal();
         },
       });
@@ -3591,26 +3738,26 @@
         label: "Tower whispers",
         action: () => {
           towerQuest.state = "started";
-          addInventory("earmuffs", 1);
+          addInventory("silence_hood", 1);
           addChat("Quest started: Tower of Whispers.");
           closeModal();
         },
       });
     } else if (towerQuest.state === "started") {
-      const ready = state.stats.bansheesSlain > 0 && inventoryCount("tower_key") > 0;
+      const ready = state.stats.keeningShadesSlain > 0 && inventoryCount("tower_key") > 0;
       choices.push({
         label: ready ? "Claim tower reward" : "Ask about tower",
         action: () => {
           if (ready) {
             removeItem(state.player.inventory, "tower_key", 1);
             towerQuest.state = "completed";
-            state.slayer.points += 2;
-            addInventory("nose_peg", 1);
-            addInventory("death_rune", 3);
-            gainXp("Slayer", 260);
+            state.vigil.points += 2;
+            addInventory("mire_charm", 1);
+            addInventory("grave_sigil", 3);
+            gainXp("Vigilance", 260);
             addChat("Quest complete: Tower of Whispers.");
           } else {
-            addChat("Vann says: wear earmuffs, kill a banshee, and bring me a tower key.");
+            addChat("Mara says: wear a silence hood, defeat a keening shade, and bring me a tower key.");
           }
           closeModal();
         },
@@ -3620,27 +3767,27 @@
     openDialogue(npc.name, lines, choices);
   }
 
-  function openSlayerShop() {
+  function openVigilanceShop() {
     state.modal = {
       type: "shop",
-      title: "Slayer Rewards",
-      currency: "slayer",
+      title: "Vigil Rewards",
+      currency: "vigil",
       rects: [],
       stock: [
-        { id: "broad_arrow", price: 1, qty: 35 },
-        { id: "bag_of_salt", price: 1, qty: 20 },
-        { id: "earmuffs", price: 1 },
-        { id: "nose_peg", price: 2 },
+        { id: "ward_arrow", price: 1, qty: 35 },
+        { id: "brine_charm", price: 1, qty: 20 },
+        { id: "silence_hood", price: 1 },
+        { id: "mire_charm", price: 2 },
         { id: "antipoison", price: 1 },
         { id: "clue_scroll", price: 2 },
-        { id: "amulet_of_accuracy", price: 3 },
-        { id: "slayer_helm", price: 5 },
+        { id: "surestrike_pendant", price: 3 },
+        { id: "vigil_helm", price: 5 },
       ],
     };
   }
 
-  function assignSlayerTask() {
-    const slayer = getLevel("Slayer");
+  function assignVigilanceTask() {
+    const vigil = getLevel("Vigilance");
     const combat = combatLevel();
     const pool = [
       { type: "giant_rat", label: "giant rats", amount: 6, minCombat: 1, xp: 30 },
@@ -3648,25 +3795,25 @@
       { type: "pasture_cow", label: "pasture cows", amount: 6, minCombat: 1, xp: 28 },
       { type: "field_imp", label: "field imps", amount: 6, minCombat: 4, xp: 45 },
       { type: "grave_skeleton", label: "grave skeletons", amount: 6, minCombat: 10, xp: 75 },
-      { type: "crawling_hand", label: "crawling hands", amount: 5, minCombat: 8, xp: 60 },
-      { type: "salt_slug", label: "salt slugs", amount: 5, minCombat: 12, xp: 80 },
-      { type: "cave_crawler", label: "cave crawlers", amount: 6, minCombat: 12, xp: 95 },
+      { type: "grasping_claw", label: "grasping claws", amount: 5, minCombat: 8, xp: 60 },
+      { type: "brine_leech", label: "brine leeches", amount: 5, minCombat: 12, xp: 80 },
+      { type: "mire_skitterer", label: "mire skitterers", amount: 6, minCombat: 12, xp: 95 },
       { type: "desert_scorpion", label: "desert scorpions", amount: 5, minCombat: 14, xp: 85 },
       { type: "highwayman", label: "highwaymen", amount: 5, minCombat: 16, xp: 95 },
       { type: "jungle_spider", label: "jungle spiders", amount: 8, minCombat: 16, xp: 105 },
-      { type: "dark_wizard", label: "dark wizards", amount: 6, minCombat: 18, xp: 110 },
-      { type: "banshee", label: "banshees", amount: 4, minCombat: 20, xp: 115 },
+      { type: "dusk_conjurer", label: "dusk conjurers", amount: 6, minCombat: 18, xp: 110 },
+      { type: "keening_shade", label: "keening shades", amount: 4, minCombat: 20, xp: 115 },
       { type: "moss_brute", label: "moss brutes", amount: 4, minCombat: 24, xp: 140 },
       { type: "hill_giant", label: "hill giants", amount: 4, minCombat: 24, xp: 145 },
-      { type: "black_knight", label: "black knights", amount: 4, minCombat: 28, xp: 175 },
-      { type: "deep_wight", label: "deep wights", amount: 3, minCombat: 30, xp: 220 },
-      { type: "aberrant_specter", label: "aberrant specters", amount: 2, minCombat: 42, xp: 260 },
-      { type: "lesser_demon", label: "lesser demons", amount: 2, minCombat: 38, xp: 260 },
-    ].filter((task) => combat >= task.minCombat || slayer >= Math.floor(task.minCombat / 2));
+      { type: "iron_oathbreaker", label: "iron oathbreakers", amount: 4, minCombat: 28, xp: 175 },
+      { type: "hollow_wight", label: "hollow wights", amount: 3, minCombat: 30, xp: 220 },
+      { type: "miasma_wraith", label: "miasma wraiths", amount: 2, minCombat: 42, xp: 260 },
+      { type: "rift_fiend", label: "rift fiends", amount: 2, minCombat: 38, xp: 260 },
+    ].filter((task) => combat >= task.minCombat || vigil >= Math.floor(task.minCombat / 2));
     const task = choice(pool);
-    state.slayer.task = { ...task, remaining: task.amount + Math.floor(random() * 4) };
-    gainXp("Slayer", Math.max(5, Math.floor(task.xp / 4)));
-    addChat(`New Slayer task: kill ${state.slayer.task.remaining} ${state.slayer.task.label}.`);
+    state.vigil.task = { ...task, remaining: task.amount + Math.floor(random() * 4) };
+    gainXp("Vigilance", Math.max(5, Math.floor(task.xp / 4)));
+    addChat(`New Vigil contract: kill ${state.vigil.task.remaining} ${state.vigil.task.label}.`);
   }
 
   function openDialogue(name, lines, choices) {
@@ -3692,16 +3839,16 @@
         { id: "bronze_arrow", price: 22, qty: 25 },
         { id: "knife", price: 13 },
         { id: "chisel", price: 18 },
-        { id: "lobster_pot", price: 28 },
-        { id: "bag_of_salt", price: 6, qty: 10 },
+        { id: "redclaw_cage", price: 28 },
+        { id: "brine_charm", price: 6, qty: 10 },
         { id: "feather", price: 15, qty: 30 },
         { id: "bow_string", price: 24 },
         { id: "wooden_shield", price: 24 },
         { id: "leather_body", price: 80 },
         { id: "raw_shrimp", price: 5 },
-        { id: "air_rune", price: 5, qty: 10 },
-        { id: "mind_rune", price: 4, qty: 10 },
-        { id: "chaos_rune", price: 55, qty: 3 },
+        { id: "gale_sigil", price: 5, qty: 10 },
+        { id: "whisper_sigil", price: 4, qty: 10 },
+        { id: "rift_sigil", price: 55, qty: 3 },
         { id: "energy_potion", price: 38 },
       ],
     };
@@ -3757,19 +3904,19 @@
     };
   }
 
-  function openWizardShop() {
+  function openSigilistShop() {
     state.modal = {
       type: "shop",
-      title: "Wizard Tower",
+      title: "Sigilist Spire",
       rects: [],
       stock: [
-        { id: "rune_essence", price: 18, qty: 8 },
-        { id: "air_talisman", price: 55 },
-        { id: "mind_talisman", price: 70 },
-        { id: "chaos_talisman", price: 260 },
-        { id: "law_talisman", price: 360 },
-        { id: "air_rune", price: 5, qty: 20 },
-        { id: "mind_rune", price: 4, qty: 20 },
+        { id: "glimmer_shard", price: 18, qty: 8 },
+        { id: "gale_focus", price: 55 },
+        { id: "whisper_focus", price: 70 },
+        { id: "rift_focus", price: 260 },
+        { id: "oath_focus", price: 360 },
+        { id: "gale_sigil", price: 5, qty: 20 },
+        { id: "whisper_sigil", price: 4, qty: 20 },
       ],
     };
   }
@@ -3777,13 +3924,13 @@
   function openIslandShop() {
     state.modal = {
       type: "shop",
-      title: "Karamel Trader",
+      title: "Saffron Trader",
       rects: [],
       stock: [
-        { id: "lobster_pot", price: 25 },
+        { id: "redclaw_cage", price: 25 },
         { id: "banana", price: 7, qty: 3 },
-        { id: "raw_lobster", price: 72 },
-        { id: "lobster", price: 118 },
+        { id: "raw_redclaw", price: 72 },
+        { id: "redclaw", price: 118 },
         { id: "antipoison", price: 52 },
         { id: "energy_potion", price: 42 },
       ],
@@ -3796,7 +3943,7 @@
       title: "Southport Supplies",
       rects: [],
       stock: [
-        { id: "lobster_pot", price: 24 },
+        { id: "redclaw_cage", price: 24 },
         { id: "raw_shrimp", price: 7, qty: 3 },
         { id: "raw_trout", price: 26 },
         { id: "bread", price: 9 },
@@ -3806,18 +3953,18 @@
     };
   }
 
-  function openCastleShop() {
+  function openBannerfallShop() {
     state.modal = {
       type: "shop",
-      title: "Castle Wars Rewards",
-      currency: "castle",
+      title: "Bannerfall Spoils",
+      currency: "banner",
       rects: [],
       stock: [
-        { id: "castle_bandage", price: 1, qty: 3 },
-        { id: "decorative_helm", price: 3 },
-        { id: "decorative_shield", price: 4 },
-        { id: "decorative_sword", price: 5 },
-        { id: "decorative_platebody", price: 7 },
+        { id: "banner_bandage", price: 1, qty: 3 },
+        { id: "banner_helm", price: 3 },
+        { id: "banner_shield", price: 4 },
+        { id: "banner_sword", price: 5 },
+        { id: "banner_platebody", price: 7 },
       ],
     };
   }
@@ -3845,22 +3992,22 @@
     else if (action === "cook") cookBestRawFish();
     else if (action === "pray") {
       state.player.hp = maxHp();
-      state.player.prayerPoints = maxPrayer();
-      addChat("You restore your Prayer points.");
+      state.player.resolvePoints = maxResolve();
+      addChat("You restore your Resolve points.");
     } else if (action === "smelt") smelt();
     else if (action === "smith") smith();
-    else if (action === "slayer") {
-      const master = state.npcs.find((npc) => npc.role === "slayer");
-      slayerDialogue(master);
-    } else if (action === "cave") addChat("A chill rises from the cave. The Deep wight waits beyond the crawlers.");
+    else if (action === "vigil") {
+      const master = state.npcs.find((npc) => npc.role === "vigil");
+      vigilDialogue(master);
+    } else if (action === "cave") addChat("A chill rises from the cave. The Hollow wight waits beyond the skitterers.");
     else if (action === "quests") {
       state.tab = "quests";
       addChat("The noticeboard lists the town's problems.");
     } else if (action === "fish") {
       const spot = nearestResource("fishing_spot");
       if (spot) resourceAction(spot);
-    } else if (action === "fish_lobster") {
-      const spot = nearestResource("lobster_spot");
+    } else if (action === "fish_redclaw") {
+      const spot = nearestResource("redclaw_spot");
       if (spot) resourceAction(spot);
     } else if (action === "banana") {
       pickBanana(obj);
@@ -3880,30 +4027,30 @@
       useCompostBin();
     } else if (action === "water") {
       fillEmptyVial();
-    } else if (action === "runecraft") {
-      craftRunes(obj);
+    } else if (action === "sigilcraft") {
+      craftSigils(obj);
     } else if (action === "tower_door") {
-      addChat("The Slayer Tower door groans open. Inside: hands, shrieks, and damp mistakes.");
+      addChat("The Gloamspire door groans open. Inside: hands, shrieks, and damp mistakes.");
     } else if (action === "tower_chest") {
       openTowerChest();
     } else if (action === "crypt") {
       summonCryptBrother(obj);
     } else if (action === "crypt_chest") {
       openCryptChest();
-    } else if (action === "castle_wars") {
-      startCastleWars();
-    } else if (action === "castle_flag") {
-      handleCastleFlag(obj);
-    } else if (action === "castle_supply") {
-      useCastleSupply();
-    } else if (action === "castle_scoreboard") {
-      addChat(castleWarsScoreText());
-    } else if (action === "wildy") {
-      addChat("The ditch marks Low Wilderness. Everything there hits harder.", "danger");
-    } else if (action === "chaos_altar") {
-      state.player.prayerPoints = maxPrayer();
+    } else if (action === "bannerfall") {
+      startBannerfall();
+    } else if (action === "banner_flag") {
+      handleBannerFlag(obj);
+    } else if (action === "banner_supply") {
+      useBannerSupply();
+    } else if (action === "banner_scoreboard") {
+      addChat(bannerfallScoreText());
+    } else if (action === "ash") {
+      addChat("The ditch marks Low Ash. Everything there hits harder.", "danger");
+    } else if (action === "rift_altar") {
+      state.player.resolvePoints = maxResolve();
       state.player.hp = Math.min(maxHp(), state.player.hp + 15);
-      addChat("Chaotic energy restores your Prayer.");
+      addChat("Rift energy restores your Resolve.");
     } else addChat(`You examine the ${obj.name}.`);
   }
 
@@ -3941,17 +4088,17 @@
     addChat("You cut strands of spider silk.", "loot");
   }
 
-  function castleWarsScoreText() {
-    const cw = state.castleWars;
-    if (!cw.active) return `Castle Wars idle. Tickets: ${inventoryCount("castle_ticket")}.`;
+  function bannerfallScoreText() {
+    const cw = state.bannerfall;
+    if (!cw.active) return `Bannerfall idle. Tokens: ${inventoryCount("banner_token")}.`;
     const seconds = Math.max(0, Math.ceil(cw.endsAt - state.time));
-    return `Castle Wars ${cw.score}-${cw.enemyScore}, ${seconds}s left${cw.flagHeld ? ", rival flag held" : ""}.`;
+    return `Bannerfall ${cw.score}-${cw.enemyScore}, ${seconds}s left${cw.flagHeld ? ", rival flag held" : ""}.`;
   }
 
-  function startCastleWars() {
-    normalizeCastleWarsState();
-    if (!state.castleWars.active) {
-      state.castleWars = {
+  function startBannerfall() {
+    normalizeBannerfallState();
+    if (!state.bannerfall.active) {
+      state.bannerfall = {
         active: true,
         score: 0,
         enemyScore: 0,
@@ -3961,12 +4108,12 @@
         supplyReadyAt: 0,
         lastReward: null,
       };
-      state.stats.castleWarsPlayed += 1;
+      state.stats.bannerfallPlayed += 1;
       gainXp("Agility", 35);
-      gainXp("Hitpoints", 25);
-      addChat("Castle Wars begins. Capture three flags or outscore the rival team.", "loot");
+      gainXp("Vitality", 25);
+      addChat("Bannerfall begins. Capture three flags or outscore the rival team.", "loot");
     } else {
-      addChat(castleWarsScoreText());
+      addChat(bannerfallScoreText());
     }
     state.player.x = 68.5;
     state.player.y = 28.5;
@@ -3976,39 +4123,39 @@
     closeModal();
   }
 
-  function updateCastleWars() {
-    const cw = state.castleWars;
+  function updateBannerfall() {
+    const cw = state.bannerfall;
     if (!cw.active) return;
     if (state.time >= cw.nextEnemyScore) {
       cw.enemyScore += 1;
       cw.nextEnemyScore = state.time + 45 + random() * 18;
-      addChat(`Rival team scores. ${castleWarsScoreText()}`, "danger");
+      addChat(`Rival team scores. ${bannerfallScoreText()}`, "danger");
     }
     if (cw.score >= 3 || cw.enemyScore >= 3 || state.time >= cw.endsAt) {
-      endCastleWars(cw.score > cw.enemyScore ? "win" : cw.score === cw.enemyScore ? "draw" : "loss");
+      endBannerfall(cw.score > cw.enemyScore ? "win" : cw.score === cw.enemyScore ? "draw" : "loss");
     }
   }
 
-  function endCastleWars(result) {
-    const cw = state.castleWars;
+  function endBannerfall(result) {
+    const cw = state.bannerfall;
     if (!cw.active) return;
-    const tickets = Math.max(1, cw.score * 2 + (result === "win" ? 3 : result === "draw" ? 2 : 1));
-    addInventory("castle_ticket", tickets);
-    if (result === "win") state.stats.castleWarsWon += 1;
-    cw.lastReward = `${tickets} tickets`;
+    const tokens = Math.max(1, cw.score * 2 + (result === "win" ? 3 : result === "draw" ? 2 : 1));
+    addInventory("banner_token", tokens);
+    if (result === "win") state.stats.bannerfallWon += 1;
+    cw.lastReward = `${tokens} tokens`;
     cw.active = false;
     cw.flagHeld = false;
     cw.endsAt = 0;
     cw.nextEnemyScore = 0;
     gainXp("Agility", 70 + cw.score * 35);
     gainXp("Defence", 55 + cw.score * 20);
-    addChat(`Castle Wars ${result}. You earn ${tickets} tickets.`, "loot");
+    addChat(`Bannerfall ${result}. You earn ${tokens} tokens.`, "loot");
   }
 
-  function handleCastleFlag(obj) {
-    const cw = state.castleWars;
+  function handleBannerFlag(obj) {
+    const cw = state.bannerfall;
     if (!cw.active) {
-      addChat("Talk to the Castle Squire or use the portal to join a match.");
+      addChat("Talk to the Banner Marshal or use the portal to join a match.");
       return;
     }
     if (obj.team === "enemy") {
@@ -4028,67 +4175,67 @@
     cw.flagHeld = false;
     cw.score += 1;
     cw.nextEnemyScore = Math.max(cw.nextEnemyScore, state.time + 28);
-    state.stats.castleFlagsCaptured += 1;
+    state.stats.bannersCaptured += 1;
     gainXp("Agility", 90);
     gainXp("Defence", 60);
     addFloatingText(state.player.x, state.player.y, "Flag captured!", "#f0d25d");
-    addChat(`Flag captured. ${castleWarsScoreText()}`, "loot");
+    addChat(`Flag captured. ${bannerfallScoreText()}`, "loot");
   }
 
-  function useCastleSupply() {
-    const cw = state.castleWars;
+  function useBannerSupply() {
+    const cw = state.bannerfall;
     if (!cw.active) {
-      addChat("Castle supplies are only handed out during a match.");
+      addChat("Bannerfall supplies are only handed out during a match.");
       return;
     }
     if (state.time < cw.supplyReadyAt) {
       addChat("The supply table is being restocked.");
       return;
     }
-    if (!addInventory("castle_bandage", 3)) return;
+    if (!addInventory("banner_bandage", 3)) return;
     state.player.runEnergy = Math.min(100, state.player.runEnergy + 15);
     cw.supplyReadyAt = state.time + 22;
     addChat("You grab bandages and catch your breath.");
   }
 
-  function runePouchText() {
-    return `${state.runePouch?.essence || 0}/${state.runePouch?.capacity || 12} essence`;
+  function sigilPouchText() {
+    return `${state.sigilPouch?.essence || 0}/${state.sigilPouch?.capacity || 12} essence`;
   }
 
-  function handleRunePouch() {
+  function handleSigilPouch() {
     normalizePlayerState();
-    if (state.runePouch.essence > 0 && inventoryCount("rune_essence") === 0) {
-      const amount = state.runePouch.essence;
-      if (addInventory("rune_essence", amount)) {
-        state.runePouch.essence = 0;
-        addChat(`You empty ${formatItem("rune_essence", amount)} from the pouch.`);
+    if (state.sigilPouch.essence > 0 && inventoryCount("glimmer_shard") === 0) {
+      const amount = state.sigilPouch.essence;
+      if (addInventory("glimmer_shard", amount)) {
+        state.sigilPouch.essence = 0;
+        addChat(`You empty ${formatItem("glimmer_shard", amount)} from the pouch.`);
       }
       return;
     }
-    const space = state.runePouch.capacity - state.runePouch.essence;
+    const space = state.sigilPouch.capacity - state.sigilPouch.essence;
     if (space <= 0) {
-      addChat(`Your rune pouch is full (${runePouchText()}).`);
+      addChat(`Your sigil pouch is full (${sigilPouchText()}).`);
       return;
     }
-    const amount = Math.min(space, inventoryCount("rune_essence"));
+    const amount = Math.min(space, inventoryCount("glimmer_shard"));
     if (amount <= 0) {
-      addChat(`Rune pouch: ${runePouchText()}.`);
+      addChat(`Sigil satchel: ${sigilPouchText()}.`);
       return;
     }
-    removeItem(state.player.inventory, "rune_essence", amount);
-    state.runePouch.essence += amount;
-    addChat(`You store ${formatItem("rune_essence", amount)} in the pouch.`);
+    removeItem(state.player.inventory, "glimmer_shard", amount);
+    state.sigilPouch.essence += amount;
+    addChat(`You store ${formatItem("glimmer_shard", amount)} in the pouch.`);
   }
 
   function hasTalisman(recipe) {
     return inventoryCount(recipe.talisman) > 0;
   }
 
-  function craftRunes(obj) {
-    const recipe = RUNECRAFTING_RECIPES[obj.rune];
+  function craftSigils(obj) {
+    const recipe = SIGILCRAFT_RECIPES[obj.sigil];
     if (!recipe) return;
-    if (getLevel("Runecrafting") < recipe.level) {
-      addChat(`You need Runecrafting level ${recipe.level} for ${recipe.name.toLowerCase()} runes.`);
+    if (getLevel("Sigilcraft") < recipe.level) {
+      addChat(`You need Sigilcraft level ${recipe.level} for ${recipe.name.toLowerCase()} sigils.`);
       return;
     }
     if (!hasTalisman(recipe)) {
@@ -4096,29 +4243,29 @@
       return;
     }
     normalizePlayerState();
-    const carried = inventoryCount("rune_essence");
-    const pouch = inventoryCount("rune_pouch") > 0 ? state.runePouch.essence : 0;
+    const carried = inventoryCount("glimmer_shard");
+    const pouch = inventoryCount("sigil_satchel") > 0 ? state.sigilPouch.essence : 0;
     const essence = carried + pouch;
     if (essence <= 0) {
-      addChat("You need rune essence.");
+      addChat("You need sigil essence.");
       return;
     }
-    const hasRuneSlot = state.player.inventory.some((item) => !item || item.id === recipe.rune);
-    if (!hasRuneSlot && carried === 0) {
-      addChat("You need a free inventory slot for the runes.");
+    const hasSigilSlot = state.player.inventory.some((item) => !item || item.id === recipe.sigil);
+    if (!hasSigilSlot && carried === 0) {
+      addChat("You need a free inventory slot for the sigils.");
       return;
     }
-    if (carried > 0) removeItem(state.player.inventory, "rune_essence", carried);
-    if (pouch > 0) state.runePouch.essence = 0;
-    const multiplier = Math.max(1, 1 + Math.floor(Math.max(0, effectiveLevel("Runecrafting") - recipe.level) / recipe.multipleEvery));
+    if (carried > 0) removeItem(state.player.inventory, "glimmer_shard", carried);
+    if (pouch > 0) state.sigilPouch.essence = 0;
+    const multiplier = Math.max(1, 1 + Math.floor(Math.max(0, effectiveLevel("Sigilcraft") - recipe.level) / recipe.multipleEvery));
     const qty = essence * multiplier;
-    addInventory(recipe.rune, qty);
-    gainXp("Runecrafting", recipe.xp * essence);
-    state.stats.runesCrafted += qty;
-    const statKey = `${obj.rune}RunesCrafted`;
+    addInventory(recipe.sigil, qty);
+    gainXp("Sigilcraft", recipe.xp * essence);
+    state.stats.sigilsCrafted += qty;
+    const statKey = `${obj.sigil}SigilsCrafted`;
     if (typeof state.stats[statKey] === "number") state.stats[statKey] += qty;
-    addFloatingText(state.player.x, state.player.y, `+${qty} ${ITEMS[recipe.rune].icon}`, recipe.color);
-    addChat(`You bind ${formatItem(recipe.rune, qty)} from ${formatItem("rune_essence", essence)}.`, "loot");
+    addFloatingText(state.player.x, state.player.y, `+${qty} ${ITEMS[recipe.sigil].icon}`, recipe.color);
+    addChat(`You bind ${formatItem(recipe.sigil, qty)} from ${formatItem("glimmer_shard", essence)}.`, "loot");
     playSfx("spell");
   }
 
@@ -4158,11 +4305,11 @@
         xp: brother.hp * 3,
         aggro: 7,
         respawn: 9999,
-        slayerType: "crypt_brother",
+        vigilType: "crypt_brother",
         cryptBrother: key,
         despawnOnDeath: true,
       },
-      [["big_bones", 1, 1], ["death_rune", 2 + Math.floor(random() * 3), 0.72], ["ancient_page", 1, 0.08]]
+      [["big_bones", 1, 1], ["grave_sigil", 2 + Math.floor(random() * 3), 0.72], ["ancient_page", 1, 0.08]]
     );
     state.player.combatTarget = enemy.id;
     addChat(`${brother.name} rises from the slab. Weakness: ${brother.weakness}.`, "danger");
@@ -4174,7 +4321,7 @@
     normalizeCryptState();
     if (!state.crypt.defeated.includes(enemy.cryptBrother)) state.crypt.defeated.push(enemy.cryptBrother);
     state.stats.cryptWightsDefeated += 1;
-    gainXp("Prayer", 55);
+    gainXp("Resolve", 55);
     addChat(`Crypt progress: ${cryptStatusText()}.`);
     if (state.crypt.defeated.length >= Object.keys(CRYPT_BROTHERS).length) {
       addChat("The crypt chest clicks open somewhere below the graveyard.", "loot");
@@ -4190,12 +4337,12 @@
       return;
     }
     const coins = 140 + Math.floor(random() * 220) + state.crypt.chestsOpened * 12;
-    const deathRunes = 3 + Math.floor(random() * 7);
-    const chaosRunes = 5 + Math.floor(random() * 10);
+    const graveSigils = 3 + Math.floor(random() * 7);
+    const riftSigils = 5 + Math.floor(random() * 10);
     addInventory("coins", coins);
-    addInventory("death_rune", deathRunes);
-    addInventory("chaos_rune", chaosRunes);
-    if (random() > 0.55) addInventory("law_rune", 1 + Math.floor(random() * 3));
+    addInventory("grave_sigil", graveSigils);
+    addInventory("rift_sigil", riftSigils);
+    if (random() > 0.55) addInventory("oath_sigil", 1 + Math.floor(random() * 3));
     if (random() > 0.7) addInventory("reward_casket", 1);
     let rare = null;
     const rareRoll = random();
@@ -4206,7 +4353,7 @@
     else if (rareRoll > 0.82) rare = "crypt_helm";
     else if (rareRoll > 0.7) rare = "ancient_page";
     if (rare) addInventory(rare, 1);
-    gainXp("Prayer", 120);
+    gainXp("Resolve", 120);
     gainXp("Magic", 90);
     state.crypt.chestsOpened += 1;
     state.crypt.lastReward = rare ? ITEMS[rare].name : `${coins} coins`;
@@ -4214,13 +4361,13 @@
     state.crypt.awakened = [];
     state.crypt.defeated = [];
     state.enemies = state.enemies.filter((enemy) => !enemy.cryptBrother || enemy.hp > 0);
-    addChat(`You loot the crypt chest: ${coins} coins, runes${rare ? `, and ${ITEMS[rare].name}` : ""}.`, "loot");
+    addChat(`You loot the crypt chest: ${coins} coins, sigils${rare ? `, and ${ITEMS[rare].name}` : ""}.`, "loot");
     playSfx("loot");
   }
 
   function openTowerChest() {
     if (inventoryCount("tower_key") < 1) {
-      addChat("The Slayer Tower chest needs a tower key.");
+      addChat("The Gloamspire chest needs a tower key.");
       return;
     }
     removeItem(state.player.inventory, "tower_key", 1);
@@ -4231,18 +4378,18 @@
     let rare = null;
     if (roll > 0.94) rare = "mystic_wand";
     else if (roll > 0.84) rare = "ghostly_robe";
-    else if (roll > 0.68) addInventory("death_rune", 2 + Math.floor(random() * 4));
+    else if (roll > 0.68) addInventory("grave_sigil", 2 + Math.floor(random() * 4));
     else if (roll > 0.48) addInventory("clue_scroll", 1);
     else if (roll > 0.3) addInventory("antipoison", 1);
     if (rare) addInventory(rare, 1);
     state.stats.towerChestsOpened += 1;
-    gainXp("Slayer", 90);
-    addChat(`You open the Slayer Tower chest: ${coins} coins, ectoplasm${rare ? `, and ${ITEMS[rare].name}` : ""}.`, "loot");
+    gainXp("Vigilance", 90);
+    addChat(`You open the Gloamspire chest: ${coins} coins, ectoplasm${rare ? `, and ${ITEMS[rare].name}` : ""}.`, "loot");
     playSfx("loot");
   }
 
   function isUndeadEnemy(enemy) {
-    return Boolean(enemy && (enemy.type.includes("wight") || enemy.type.includes("skeleton") || enemy.slayerType === "crypt_brother"));
+    return Boolean(enemy && (enemy.type.includes("wight") || enemy.type.includes("skeleton") || enemy.vigilType === "crypt_brother"));
   }
 
   function cropAge(patch) {
@@ -4370,42 +4517,42 @@
   function cleanHerb(slot) {
     const item = state.player.inventory[slot];
     if (!item || item.id !== "grimy_mirthleaf") return;
-    if (getLevel("Herblore") < 1) {
-      addChat("You need Herblore level 1 to clean that herb.");
+    if (getLevel("Herbalism") < 1) {
+      addChat("You need Herbalism level 1 to clean that herb.");
       return;
     }
     removeSlot(state.player.inventory, slot, 1);
     addInventory("clean_mirthleaf", 1);
-    gainXp("Herblore", 12);
+    gainXp("Herbalism", 12);
     state.stats.herbsCleaned += 1;
     addChat("You clean the grimy mirthleaf.");
   }
 
-  function mixHerblorePotion() {
-    if (getLevel("Herblore") < 1) {
-      addChat("You need Herblore level 1 to mix this potion.");
+  function mixHerbalismPotion() {
+    if (getLevel("Herbalism") < 1) {
+      addChat("You need Herbalism level 1 to mix this potion.");
       return;
     }
     if (inventoryCount("clean_mirthleaf") < 1 || inventoryCount("vial_of_water") < 1) {
       addChat("You need mirthleaf and a vial of water.");
       return;
     }
-    if (getLevel("Herblore") >= 5 && inventoryCount("spider_silk") > 0) {
+    if (getLevel("Herbalism") >= 5 && inventoryCount("spider_silk") > 0) {
       removeItem(state.player.inventory, "clean_mirthleaf", 1);
       removeItem(state.player.inventory, "vial_of_water", 1);
       removeItem(state.player.inventory, "spider_silk", 1);
       addInventory("antipoison", 1);
-      gainXp("Herblore", 58);
+      gainXp("Herbalism", 58);
       state.stats.potionsMixed += 1;
       addChat("You mix an antipoison.", "loot");
       return;
     }
-    if (getLevel("Herblore") >= 8 && inventoryCount("potato") > 0) {
+    if (getLevel("Herbalism") >= 8 && inventoryCount("potato") > 0) {
       removeItem(state.player.inventory, "clean_mirthleaf", 1);
       removeItem(state.player.inventory, "vial_of_water", 1);
       removeItem(state.player.inventory, "potato", 1);
       addInventory("energy_potion", 1);
-      gainXp("Herblore", 62);
+      gainXp("Herbalism", 62);
       state.stats.potionsMixed += 1;
       addChat("You mix a lumpy energy potion.", "loot");
       return;
@@ -4413,7 +4560,7 @@
     removeItem(state.player.inventory, "clean_mirthleaf", 1);
     removeItem(state.player.inventory, "vial_of_water", 1);
     addInventory("attack_potion", 1);
-    gainXp("Herblore", 48);
+    gainXp("Herbalism", 48);
     state.stats.potionsMixed += 1;
     addChat("You mix a murky attack potion.", "loot");
   }
@@ -4511,35 +4658,35 @@
 
   function stealFromStall(obj) {
     const level = obj.level || 1;
-    if (getLevel("Thieving") < level) {
-      addChat(`You need Thieving level ${level} for that stall.`);
+    if (getLevel("Pilfering") < level) {
+      addChat(`You need Pilfering level ${level} for that stall.`);
       return;
     }
     if (obj.depletedUntil && obj.depletedUntil > state.time) {
       addChat("The stall owner is watching it closely.");
       return;
     }
-    const success = random() < clamp(0.42 + effectiveLevel("Thieving") * 0.025, 0.42, 0.9);
+    const success = random() < clamp(0.42 + effectiveLevel("Pilfering") * 0.025, 0.42, 0.9);
     obj.depletedUntil = state.time + 5;
     if (!success) {
       const hit = 4 + Math.floor(random() * 10);
       state.player.hp = Math.max(1, state.player.hp - hit);
       state.player.damageFlash = 0.35;
       addFloatingText(state.player.x, state.player.y, `${hit}`, "#ff5858");
-      gainXp("Thieving", 8);
+      gainXp("Pilfering", 8);
       addChat("A guard clips you for trying that.");
       return;
     }
     const roll = random();
     const reward = roll > 0.82 ? ["silk", 1] : roll > 0.6 ? ["fur", 1] : roll > 0.28 ? ["cake", 1] : ["coins", 12 + Math.floor(random() * 24)];
     addInventory(reward[0], reward[1]);
-    gainXp("Thieving", reward[0] === "silk" ? 38 : reward[0] === "fur" ? 32 : 24);
+    gainXp("Pilfering", reward[0] === "silk" ? 38 : reward[0] === "fur" ? 32 : 24);
     state.stats.stallsStolen += 1;
     addChat(`You steal ${formatItem(reward[0], reward[1])}.`, "loot");
   }
 
   function cookBestRawFish() {
-    const itemId = inventoryCount("raw_lobster") > 0 ? "raw_lobster" : inventoryCount("raw_trout") > 0 ? "raw_trout" : inventoryCount("raw_beef") > 0 ? "raw_beef" : inventoryCount("raw_chicken") > 0 ? "raw_chicken" : inventoryCount("raw_shrimp") > 0 ? "raw_shrimp" : null;
+    const itemId = inventoryCount("raw_redclaw") > 0 ? "raw_redclaw" : inventoryCount("raw_trout") > 0 ? "raw_trout" : inventoryCount("raw_beef") > 0 ? "raw_beef" : inventoryCount("raw_chicken") > 0 ? "raw_chicken" : inventoryCount("raw_shrimp") > 0 ? "raw_shrimp" : null;
     if (!itemId) {
       addChat("You need raw food to cook.");
       return;
@@ -4555,7 +4702,7 @@
     } else {
       addInventory(data.cookTo);
       gainXp("Cooking", data.cookingXp);
-      if (data.cookTo === "lobster") state.stats.lobstersCooked += 1;
+      if (data.cookTo === "redclaw") state.stats.redclawsCooked += 1;
       addChat(`You cook the ${ITEMS[data.cookTo].name}.`);
     }
   }
@@ -4647,7 +4794,7 @@
       }
       removeItem(state.player.inventory, "gold_bar", 1);
       removeItem(state.player.inventory, "cut_gem", 1);
-      addInventory("power_amulet", 1);
+      addInventory("prism_pendant", 1);
       gainXp("Crafting", 135);
       state.stats.jewelryCrafted += 1;
       addChat("You craft a power amulet.", "loot");
@@ -4689,12 +4836,12 @@
       return;
     }
     if (state.modal?.type === "shop") {
-      if (state.modal.currency === "slayer") {
-        addChat("The Slayer Master only takes points.");
+      if (state.modal.currency === "vigil") {
+        addChat("The Huntwarden only takes points.");
         return;
       }
-      if (state.modal.currency === "castle") {
-        addChat("The squire only takes tickets.");
+      if (state.modal.currency === "banner") {
+        addChat("The squire only takes tokens.");
         return;
       }
       const value = Math.max(1, Math.floor((data.value || 1) * 0.45));
@@ -4706,11 +4853,11 @@
     if (item.id === "grimy_mirthleaf") {
       cleanHerb(slot);
     } else if (item.id === "clean_mirthleaf" || item.id === "vial_of_water") {
-      mixHerblorePotion();
-    } else if (item.id === "rune_pouch") {
-      handleRunePouch();
+      mixHerbalismPotion();
+    } else if (item.id === "sigil_satchel") {
+      handleSigilPouch();
     } else if (item.id === "ancient_page") {
-      addChat(`Ancient page: wake the brothers, keep your Prayer close, loot once. ${cryptStatusText()}.`);
+      addChat(`Ancient page: wake the brothers, keep your Resolve close, loot once. ${cryptStatusText()}.`);
     } else if (item.id === "empty_vial") {
       const nearWell = state.scenery.some((obj) => obj.action === "water" && dist(obj, state.player) < 3);
       if (nearWell) fillEmptyVial();
@@ -4730,7 +4877,7 @@
       equip(slot);
     } else if (item.id === "bones" || item.id === "big_bones") {
       removeSlot(state.player.inventory, slot, 1);
-      gainXp("Prayer", item.id === "big_bones" ? 135 : 45);
+      gainXp("Resolve", item.id === "big_bones" ? 135 : 45);
       if (state.quests.restlessBones.state === "started") state.stats.bonesBuried += 1;
       addChat("You bury the bones.");
     } else if (item.id === "knife") {
@@ -4751,14 +4898,14 @@
       }
     } else if (item.id === "spider_silk") {
       weaveSpiderCape();
-    } else if (item.id === "raw_shrimp" || item.id === "raw_trout" || item.id === "raw_beef" || item.id === "raw_chicken" || item.id === "raw_lobster") {
+    } else if (item.id === "raw_shrimp" || item.id === "raw_trout" || item.id === "raw_beef" || item.id === "raw_chicken" || item.id === "raw_redclaw") {
       const nearRange = state.scenery.some((obj) => obj.action === "cook" && dist(obj, state.player) < 3);
       const nearFire = state.fires.some((fire) => dist(fire, state.player) < 2.5);
       if (nearRange || nearFire) cookBestRawFish();
       else addChat("Find a range or fire to cook that.");
-    } else if (item.id === "slayer_gem") {
-      if (state.slayer.task) addChat(`Slayer gem: ${state.slayer.task.remaining} ${state.slayer.task.label} left.`);
-      else addChat("Slayer gem: no task assigned.");
+    } else if (item.id === "vigil_glass") {
+      if (state.vigil.task) addChat(`Vigil glass: ${state.vigil.task.remaining} ${state.vigil.task.label} left.`);
+      else addChat("Vigil glass: no task assigned.");
       openBestiary();
     } else if (item.id === "clue_scroll") {
       readClueScroll(slot);
@@ -4783,7 +4930,7 @@
         { id: "hollow", hint: "Under the damp cave mouth, legs skitter in the dark.", x: 68, y: 43, radius: 4.2, xp: 150 },
         { id: "tower", hint: "Where a northern tower whispers through wool and rotten air.", x: 72, y: 12, radius: 3.2, xp: 170 },
         { id: "moss", hint: "The green brutes guard a quiet western wood.", x: 15, y: 17, radius: 4.8, xp: 180 },
-        { id: "chaos", hint: "Where purple stone hums beyond the ditch.", x: 11, y: 12, radius: 4.2, xp: 210 },
+        { id: "rift", hint: "Where purple stone hums beyond the ditch.", x: 11, y: 12, radius: 4.2, xp: 210 },
         { id: "southport", hint: "At the far south, tarred planks count every fish tale.", x: 64, y: 97, radius: 4.2, xp: 190 },
         { id: "dunes", hint: "A dry waystone watches claws and toll roads.", x: 97, y: 45, radius: 4.2, xp: 205 },
         { id: "ridge", hint: "Cold stones stack where the north road runs out.", x: 95, y: 13, radius: 3.8, xp: 220 },
@@ -4811,15 +4958,15 @@
     const coins = 70 + Math.floor(random() * 180);
     addInventory("coins", coins);
     const roll = random();
-    if (roll > 0.985) addInventory(choice(["rune_scimitar", "giant_club"]), 1);
+    if (roll > 0.985) addInventory(choice(["aurel_sabre", "giant_club"]), 1);
     else if (roll > 0.94) addInventory("team_cape", 1);
-    else if (roll > 0.92) addInventory("slayer_helm", 1);
+    else if (roll > 0.92) addInventory("vigil_helm", 1);
     else if (roll > 0.88) addInventory(choice(["ghostly_robe", "mystic_wand"]), 1);
-    else if (roll > 0.78) addInventory(choice(["amulet_of_accuracy", "power_amulet", "pirate_cutlass"]), 1);
-    else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster", "limpwurt_root", "scorpion_tail"]), 1);
+    else if (roll > 0.78) addInventory(choice(["surestrike_pendant", "prism_pendant", "pirate_cutlass"]), 1);
+    else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar", "raw_redclaw", "limpwurt_root", "scorpion_tail"]), 1);
     else if (roll > 0.46) addInventory(choice(["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "bow_string"]), 1);
-    else if (roll > 0.28) addInventory("death_rune", 2 + Math.floor(random() * 5));
-    else addInventory("broad_arrow", 20 + Math.floor(random() * 25));
+    else if (roll > 0.28) addInventory("grave_sigil", 2 + Math.floor(random() * 5));
+    else addInventory("ward_arrow", 20 + Math.floor(random() * 25));
     gainXp("Crafting", 60);
     addChat(`You open the casket and find ${coins} coins and treasure.`, "loot");
   }
@@ -4876,19 +5023,19 @@
         addChat("No nearby target.");
         return;
       }
-      if (inventoryCount("air_rune") < 1 || inventoryCount("mind_rune") < 1) {
-        addChat("You need air and mind runes.");
+      if (inventoryCount("gale_sigil") < 1 || inventoryCount("whisper_sigil") < 1) {
+        addChat("You need gale and whisper sigils.");
         return;
       }
-      removeItem(state.player.inventory, "air_rune", 1);
-      removeItem(state.player.inventory, "mind_rune", 1);
+      removeItem(state.player.inventory, "gale_sigil", 1);
+      removeItem(state.player.inventory, "whisper_sigil", 1);
       const hit = Math.floor(random() * (effectiveLevel("Magic") / 2 + 4));
       enemy.hp = Math.max(0, enemy.hp - hit);
       enemy.hitFlash = 0.4;
       playSfx("spell");
       gainXp("Magic", 14 + hit * 2);
       addFloatingText(enemy.x, enemy.y, `${hit}`, "#9ee8ff");
-      addChat(`You cast Wind Poke on the ${enemy.name}.`);
+      addChat(`You cast Gale Poke on the ${enemy.name}.`);
       if (enemy.hp <= 0) killEnemy(enemy);
     } else if (spell === "fire") {
       const enemy = nearestAliveEnemy(7);
@@ -4896,12 +5043,12 @@
         addChat("No nearby target.");
         return;
       }
-      if (inventoryCount("air_rune") < 2 || inventoryCount("chaos_rune") < 1) {
-        addChat("You need 2 air runes and 1 chaos rune.");
+      if (inventoryCount("gale_sigil") < 2 || inventoryCount("rift_sigil") < 1) {
+        addChat("You need 2 gale sigils and 1 rift sigil.");
         return;
       }
-      removeItem(state.player.inventory, "air_rune", 2);
-      removeItem(state.player.inventory, "chaos_rune", 1);
+      removeItem(state.player.inventory, "gale_sigil", 2);
+      removeItem(state.player.inventory, "rift_sigil", 1);
       const staffBoost = ITEMS[state.player.equipment.weapon]?.magicBoost ? 2 : 0;
       const hit = Math.floor(random() * (effectiveLevel("Magic") / 2 + 8 + staffBoost));
       enemy.hp = Math.max(0, enemy.hp - hit);
@@ -4909,11 +5056,11 @@
       playSfx("spell");
       gainXp("Magic", 28 + hit * 2.2);
       addFloatingText(enemy.x, enemy.y, `${hit}`, "#ff9d4d");
-      addChat(`You cast Fire Bolt on the ${enemy.name}.`);
+      addChat(`You cast Cinder Bolt on the ${enemy.name}.`);
       if (enemy.hp <= 0) killEnemy(enemy);
     } else if (spell === "crumble") {
       if (getLevel("Magic") < 20) {
-        addChat("You need Magic level 20 to crumble undead.");
+        addChat("You need Magic level 20 to rattle bones.");
         return;
       }
       const enemy = nearestAliveEnemy(7);
@@ -4925,24 +5072,24 @@
         addChat("That spell only bites undead things.");
         return;
       }
-      if (inventoryCount("chaos_rune") < 1 || inventoryCount("death_rune") < 1) {
-        addChat("You need 1 chaos rune and 1 death rune.");
+      if (inventoryCount("rift_sigil") < 1 || inventoryCount("grave_sigil") < 1) {
+        addChat("You need 1 rift sigil and 1 grave sigil.");
         return;
       }
-      removeItem(state.player.inventory, "chaos_rune", 1);
-      removeItem(state.player.inventory, "death_rune", 1);
+      removeItem(state.player.inventory, "rift_sigil", 1);
+      removeItem(state.player.inventory, "grave_sigil", 1);
       const staffBoost = ITEMS[state.player.equipment.weapon]?.magicBoost ? 3 : 0;
       const hit = 2 + Math.floor(random() * (effectiveLevel("Magic") / 2 + 10 + staffBoost));
       enemy.hp = Math.max(0, enemy.hp - hit);
       enemy.hitFlash = 0.5;
-      state.player.prayerPoints = Math.min(maxPrayer(), state.player.prayerPoints + 1.5);
+      state.player.resolvePoints = Math.min(maxResolve(), state.player.resolvePoints + 1.5);
       playSfx("spell");
       gainXp("Magic", 35 + hit * 2.4);
       addFloatingText(enemy.x, enemy.y, `${hit}`, "#d6f0ee");
-      addChat(`You crumble the ${enemy.name}.`);
+      addChat(`You rattle the bones of the ${enemy.name}.`);
       if (enemy.hp <= 0) killEnemy(enemy);
     } else if (spell === "alchemy") {
-      const slot = state.player.inventory.findIndex((item) => item && !["coins", "air_rune", "mind_rune", "chaos_rune", "law_rune", "death_rune"].includes(item.id));
+      const slot = state.player.inventory.findIndex((item) => item && !["coins", "gale_sigil", "whisper_sigil", "rift_sigil", "oath_sigil", "grave_sigil"].includes(item.id));
       if (slot < 0) {
         addChat("Nothing suitable to alchemise.");
         return;
@@ -5147,7 +5294,7 @@
       ctx.ellipse(screen.x, screen.y - 4, 15 + Math.sin(state.time * 4) * 2, 6, 0, 0, Math.PI * 2);
       ctx.stroke();
       drawText("fish", screen.x, screen.y - 18, { size: 10, color: "#e8fbff", outline: "#06384e", align: "center" });
-    } else if (resource.type === "lobster_spot") {
+    } else if (resource.type === "redclaw_spot") {
       const bob = Math.sin(state.time * 3 + resource.id) * 2;
       ctx.strokeStyle = "#ffded1";
       ctx.lineWidth = 2;
@@ -5213,10 +5360,10 @@
       ctx.fillRect(screen.x - 20, screen.y - 18, 40, 10);
       ctx.fillRect(screen.x - 8, screen.y - 10, 16, 15);
       ctx.fillRect(screen.x - 18, screen.y + 2, 36, 8);
-    } else if (obj.type === "slayer_board") {
+    } else if (obj.type === "vigil_board") {
       drawBox(screen.x, screen.y - 42, 62, 54, "#4f301f", "#1c0e08");
       drawText("SLAYER", screen.x, screen.y - 44, { color: "#8ff0ff", outline: "#000", size: 10, align: "center" });
-    } else if (obj.type === "slayer_tower") {
+    } else if (obj.type === "vigil_tower") {
       drawBox(screen.x, screen.y - 56, 76, 92, "#5a5d5f", "#17191a");
       ctx.fillStyle = "#303234";
       ctx.fillRect(screen.x - 20, screen.y - 34, 40, 70);
@@ -5260,7 +5407,7 @@
       ctx.strokeStyle = "#1a120a";
       ctx.strokeRect(screen.x - 23, screen.y - 35, 46, 8);
       drawText(`${state.crypt?.defeated?.length || 0}/3`, screen.x, screen.y - 45, { color: "#ffd86b", outline: "#000", size: 10, align: "center" });
-    } else if (obj.type === "castle_portal") {
+    } else if (obj.type === "banner_portal") {
       drawBox(screen.x, screen.y - 22, 68, 46, "#5c4226", "#1c1008");
       ctx.fillStyle = "#243c8f";
       ctx.beginPath();
@@ -5268,7 +5415,7 @@
       ctx.arc(screen.x + 16, screen.y - 26, 9 + Math.cos(state.time * 4) * 2, 0, Math.PI * 2);
       ctx.fill();
       drawText("CW", screen.x, screen.y - 50, { color: "#f0d25d", outline: "#000", size: 12, align: "center" });
-    } else if (obj.type === "castle_flag") {
+    } else if (obj.type === "banner_flag") {
       const home = obj.team === "home";
       ctx.strokeStyle = "#2b1a0a";
       ctx.lineWidth = 4;
@@ -5281,18 +5428,18 @@
       ctx.strokeStyle = "#111";
       ctx.strokeRect(screen.x + 2, screen.y - 58, 34, 20);
       drawText(home ? "BOON" : "RIVAL", screen.x + 19, screen.y - 44, { color: "#fff4c6", outline: "#000", size: 8, align: "center" });
-      if (state.castleWars.flagHeld && home) drawText("SCORE", screen.x, screen.y - 70, { color: "#f0d25d", outline: "#000", size: 9, align: "center" });
-    } else if (obj.type === "castle_supply") {
+      if (state.bannerfall.flagHeld && home) drawText("SCORE", screen.x, screen.y - 70, { color: "#f0d25d", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "banner_supply") {
       drawBox(screen.x, screen.y - 18, 72, 28, "#7c5532", "#231309");
       ctx.fillStyle = "#efe0c0";
       ctx.fillRect(screen.x - 22, screen.y - 36, 18, 10);
       ctx.fillStyle = "#d24d4d";
       ctx.fillRect(screen.x + 5, screen.y - 35, 22, 8);
       drawText("SUPPLY", screen.x, screen.y - 48, { color: "#f0d25d", outline: "#000", size: 9, align: "center" });
-    } else if (obj.type === "castle_scoreboard") {
+    } else if (obj.type === "banner_scoreboard") {
       drawBox(screen.x, screen.y - 36, 72, 50, "#3c2a18", "#150c05");
       drawText("CASTLE", screen.x, screen.y - 53, { color: "#f0d25d", outline: "#000", size: 9, align: "center" });
-      drawText(`${state.castleWars.score}-${state.castleWars.enemyScore}`, screen.x, screen.y - 30, { color: "#ffffff", outline: "#000", size: 14, align: "center" });
+      drawText(`${state.bannerfall.score}-${state.bannerfall.enemyScore}`, screen.x, screen.y - 30, { color: "#ffffff", outline: "#000", size: 14, align: "center" });
     } else if (obj.type === "well") {
       drawBox(screen.x, screen.y - 26, 42, 34, "#767065", "#2c2925");
       ctx.strokeStyle = "#5c321e";
@@ -5324,7 +5471,7 @@
       ctx.lineTo(screen.x + 20, screen.y - 14);
       ctx.stroke();
       drawText("FLETCH", screen.x, screen.y - 38, { color: "#ffe39b", outline: "#000", size: 10, align: "center" });
-    } else if (obj.type === "wizard_tower") {
+    } else if (obj.type === "sigilist_tower") {
       drawBox(screen.x, screen.y - 34, 48, 62, "#57506d", "#1e1830");
       ctx.fillStyle = "#2e254a";
       ctx.beginPath();
@@ -5336,8 +5483,8 @@
       ctx.strokeStyle = "#bfb5ff";
       ctx.stroke();
       drawText("MAGIC", screen.x, screen.y - 101, { color: "#d9d2ff", outline: "#000", size: 9, align: "center" });
-    } else if (obj.action === "runecraft") {
-      drawRunecraftingAltar(obj, screen);
+    } else if (obj.action === "sigilcraft") {
+      drawSigilcraftAltar(obj, screen);
     } else if (obj.type === "vegetable_patch" || obj.type === "herb_patch") {
       drawFarmPatch(obj, screen);
     } else if (obj.type === "compost_bin") {
@@ -5444,7 +5591,7 @@
     } else if (obj.type === "ditch") {
       drawBox(screen.x, screen.y - 8, 90, 16, "#2b1a10", "#080604");
       drawText("WILDY", screen.x, screen.y - 22, { color: "#ff8a6b", outline: "#000", size: 10, align: "center" });
-    } else if (obj.type === "chaos_altar") {
+    } else if (obj.type === "rift_altar") {
       drawBox(screen.x, screen.y - 24, 54, 34, "#4d3857", "#190d1f");
       drawText("*", screen.x, screen.y - 38, { color: "#c18cff", outline: "#000", size: 20, align: "center" });
     } else if (obj.type === "ruins") {
@@ -5459,8 +5606,8 @@
     }
   }
 
-  function drawRunecraftingAltar(obj, screen) {
-    const recipe = RUNECRAFTING_RECIPES[obj.rune] || RUNECRAFTING_RECIPES.air;
+  function drawSigilcraftAltar(obj, screen) {
+    const recipe = SIGILCRAFT_RECIPES[obj.sigil] || SIGILCRAFT_RECIPES.gale;
     const pulse = 0.5 + Math.sin(state.time * 3 + obj.x) * 0.15;
     drawDiamond(screen.x, screen.y - 3, 74, 38, "#3a3147", "#191326");
     ctx.fillStyle = recipe.color;
@@ -5530,12 +5677,12 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "sailor" ? "#315f75" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
+    const color = npc.role === "vigil" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "sigilist" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : npc.role === "sailor" ? "#315f75" : npc.role === "tower_keeper" ? "#4a5960" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
-    if (npc.role === "slayer") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
+    if (npc.role === "vigil") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
     if (npc.role === "gardener") drawText("*", screen.x + 15, screen.y - 45, { color: "#d8ff77", outline: "#000", size: 15, align: "center" });
-    if (npc.role === "wizard") drawText("*", screen.x + 15, screen.y - 45, { color: "#d9d2ff", outline: "#000", size: 16, align: "center" });
+    if (npc.role === "sigilist") drawText("*", screen.x + 15, screen.y - 45, { color: "#d9d2ff", outline: "#000", size: 16, align: "center" });
     if (npc.role === "squire") drawText("cw", screen.x + 17, screen.y - 45, { color: "#f0d25d", outline: "#000", size: 10, align: "center" });
     if (npc.role === "island_trader") drawText("gp", screen.x + 17, screen.y - 45, { color: "#ffe36a", outline: "#000", size: 10, align: "center" });
     if (npc.role === "sailor") drawText("ship", screen.x + 20, screen.y - 45, { color: "#7fd7ff", outline: "#000", size: 8, align: "center" });
@@ -5571,17 +5718,17 @@
       giant_rat: "#67513b",
       pasture_cow: "#f0e8d2",
       field_imp: "#b64c48",
-      dark_wizard: "#1f3d86",
-      black_knight: "#1e1e22",
+      dusk_conjurer: "#1f3d86",
+      iron_oathbreaker: "#1e1e22",
       grave_skeleton: "#dfd8bd",
-      cave_crawler: "#3f6051",
-      salt_slug: "#7d8f75",
-      crawling_hand: "#7b665a",
-      banshee: "#b9d5dc",
-      aberrant_specter: "#73a08c",
+      mire_skitterer: "#3f6051",
+      brine_leech: "#7d8f75",
+      grasping_claw: "#7b665a",
+      keening_shade: "#b9d5dc",
+      miasma_wraith: "#73a08c",
       jungle_spider: "#2f2f28",
-      deep_wight: "#5860a8",
-      lesser_demon: "#8e2f32",
+      hollow_wight: "#5860a8",
+      rift_fiend: "#8e2f32",
       moss_brute: "#557b3e",
       hill_giant: "#786143",
       desert_scorpion: "#b87938",
@@ -5649,7 +5796,7 @@
     } else if (enemy.type === "grave_skeleton") {
       drawHumanoid(screen.x, screen.y, "#d8d0ba", "#efe8cd");
       drawText("x", screen.x, screen.y - 44, { color: "#1f1f1f", size: 10, align: "center" });
-    } else if (enemy.type === "dark_wizard") {
+    } else if (enemy.type === "dusk_conjurer") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c7b08f", 0.95);
       ctx.fillStyle = "#18306f";
       ctx.beginPath();
@@ -5659,7 +5806,7 @@
       ctx.closePath();
       ctx.fill();
       drawText("*", screen.x + 18, screen.y - 39, { color: "#9cd8ff", outline: "#000", size: 14, align: "center" });
-    } else if (enemy.type === "black_knight") {
+    } else if (enemy.type === "iron_oathbreaker") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c5a276", 1.12);
       ctx.strokeStyle = "#cfd2d6";
       ctx.lineWidth = 4;
@@ -5699,7 +5846,7 @@
     } else if (enemy.type === "highwayman") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#c7a174", 0.98);
       drawText("Stand!", screen.x, screen.y - 63, { color: "#ffe0a0", outline: "#000", size: 8, align: "center" });
-    } else if (enemy.type === "cave_crawler") {
+    } else if (enemy.type === "mire_skitterer") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
       ctx.ellipse(screen.x, screen.y - 17, 22, 12, 0, 0, Math.PI * 2);
@@ -5711,7 +5858,7 @@
         ctx.lineTo(screen.x + i * 11, screen.y + 3);
         ctx.stroke();
       }
-    } else if (enemy.type === "salt_slug") {
+    } else if (enemy.type === "brine_leech") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
       ctx.ellipse(screen.x, screen.y - 13, 24, 10, 0, 0, Math.PI * 2);
@@ -5723,7 +5870,7 @@
       ctx.moveTo(screen.x + 16, screen.y - 18);
       ctx.lineTo(screen.x + 24, screen.y - 29);
       ctx.stroke();
-    } else if (enemy.type === "crawling_hand") {
+    } else if (enemy.type === "grasping_claw") {
       ctx.fillStyle = colors[enemy.type];
       ctx.beginPath();
       ctx.ellipse(screen.x, screen.y - 11, 16, 8, 0.1, 0, Math.PI * 2);
@@ -5737,7 +5884,7 @@
         ctx.stroke();
       }
       drawText("h", screen.x, screen.y - 35, { color: "#d9c2aa", outline: "#000", size: 11, align: "center" });
-    } else if (enemy.type === "banshee") {
+    } else if (enemy.type === "keening_shade") {
       ctx.save();
       ctx.globalAlpha *= 0.86 + Math.sin(state.time * 5 + enemy.id.length) * 0.08;
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#e8f7f7", 1.05);
@@ -5748,7 +5895,7 @@
       ctx.stroke();
       drawText("w", screen.x + 18, screen.y - 52, { color: "#e4fbff", outline: "#000", size: 14, align: "center" });
       ctx.restore();
-    } else if (enemy.type === "aberrant_specter") {
+    } else if (enemy.type === "miasma_wraith") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#acd7c9", 1.12);
       ctx.fillStyle = "rgba(122, 196, 162, 0.42)";
       ctx.beginPath();
@@ -5773,7 +5920,7 @@
       ctx.arc(screen.x + 7, screen.y - 22, 2, 0, Math.PI * 2);
       ctx.arc(screen.x + 13, screen.y - 21, 2, 0, Math.PI * 2);
       ctx.fill();
-    } else if (enemy.type === "deep_wight") {
+    } else if (enemy.type === "hollow_wight") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#95a0e8", 1.18);
       ctx.strokeStyle = "#b7c3ff";
       ctx.lineWidth = 3;
@@ -5782,7 +5929,7 @@
       ctx.lineTo(screen.x + 18, screen.y - 18);
       ctx.stroke();
       drawText("*", screen.x + 19, screen.y - 48, { color: "#dce6ff", outline: "#000", size: 18, align: "center" });
-    } else if (enemy.slayerType === "crypt_brother") {
+    } else if (enemy.vigilType === "crypt_brother") {
       drawHumanoid(screen.x, screen.y, "#4f5a5a", "#b9c7c6", 1.2);
       ctx.strokeStyle = "#d6f0ee";
       ctx.lineWidth = 3;
@@ -5791,7 +5938,7 @@
       ctx.lineTo(screen.x + 18, screen.y - 52);
       ctx.stroke();
       drawText("!", screen.x + 19, screen.y - 49, { color: "#d6f0ee", outline: "#000", size: 16, align: "center" });
-    } else if (enemy.type === "lesser_demon") {
+    } else if (enemy.type === "rift_fiend") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#b85b52", 1.35);
       ctx.fillStyle = "#5b171a";
       ctx.beginPath();
@@ -5908,18 +6055,18 @@
     ctx.fillRect(12, 10, 520, 52);
     ctx.strokeStyle = "#7c622d";
     ctx.strokeRect(12, 10, 520, 52);
-    drawText(`BoonScape 2005 - ${state.areaName}`, 24, 29, { color: "#ffd86b", outline: "#000", size: 17, align: "left" });
-    const task = state.slayer.task ? `${state.slayer.task.remaining} ${state.slayer.task.label}` : "No task";
+    drawText(`Briarbound - ${state.areaName}`, 24, 29, { color: "#ffd86b", outline: "#000", size: 17, align: "left" });
+    const task = state.vigil.task ? `${state.vigil.task.remaining} ${state.vigil.task.label}` : "No task";
     const boosts = activeBoosts().map(([skill, amount]) => `${skill.slice(0, 3)}+${amount}`).join(" ");
     const poison = isPoisoned() ? `  Poison ${Math.ceil(state.player.poisonDamage)}` : "";
-    drawText(`Combat ${combatLevel()}  HP ${Math.ceil(state.player.hp)}/${maxHp()}  Prayer ${prayerLabel(state.player.prayerMode)}  Slayer: ${task}${boosts ? `  Boosts ${boosts}` : ""}${poison}`, 24, 50, {
+    drawText(`Combat ${combatLevel()}  HP ${Math.ceil(state.player.hp)}/${maxHp()}  Resolve ${resolveLabel(state.player.resolveMode)}  Vigilance: ${task}${boosts ? `  Boosts ${boosts}` : ""}${poison}`, 24, 50, {
       color: "#f6e5bd",
       outline: "#000",
       size: 11,
       align: "left",
     });
-    if (state.castleWars.active) {
-      drawText(`Castle Wars ${state.castleWars.score}-${state.castleWars.enemyScore}${state.castleWars.flagHeld ? "  FLAG!" : ""}`, VIEW.w - 18, 29, {
+    if (state.bannerfall.active) {
+      drawText(`Bannerfall ${state.bannerfall.score}-${state.bannerfall.enemyScore}${state.bannerfall.flagHeld ? "  FLAG!" : ""}`, VIEW.w - 18, 29, {
         color: "#f0d25d",
         outline: "#000",
         size: 12,
@@ -5982,11 +6129,11 @@
   function drawPlayerOrbs(x, y, w, h) {
     const hpPct = state.player.hp / maxHp();
     drawOrb(x + 30, y + 26, 22, hpPct, "#c83b33", `${Math.ceil(state.player.hp)}`);
-    drawOrb(x + 86, y + 26, 22, state.player.prayerPoints / maxPrayer(), "#d9d2b2", `${Math.floor(state.player.prayerPoints)}`);
+    drawOrb(x + 86, y + 26, 22, state.player.resolvePoints / maxResolve(), "#d9d2b2", `${Math.floor(state.player.resolvePoints)}`);
     drawOrb(x + 142, y + 26, 22, getLevel("Magic") / 99, "#5ea1ff", `${getLevel("Magic")}`);
     drawOrb(x + 198, y + 26, 22, state.player.runEnergy / 100, "#65d06d", `${Math.floor(state.player.runEnergy)}`);
     drawText("HP", x + 30, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
-    drawText("Pray", x + 86, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
+    drawText("Res", x + 86, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
     drawText("Mage", x + 142, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
     drawText("Run", x + 198, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
     if (isPoisoned()) drawText("Poison", x + 30, y + 9, { size: 10, color: "#79e068", outline: "#000", align: "center" });
@@ -6089,23 +6236,23 @@
       const level = getLevel(skill);
       const boost = state.player.boosts?.[skill] || 0;
       pushRect({ kind: "skillGuide", skill, x: sx - 2, y: sy - 10, w: colW - 6, h: 22 });
-      const color = skill === "Slayer" ? "#69e7ff" : skill === "Runecrafting" ? "#d5c7ff" : skill === "Farming" || skill === "Herblore" ? "#a9ff8f" : "#ffe7a8";
+      const color = skill === "Vigilance" ? "#69e7ff" : skill === "Sigilcraft" ? "#d5c7ff" : skill === "Farming" || skill === "Herbalism" ? "#a9ff8f" : "#ffe7a8";
       drawText(skillShortName(skill), sx, sy, { color, outline: "#000", size: 10, align: "left" });
       drawText(boost ? `${level}+${boost}` : `${level}`, sx + colW - 36, sy, { color: boost ? "#77ff77" : "#ffffff", outline: "#000", size: 11, align: "right" });
       drawText(`${xpToNext(skill)}`, sx + colW - 4, sy, { color: "#cdbb8a", outline: "#000", size: 8, align: "right" });
     });
-    const taskText = state.slayer.task ? `${state.slayer.task.remaining} ${state.slayer.task.label}` : "Ask Vann for work";
-    drawText(`Slayer: ${taskText}`, x, y + h - 22, { color: "#83efff", outline: "#000", size: 12, align: "left" });
+    const taskText = state.vigil.task ? `${state.vigil.task.remaining} ${state.vigil.task.label}` : "Ask Mara for work";
+    drawText(`Vigilance: ${taskText}`, x, y + h - 22, { color: "#83efff", outline: "#000", size: 12, align: "left" });
   }
 
   function skillShortName(skill) {
     return {
-      Hitpoints: "Hits",
+      Vitality: "Hits",
       Woodcutting: "Woodcut",
       Firemaking: "Firemake",
       Fletching: "Fletch",
-      Runecrafting: "Runecraft",
-      Herblore: "Herb",
+      Sigilcraft: "Sigilcraft",
+      Herbalism: "Herb",
     }[skill] || skill;
   }
 
@@ -6131,7 +6278,7 @@
     }
     const diaryY = Math.min(yy + 8, y + h - 156);
     const done = diaryCompletedCount();
-    drawText(`Boonshire Diary ${done}/${DIARY_TASKS.length}`, x, diaryY, { color: "#6feaff", outline: "#000", size: 12, align: "left" });
+    drawText(`Briarfall Diary ${done}/${DIARY_TASKS.length}`, x, diaryY, { color: "#6feaff", outline: "#000", size: 12, align: "left" });
     const visibleDiaryTasks = DIARY_TASKS.slice(0, 4);
     visibleDiaryTasks.forEach((task, i) => {
       drawText(`${task.done() ? "*" : "-"} ${task.label}`, x, diaryY + 18 + i * 15, {
@@ -6186,10 +6333,10 @@
     drawText("Spellbook", x, y + 12, { color: "#f6e1a5", outline: "#000", size: 14, align: "left" });
     const spells = [
       { id: "home", name: "Home Teleport", note: "Back to town" },
-      { id: "wind", name: "Wind Poke", note: "1 air + 1 mind" },
-      { id: "fire", name: "Fire Bolt", note: "2 air + 1 chaos" },
-      { id: "crumble", name: "Crumble", note: "undead: chaos + death" },
-      { id: "alchemy", name: "Low Alchemy", note: "turn item to coins" },
+      { id: "wind", name: "Gale Poke", note: "1 gale + 1 whisper" },
+      { id: "fire", name: "Cinder Bolt", note: "2 gale + 1 rift" },
+      { id: "crumble", name: "Bone Rattle", note: "undead: rift + grave" },
+      { id: "alchemy", name: "Coin Spark", note: "turn item to coins" },
     ];
     spells.forEach((spell, i) => {
       const rect = { kind: "spell", spell: spell.id, x, y: y + 36 + i * 58, w, h: 46 };
@@ -6201,10 +6348,10 @@
       drawText(spell.name, rect.x + 10, rect.y + 18, { color: "#cfe6ff", outline: "#000", size: 12, align: "left" });
       drawText(spell.note, rect.x + 10, rect.y + 36, { color: "#a8c0d8", outline: "#000", size: 10, align: "left" });
     });
-    const runeY = y + h - 74;
-    drawText(`Runes: air ${inventoryCount("air_rune")}  mind ${inventoryCount("mind_rune")}`, x, runeY, { color: "#dcecff", outline: "#000", size: 11, align: "left" });
-    drawText(`chaos ${inventoryCount("chaos_rune")}  law ${inventoryCount("law_rune")}  death ${inventoryCount("death_rune")}`, x, runeY + 17, { color: "#dcecff", outline: "#000", size: 11, align: "left" });
-    drawText(`Pouch: ${runePouchText()}`, x, runeY + 34, { color: "#d5c7ff", outline: "#000", size: 11, align: "left" });
+    const sigilY = y + h - 74;
+    drawText(`Sigils: gale ${inventoryCount("gale_sigil")}  whisper ${inventoryCount("whisper_sigil")}`, x, sigilY, { color: "#dcecff", outline: "#000", size: 11, align: "left" });
+    drawText(`rift ${inventoryCount("rift_sigil")}  oath ${inventoryCount("oath_sigil")}  grave ${inventoryCount("grave_sigil")}`, x, sigilY + 17, { color: "#dcecff", outline: "#000", size: 11, align: "left" });
+    drawText(`Pouch: ${sigilPouchText()}`, x, sigilY + 34, { color: "#d5c7ff", outline: "#000", size: 11, align: "left" });
   }
 
   function drawSettings(x, y, w, h) {
@@ -6212,7 +6359,7 @@
     const buttons = [
       { id: "run", label: `Run: ${state.player.run ? "On" : "Off"} (${Math.floor(state.player.runEnergy)}%)` },
       { id: "style", label: `Style: ${state.player.combatStyle}` },
-      { id: "prayer", label: `Prayer: ${prayerLabel(state.player.prayerMode)}` },
+      { id: "resolve", label: `Resolve: ${resolveLabel(state.player.resolveMode)}` },
       { id: "music", label: `Music: ${state.musicOn ? "On" : "Off"}` },
       { id: "collection", label: "Collection log" },
       { id: "worldMap", label: "World map" },
@@ -6228,7 +6375,7 @@
     wrapText("Keys: 1-6 tabs, WASD walk, M map, F fullscreen, Esc closes panels.", x, y + h - 38, w, 12, "#cdbb8a");
   }
 
-  function prayerLabel(mode) {
+  function resolveLabel(mode) {
     if (mode === "thickSkin") return "Thick Skin";
     if (mode === "burstStrength") return "Burst Str";
     if (mode === "sharpEye") return "Sharp Eye";
@@ -6252,15 +6399,15 @@
           action: () => moveToTile(Math.floor(item.x), Math.floor(item.y), { kind: "groundItem", id: item.id }),
         });
       } else if (picked.kind === "npc") {
-        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" || item.role === "wizard" || item.role === "tower_keeper" ? "Trade" : item.role === "squire" ? "Join / Rewards" : item.role === "slayer" ? "Talk-to / Assignment" : "Talk-to";
+        const primary = item.role === "banker" ? "Bank" : item.role === "shop" || item.role === "fletcher" || item.role === "sigilist" || item.role === "tower_keeper" ? "Trade" : item.role === "squire" ? "Join / Rewards" : item.role === "vigil" ? "Talk-to / Assignment" : "Talk-to";
         options.push({ label: `${primary} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "npc", id: item.id }) });
       } else if (picked.kind === "enemy") {
         options.push({ label: `Attack ${item.name} (level ${item.level})`, action: () => approachOrAttackEnemy(item) });
       } else if (picked.kind === "resource") {
-        const label = item.type.includes("tree") ? "Chop" : item.type === "essence_rock" ? "Mine-essence" : item.type.includes("rock") ? "Mine" : item.type === "lobster_spot" ? "Cage" : "Net";
+        const label = item.type.includes("tree") ? "Chop" : item.type === "essence_rock" ? "Mine-essence" : item.type.includes("rock") ? "Mine" : item.type === "redclaw_spot" ? "Cage" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_lobster" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "runecraft" ? "Craft-rune-at" : item.action === "tower_door" ? "Enter" : item.action === "tower_chest" ? "Open" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "castle_wars" ? "Enter" : item.action === "castle_flag" ? "Use-flag" : item.action === "castle_supply" ? "Take-from" : item.action === "castle_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_redclaw" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "sigilcraft" ? "Craft-sigil-at" : item.action === "tower_door" ? "Enter" : item.action === "tower_chest" ? "Open" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "bannerfall" ? "Enter" : item.action === "banner_flag" ? "Use-flag" : item.action === "banner_supply" ? "Take-from" : item.action === "banner_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
         options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
@@ -6287,9 +6434,9 @@
     if (resource.type === "tin_rock") return "Tin rock";
     if (resource.type === "iron_rock") return "Iron rock";
     if (resource.type === "gold_rock") return "Gold rock";
-    if (resource.type === "essence_rock") return "Rune essence";
+    if (resource.type === "essence_rock") return "Glimmer shard";
     if (resource.type === "fishing_spot") return "Fishing spot";
-    if (resource.type === "lobster_spot") return "Lobster spot";
+    if (resource.type === "redclaw_spot") return "Redclaw spot";
     return resource.type;
   }
 
@@ -6301,7 +6448,7 @@
 
   function examineText(kind, item) {
     if (kind === "groundItem") return `It's ${formatItem(item.itemId, item.qty)} on the ground.`;
-    if (kind === "enemy") return `A level ${item.level} ${item.name}. ${item.requiredProtection ? `Needs ${slayerProtectionName(item.requiredProtection)}.` : item.finisher ? `Needs ${ITEMS[item.finisher].name.toLowerCase()} at the end.` : "It looks grindable."}`;
+    if (kind === "enemy") return `A level ${item.level} ${item.name}. ${item.requiredProtection ? `Needs ${vigilProtectionName(item.requiredProtection)}.` : item.finisher ? `Needs ${ITEMS[item.finisher].name.toLowerCase()} at the end.` : "It looks grindable."}`;
     if (kind === "npc") return `${item.name} seems ready to repeat the same line forever.`;
     if (kind === "resource") return `A ${resourceName(item).toLowerCase()} waiting to become experience.`;
     if (kind === "scenery" && item.action === "agility") return `A very official-looking shortcut for Agility level ${item.level || 1}.`;
@@ -6309,20 +6456,20 @@
     if (kind === "scenery" && item.action === "farm") return `${item.name}: ${farmPatchStatus(item.patchId)}.`;
     if (kind === "scenery" && item.action === "compost") return "A wooden bin where spare crops become useful dirt.";
     if (kind === "scenery" && item.action === "water") return "A town well. Excellent for vials and rumours.";
-    if (kind === "scenery" && item.action === "fish_lobster") return "A dock for lobster pots and better food.";
+    if (kind === "scenery" && item.action === "fish_redclaw") return "A dock for redclaw pots and better food.";
     if (kind === "scenery" && item.action === "banana") return `${item.name}: ${item.readyAt && item.readyAt > state.time ? "bare for now" : "heavy with yellow supplies"}.`;
     if (kind === "scenery" && item.action === "web") return `${item.name}: ${item.readyAt && item.readyAt > state.time ? "thin strands regrowing" : "thick enough to cut for silk"}.`;
     if (kind === "scenery" && item.action === "island_shop") return "A stall with prices set by someone who owns the only boat.";
-    if (kind === "scenery" && item.action === "tower_door") return "A cold Slayer Tower door. The notice says earmuffs, nose pegs, and keys are strongly advised.";
-    if (kind === "scenery" && item.action === "tower_chest") return "A locked chest from the Slayer Tower, scratched by hands and wet with ectoplasm.";
-    if (kind === "scenery" && item.type === "tower_notice") return "The notice reads: banshees shriek, specters reek, and hands steal keys badly.";
-    if (kind === "scenery" && item.action === "runecraft") return `${item.name}: ${RUNECRAFTING_RECIPES[item.rune].name} runes require Runecrafting ${RUNECRAFTING_RECIPES[item.rune].level}.`;
-    if (kind === "scenery" && item.action === "crypt") return `${item.name}: a slab for one of the crypt brothers. ${cryptStatusText()}.`;
+    if (kind === "scenery" && item.action === "tower_door") return "A cold Gloamspire door. The notice says silence hoods, mire charms, and keys are strongly advised.";
+    if (kind === "scenery" && item.action === "tower_chest") return "A locked chest from the Gloamspire, scratched by hands and wet with ectoplasm.";
+    if (kind === "scenery" && item.type === "tower_notice") return "The notice reads: keening shades shriek, miasma wraiths reek, and grasping claws steal keys badly.";
+    if (kind === "scenery" && item.action === "sigilcraft") return `${item.name}: ${SIGILCRAFT_RECIPES[item.sigil].name} sigils require Sigilcraft ${SIGILCRAFT_RECIPES[item.sigil].level}.`;
+    if (kind === "scenery" && item.action === "crypt") return `${item.name}: a slab for one of the oath wardens. ${cryptStatusText()}.`;
     if (kind === "scenery" && item.action === "crypt_chest") return `The crypt chest is sealed by old combat nonsense. ${cryptStatusText()}.`;
-    if (kind === "scenery" && item.action?.startsWith("castle")) return `${item.name}: ${castleWarsScoreText()}`;
-    if (kind === "scenery" && item.type === "wizard_tower") return "A squat tower full of essence dust, glowing circles, and bad robes.";
+    if (kind === "scenery" && item.action?.startsWith("banner")) return `${item.name}: ${bannerfallScoreText()}`;
+    if (kind === "scenery" && item.type === "sigilist_tower") return "A squat tower full of essence dust, glowing circles, and bad robes.";
     if (kind === "scenery" && item.type === "scarecrow") return "It has the posture of a moderator and the wardrobe of a farmer.";
-    if (kind === "scenery" && item.type === "seed_sacks") return "Seed sacks stacked with absolute 2005 confidence.";
+    if (kind === "scenery" && item.type === "seed_sacks") return "Seed sacks stacked with absolute dial-up confidence.";
     return `You examine the ${item.name}.`;
   }
 
@@ -6443,7 +6590,7 @@
     ctx.strokeStyle = "#c4a15a";
     ctx.lineWidth = 3;
     ctx.strokeRect(x, y, w, h);
-    drawText("Bank of BoonScape", x + 18, y + 28, { color: "#ffd86b", outline: "#000", size: 18, align: "left" });
+    drawText("Briarfall Vault", x + 18, y + 28, { color: "#ffd86b", outline: "#000", size: 18, align: "left" });
     const close = { kind: "modalClose", x: x + w - 38, y: y + 12, w: 26, h: 26 };
     state.modal.rects.push(close);
     drawButton(close, "x");
@@ -6486,8 +6633,8 @@
     ctx.lineWidth = 3;
     ctx.strokeRect(x, y, w, h);
     drawText(state.modal.title, x + 18, y + 28, { color: "#ffd86b", outline: "#000", size: 18, align: "left" });
-    const currencyLabel = state.modal.currency === "slayer" ? `Slayer points: ${state.slayer.points}` : state.modal.currency === "castle" ? `Tickets: ${inventoryCount("castle_ticket")}` : `Coins: ${inventoryCount("coins")}`;
-    const suffix = state.modal.currency === "slayer" ? "pts" : state.modal.currency === "castle" ? "tk" : "gp";
+    const currencyLabel = state.modal.currency === "vigil" ? `Vigil marks: ${state.vigil.points}` : state.modal.currency === "banner" ? `Tokens: ${inventoryCount("banner_token")}` : `Coins: ${inventoryCount("coins")}`;
+    const suffix = state.modal.currency === "vigil" ? "pts" : state.modal.currency === "banner" ? "tok" : "gp";
     drawText(currencyLabel, x + 18, y + 52, { color: "#f8df78", outline: "#000", size: 12, align: "left" });
     const close = { kind: "modalClose", x: x + w - 38, y: y + 12, w: 26, h: 26 };
     state.modal.rects.push(close);
@@ -6497,7 +6644,7 @@
       state.modal.rects.push(rect);
       drawButton(rect, `${stock.qty || 1} ${ITEMS[stock.id].name} - ${stock.price}${suffix}`);
     });
-    drawText(state.modal.currency === "slayer" ? "Spend points from tasks." : state.modal.currency === "castle" ? "Tickets come from flag matches." : "Click inventory items to sell.", x + 336, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
+    drawText(state.modal.currency === "vigil" ? "Spend points from tasks." : state.modal.currency === "banner" ? "Tokens come from flag matches." : "Click inventory items to sell.", x + 336, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
     for (let i = 0; i < state.player.inventory.length; i += 1) {
       const col = i % 4;
       const row = Math.floor(i / 4);
@@ -6525,12 +6672,12 @@
     state.modal.rects.push(close);
     drawButton(close, "x");
     const groups = [
-      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "pirate_cutlass", "wight_blade", "giant_club", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "earmuffs", "nose_peg", "leather_gloves", "wizard_hat", "black_helm", "iron_platelegs", "team_cape", "spider_cape", "ghostly_robe", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff", "mystic_wand"]],
+      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "aurel_sabre", "pirate_cutlass", "wight_blade", "giant_club", "shortbow", "bronze_arrow", "ward_arrow", "wooden_shield", "bronze_helm", "silence_hood", "mire_charm", "leather_gloves", "sigilist_cap", "oathbreaker_helm", "iron_platelegs", "team_cape", "spider_cape", "ghostly_robe", "banner_helm", "banner_shield", "banner_sword", "banner_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "gale_staff", "crypt_staff", "mystic_wand"]],
       ["Skilling", ["logs", "oak_logs", "copper_ore", "tin_ore", "iron_ore", "gold_ore", "bronze_bar", "iron_bar", "gold_bar", "cowhide", "leather_body", "silk", "fur", "limpwurt_root"]],
-      ["Food", ["bread", "cake", "spinach_roll", "banana", "raw_shrimp", "cooked_shrimp", "raw_trout", "cooked_trout", "raw_lobster", "lobster", "raw_beef", "cooked_beef", "burnt_fish", "burnt_meat"]],
+      ["Food", ["bread", "cake", "spinach_roll", "banana", "raw_shrimp", "cooked_shrimp", "raw_trout", "cooked_trout", "raw_redclaw", "redclaw", "raw_beef", "cooked_beef", "burnt_fish", "burnt_meat"]],
       ["Potions", ["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "energy_potion", "antipoison"]],
-      ["Treasure", ["slayer_gem", "bag_of_salt", "tower_key", "ectoplasm", "spider_silk", "scorpion_tail", "lobster_pot", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "achievement_cape"]],
-      ["Runes", ["air_rune", "mind_rune", "chaos_rune", "law_rune", "death_rune"]],
+      ["Treasure", ["vigil_glass", "brine_charm", "tower_key", "ectoplasm", "spider_silk", "scorpion_tail", "redclaw_cage", "banner_token", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "prism_pendant", "ancient_page", "surestrike_pendant", "vigil_helm", "achievement_cape"]],
+      ["Sigils", ["gale_sigil", "whisper_sigil", "rift_sigil", "oath_sigil", "grave_sigil"]],
     ];
     let yy = y + 82;
     let column = 0;
@@ -6692,9 +6839,9 @@
     const close = { kind: "modalClose", x: x + w - 38, y: y + 12, w: 26, h: 26 };
     state.modal.rects.push(close);
     drawButton(close, "x");
-    drawText("Slayer Codex", x + 20, y + 30, { color: "#6feaff", outline: "#000", size: 20, align: "left" });
+    drawText("Beast Ledger", x + 20, y + 30, { color: "#6feaff", outline: "#000", size: 20, align: "left" });
     drawText("Locations, drops, and the kind of questionable advice every task needs.", x + 20, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
-    const activeType = state.slayer.task?.type;
+    const activeType = state.vigil.task?.type;
     BESTIARY.forEach((entry, i) => {
       const col = i % 3;
       const row = Math.floor(i / 3);
@@ -6726,7 +6873,7 @@
     state.modal.rects.push(close);
     drawButton(close, "x");
     const done = diaryCompletedCount();
-    drawText("Boonshire Diary", x + 20, y + 30, { color: "#6feaff", outline: "#000", size: 20, align: "left" });
+    drawText("Briarfall Diary", x + 20, y + 30, { color: "#6feaff", outline: "#000", size: 20, align: "left" });
     drawText(`${done}/${DIARY_TASKS.length} tasks complete`, x + 20, y + 58, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
     const taskColW = (w - 56) / 2;
     DIARY_TASKS.forEach((task, i) => {
@@ -6746,7 +6893,7 @@
       state.modal.rects.push(claim);
       drawButton(claim, "Claim diary reward");
     } else {
-      drawText(state.diaryRewardClaimed ? "Reward claimed: Achievement cape." : "Reward: Achievement cape, law runes, XP.", x + 20, y + h - 34, {
+      drawText(state.diaryRewardClaimed ? "Reward claimed: Concord mantle." : "Reward: Concord mantle, oath sigils, XP.", x + 20, y + h - 34, {
         color: "#f0d8a0",
         outline: "#000",
         size: 12,
@@ -6885,13 +7032,13 @@
       const itemId = state.player.equipment[rect.slot];
       return itemId ? hoverLinesForItem({ id: itemId, qty: 1 }) : [`${rect.slot} slot`];
     }
-    if (rect.kind === "shopBuy") return hoverLinesForItem({ id: rect.stock.id, qty: rect.stock.qty || 1 }).concat([`Price: ${rect.stock.price}${state.modal?.currency === "slayer" ? " pts" : state.modal?.currency === "castle" ? " tickets" : " gp"}`]);
+    if (rect.kind === "shopBuy") return hoverLinesForItem({ id: rect.stock.id, qty: rect.stock.qty || 1 }).concat([`Price: ${rect.stock.price}${state.modal?.currency === "vigil" ? " pts" : state.modal?.currency === "banner" ? " tokens" : " gp"}`]);
     if (rect.kind === "spell") return [`Cast ${rect.spell}`];
     if (rect.kind === "skillGuide") return [`${rect.skill} guide`, `${xpToNext(rect.skill)} XP to next`];
     if (rect.kind === "setting") return [tabLabels.settings, rect.setting];
     if (rect.kind === "mapDestination") return [rect.destination.label, rect.destination.note];
     if (rect.kind === "lampSkill") return [`Rub lamp on ${rect.skill}`];
-    if (rect.kind === "diaryOpen") return ["Boonshire Diary", `${diaryCompletedCount()}/${DIARY_TASKS.length}`];
+    if (rect.kind === "diaryOpen") return ["Briarfall Diary", `${diaryCompletedCount()}/${DIARY_TASKS.length}`];
     if (rect.kind === "diaryClaim") return ["Claim diary reward"];
     if (rect.kind === "bankSort") return ["Sort bank", "Tidy and stack items"];
     return [];
@@ -6907,9 +7054,9 @@
     if (data.runRestore) lines.push(`Restores ${data.runRestore}% run`);
     if (data.poisonCure) lines.push("Cures poison");
     if (data.poisonResist) lines.push("Resists poison");
-    if (data.slayerProtection) lines.push(`Protects vs ${slayerProtectionName(data.slayerProtection)}`);
-    if (data.slayerProtectAll) lines.push("Protects vs Slayer hazards");
-    if (item.id === "rune_pouch") lines.push(runePouchText());
+    if (data.vigilProtection) lines.push(`Protects vs ${vigilProtectionName(data.vigilProtection)}`);
+    if (data.vigilProtectAll) lines.push("Protects vs Vigil hazards");
+    if (item.id === "sigil_satchel") lines.push(sigilPouchText());
     if (data.requirements) lines.push(`Requires ${requirementText(data.requirements)}`);
     if (data.value) lines.push(`Value ${data.value} gp`);
     return lines;
@@ -6918,7 +7065,7 @@
   function hoverLinesForWorld(picked) {
     const item = picked.item;
     if (picked.kind === "groundItem") return hoverLinesForItem({ id: item.itemId, qty: item.qty });
-    if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.slayerType ? `Slayer: ${item.slayerType.replaceAll("_", " ")}` : "Attack", item.requiredProtection ? (hasSlayerProtection(item) ? `${slayerProtectionName(item.requiredProtection)} covered` : `Needs ${slayerProtectionName(item.requiredProtection)}`) : null, item.poisonDamage ? "Poisonous" : null, item.finisher ? `Finish with ${ITEMS[item.finisher].name}` : null].filter(Boolean);
+    if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.vigilType ? `Vigilance: ${item.vigilType.replaceAll("_", " ")}` : "Attack", item.requiredProtection ? (hasVigilanceProtection(item) ? `${vigilProtectionName(item.requiredProtection)} covered` : `Needs ${vigilProtectionName(item.requiredProtection)}`) : null, item.poisonDamage ? "Poisonous" : null, item.finisher ? `Finish with ${ITEMS[item.finisher].name}` : null].filter(Boolean);
     if (picked.kind === "npc") return [item.name, item.role.replaceAll("_", " ")];
     if (picked.kind === "resource") return [resourceName(item)];
     if (picked.kind === "scenery") {
@@ -6927,22 +7074,22 @@
       if (item.action === "farm") return farmPatchLines(item);
       if (item.action === "compost") return [item.name, "Turns potatoes into compost"];
       if (item.action === "water") return [item.name, "Fill empty vials"];
-      if (item.action === "runecraft") {
-        const recipe = RUNECRAFTING_RECIPES[item.rune];
-        return [item.name, `Runecrafting ${recipe.level}`, `${inventoryCount("rune_essence") + (inventoryCount("rune_pouch") > 0 ? state.runePouch.essence : 0)} essence`];
+      if (item.action === "sigilcraft") {
+        const recipe = SIGILCRAFT_RECIPES[item.sigil];
+        return [item.name, `Sigilcraft ${recipe.level}`, `${inventoryCount("glimmer_shard") + (inventoryCount("sigil_satchel") > 0 ? state.sigilPouch.essence : 0)} essence`];
       }
       if (item.action === "crypt") {
         const brother = CRYPT_BROTHERS[item.brother];
-        return [item.name, brother ? brother.name : "Crypt brother", cryptStatusText()];
+        return [item.name, brother ? brother.name : "Oath warden", cryptStatusText()];
       }
       if (item.action === "crypt_chest") return [item.name, cryptStatusText(), state.crypt?.lastReward ? `Last: ${state.crypt.lastReward}` : "Wake all brothers"];
-      if (item.action === "castle_wars") return [item.name, "Join match", castleWarsScoreText()];
-      if (item.action === "castle_flag") return [item.name, item.team === "enemy" ? "Steal flag" : "Score here", castleWarsScoreText()];
-      if (item.action === "castle_supply") return [item.name, "Bandages and run energy", castleWarsScoreText()];
-      if (item.action === "castle_scoreboard") return [item.name, castleWarsScoreText()];
-      if (item.action === "tower_door") return [item.name, "Enter Slayer Tower", "Wear protection gear"];
+      if (item.action === "bannerfall") return [item.name, "Join match", bannerfallScoreText()];
+      if (item.action === "banner_flag") return [item.name, item.team === "enemy" ? "Steal flag" : "Score here", bannerfallScoreText()];
+      if (item.action === "banner_supply") return [item.name, "Bandages and run energy", bannerfallScoreText()];
+      if (item.action === "banner_scoreboard") return [item.name, bannerfallScoreText()];
+      if (item.action === "tower_door") return [item.name, "Enter Gloamspire", "Wear protection gear"];
       if (item.action === "tower_chest") return [item.name, "Open with tower key"];
-      if (item.action === "fish_lobster") return [item.name, "Cage lobsters", "Requires Fishing 35 and lobster pot"];
+      if (item.action === "fish_redclaw") return [item.name, "Cage redclaws", "Requires Fishing 35 and redclaw pot"];
       if (item.action === "banana") return [item.name, item.readyAt && item.readyAt > state.time ? "Growing back" : "Pick banana"];
       if (item.action === "web") return [item.name, item.readyAt && item.readyAt > state.time ? "Regrowing" : "Cut spider silk", "Requires knife"];
       if (item.action === "island_shop") return [item.name, "Trade island supplies"];
@@ -7013,16 +7160,16 @@
     } else if (rect.kind === "shopBuy") {
       const qty = rect.stock.qty || 1;
       const total = rect.stock.price;
-      if (state.modal?.currency === "slayer") {
-        if (state.slayer.points < total) addChat("You need more Slayer points.");
+      if (state.modal?.currency === "vigil") {
+        if (state.vigil.points < total) addChat("You need more Vigil marks.");
         else if (addInventory(rect.stock.id, qty)) {
-          state.slayer.points -= total;
+          state.vigil.points -= total;
           addChat(`You buy ${formatItem(rect.stock.id, qty)}.`);
         }
-      } else if (state.modal?.currency === "castle") {
-        if (inventoryCount("castle_ticket") < total) addChat("You need more Castle wars tickets.");
+      } else if (state.modal?.currency === "banner") {
+        if (inventoryCount("banner_token") < total) addChat("You need more Bannerfall tokens.");
         else if (addInventory(rect.stock.id, qty)) {
-          removeItem(state.player.inventory, "castle_ticket", total);
+          removeItem(state.player.inventory, "banner_token", total);
           addChat(`You buy ${formatItem(rect.stock.id, qty)}.`);
         }
       } else if (!spendCoins(total)) addChat("You do not have enough coins.");
@@ -7046,11 +7193,11 @@
       const order = ["balanced", "Attack", "Strength", "Defence"];
       state.player.combatStyle = order[(order.indexOf(state.player.combatStyle) + 1) % order.length];
       addChat(`Combat style: ${state.player.combatStyle}.`);
-    } else if (setting === "prayer") {
+    } else if (setting === "resolve") {
       const order = ["none", "thickSkin", "burstStrength", "sharpEye", "rapidHeal"];
-      state.player.prayerMode = order[(order.indexOf(state.player.prayerMode) + 1) % order.length];
-      if (state.player.prayerPoints <= 0) state.player.prayerMode = "none";
-      addChat(`Prayer: ${prayerLabel(state.player.prayerMode)}.`);
+      state.player.resolveMode = order[(order.indexOf(state.player.resolveMode) + 1) % order.length];
+      if (state.player.resolvePoints <= 0) state.player.resolveMode = "none";
+      addChat(`Resolve: ${resolveLabel(state.player.resolveMode)}.`);
     } else if (setting === "music") {
       state.musicOn = !state.musicOn;
       state.nextMusic = state.time;
@@ -7112,8 +7259,8 @@
         equipment: state.player.equipment,
         skills: state.player.skills,
         combatStyle: state.player.combatStyle,
-        prayerMode: state.player.prayerMode,
-        prayerPoints: state.player.prayerPoints,
+        resolveMode: state.player.resolveMode,
+        resolvePoints: state.player.resolvePoints,
         boosts: state.player.boosts,
         boostDecay: state.player.boostDecay,
         runEnergy: state.player.runEnergy,
@@ -7121,10 +7268,10 @@
       },
       quests: state.quests,
       stats: state.stats,
-      slayer: state.slayer,
-      runePouch: state.runePouch,
+      vigil: state.vigil,
+      sigilPouch: state.sigilPouch,
       crypt: state.crypt,
-      castleWars: state.castleWars,
+      bannerfall: state.bannerfall,
       farmingContract: state.farmingContract,
       clue: state.clue,
       nextRandomEvent: state.nextRandomEvent,
@@ -7135,34 +7282,40 @@
       farmingSavedAtTime: state.time,
       farmingSavedAtWall: Date.now(),
     };
-    localStorage.setItem("boonscape-save", JSON.stringify(payload));
+    localStorage.setItem("briarbound-save", JSON.stringify(payload));
     addChat("Game saved.");
   }
 
   function loadGame() {
-    const raw = localStorage.getItem("boonscape-save");
+    const raw = localStorage.getItem("briarbound-save") || localStorage.getItem(legacyKey("boon", "scape-save"));
     if (!raw) {
       addChat("No save found.");
       return;
     }
     try {
       const payload = JSON.parse(raw);
-      Object.assign(state.player, payload.player);
+      migrateLegacyPlayerData(payload.player);
+      Object.assign(state.player, payload.player || {});
       normalizePlayerState();
       state.quests = { ...state.quests, ...(payload.quests || {}) };
+      migrateLegacyQuests(state.quests);
       state.stats = { ...blankStats(), ...(payload.stats || {}) };
-      state.slayer = payload.slayer || state.slayer;
-      state.runePouch = payload.runePouch || state.runePouch;
+      migrateLegacyStats(state.stats);
+      state.vigil = migrateLegacyVigil(payload.vigil || payload[legacyKey("sl", "ay", "er")] || state.vigil);
+      state.sigilPouch = payload.sigilPouch || payload[legacyKey("ru", "nePouch")] || state.sigilPouch;
       state.crypt = payload.crypt || state.crypt;
-      state.castleWars = payload.castleWars || state.castleWars;
+      state.bannerfall = payload.bannerfall || payload[legacyKey("cast", "leWars")] || state.bannerfall;
       normalizePlayerState();
       state.farmingContract = payload.farmingContract || null;
       state.clue = payload.clue || null;
       state.randomEvent = null;
       state.nextRandomEvent = payload.nextRandomEvent || state.time + 95;
-      state.collection = payload.collection || {};
+      state.collection = migrateLegacyCollection(payload.collection);
       state.diaryRewardClaimed = Boolean(payload.diaryRewardClaimed);
       state.groundItems = payload.groundItems || [];
+      for (const item of state.groundItems) {
+        if (item?.itemId) item.itemId = migrateLegacyItemId(item.itemId);
+      }
       state.farmingPatches = payload.farmingPatches || state.farmingPatches;
       normalizeFarmingPatches();
       const savedAtTime = Number.isFinite(payload.farmingSavedAtTime) ? payload.farmingSavedAtTime : state.time;
@@ -7172,7 +7325,7 @@
         const savedAge = Math.max(0, savedAtTime - patch.plantedAt);
         patch.plantedAt = state.time - savedAge - offlineSeconds;
       }
-      state.player.prayerPoints = Math.min(state.player.prayerPoints ?? maxPrayer(), maxPrayer());
+      state.player.resolvePoints = Math.min(state.player.resolvePoints ?? maxResolve(), maxResolve());
       state.player.runEnergy = clamp(state.player.runEnergy ?? 100, 0, 100);
       addChat("Game loaded.");
     } catch (error) {
@@ -7188,7 +7341,7 @@
         const screen = screenOf(enemy);
         const area = areaAt(enemy.x, enemy.y);
         const distance = dist(enemy, state.player);
-        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, requiredProtection: enemy.requiredProtection || null, protected: hasSlayerProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, aggro: enemy.aggro, distance: Number(distance.toFixed(2)), engaging: state.player.combatTarget === enemy.id || isMultiCombatArea(area) || enemy.id === renderSingleAggressorId, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
+        return { id: enemy.id, name: enemy.name, type: enemy.type, vigilType: enemy.vigilType, requiredProtection: enemy.requiredProtection || null, protected: hasVigilanceProtection(enemy), cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, aggro: enemy.aggro, distance: Number(distance.toFixed(2)), engaging: state.player.combatTarget === enemy.id || isMultiCombatArea(area) || enemy.id === renderSingleAggressorId, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
       });
     const nearbyNpcs = state.npcs
       .filter((npc) => dist(npc, state.player) < 7)
@@ -7215,7 +7368,7 @@
           action: obj.action,
           level: obj.level || null,
           patch: obj.patchId ? farmPatchStatus(obj.patchId) : null,
-          rune: obj.rune || null,
+          sigil: obj.sigil || null,
           brother: obj.brother || null,
           team: obj.team || null,
           ready: obj.readyAt ? obj.readyAt <= state.time : null,
@@ -7242,8 +7395,8 @@
         hp: state.player.hp,
         maxHp: maxHp(),
         poisonDamage: state.player.poisonDamage || 0,
-        prayerPoints: Number(state.player.prayerPoints.toFixed(1)),
-        prayerMode: state.player.prayerMode,
+        resolvePoints: Number(state.player.resolvePoints.toFixed(1)),
+        resolveMode: state.player.resolveMode,
         runEnergy: Number(state.player.runEnergy.toFixed(1)),
         area: state.areaName,
         moving: state.player.path.length,
@@ -7255,19 +7408,19 @@
       skills: Object.fromEntries(skillNames.map((skill) => [skill, getLevel(skill)])),
       effectiveSkills: Object.fromEntries(skillNames.map((skill) => [skill, effectiveLevel(skill)])),
       boosts: Object.fromEntries(activeBoosts()),
-      slayer: state.slayer.task
-        ? { task: state.slayer.task.label, remaining: state.slayer.task.remaining, streak: state.slayer.streak, points: state.slayer.points }
-        : { task: null, streak: state.slayer.streak, points: state.slayer.points },
-      runePouch: { essence: state.runePouch.essence, capacity: state.runePouch.capacity },
+      vigil: state.vigil.task
+        ? { task: state.vigil.task.label, remaining: state.vigil.task.remaining, streak: state.vigil.streak, points: state.vigil.points }
+        : { task: null, streak: state.vigil.streak, points: state.vigil.points },
+      sigilPouch: { essence: state.sigilPouch.essence, capacity: state.sigilPouch.capacity },
       crypt: { awakened: state.crypt.awakened, defeated: state.crypt.defeated, chestsOpened: state.crypt.chestsOpened, lastReward: state.crypt.lastReward },
-      castleWars: {
-        active: state.castleWars.active,
-        score: state.castleWars.score,
-        enemyScore: state.castleWars.enemyScore,
-        flagHeld: state.castleWars.flagHeld,
-        secondsLeft: state.castleWars.active ? Math.max(0, Math.ceil(state.castleWars.endsAt - state.time)) : 0,
-        tickets: inventoryCount("castle_ticket"),
-        lastReward: state.castleWars.lastReward,
+      bannerfall: {
+        active: state.bannerfall.active,
+        score: state.bannerfall.score,
+        enemyScore: state.bannerfall.enemyScore,
+        flagHeld: state.bannerfall.flagHeld,
+        secondsLeft: state.bannerfall.active ? Math.max(0, Math.ceil(state.bannerfall.endsAt - state.time)) : 0,
+        tokens: inventoryCount("banner_token"),
+        lastReward: state.bannerfall.lastReward,
       },
       farmingContract: state.farmingContract,
       clue: state.clue ? { hint: state.clue.hint, targetX: state.clue.x, targetY: state.clue.y } : null,
@@ -7287,26 +7440,26 @@
         farmingContractsCompleted: state.stats.farmingContractsCompleted,
         visitedSouthport: state.stats.visitedSouthport,
         essenceMined: state.stats.essenceMined,
-        runesCrafted: state.stats.runesCrafted,
-        airRunesCrafted: state.stats.airRunesCrafted,
-        mindRunesCrafted: state.stats.mindRunesCrafted,
-        chaosRunesCrafted: state.stats.chaosRunesCrafted,
-        lawRunesCrafted: state.stats.lawRunesCrafted,
+        sigilsCrafted: state.stats.sigilsCrafted,
+        galeSigilsCrafted: state.stats.galeSigilsCrafted,
+        whisperSigilsCrafted: state.stats.whisperSigilsCrafted,
+        riftSigilsCrafted: state.stats.riftSigilsCrafted,
+        oathSigilsCrafted: state.stats.oathSigilsCrafted,
         cryptWightsDefeated: state.stats.cryptWightsDefeated,
         cryptChestsOpened: state.stats.cryptChestsOpened,
-        castleWarsPlayed: state.stats.castleWarsPlayed,
-        castleWarsWon: state.stats.castleWarsWon,
-        castleFlagsCaptured: state.stats.castleFlagsCaptured,
+        bannerfallPlayed: state.stats.bannerfallPlayed,
+        bannerfallWon: state.stats.bannerfallWon,
+        bannersCaptured: state.stats.bannersCaptured,
         gemsCut: state.stats.gemsCut,
         jewelryCrafted: state.stats.jewelryCrafted,
-        lobstersCaught: state.stats.lobstersCaught,
-        lobstersCooked: state.stats.lobstersCooked,
+        redclawsCaught: state.stats.redclawsCaught,
+        redclawsCooked: state.stats.redclawsCooked,
         bananasPicked: state.stats.bananasPicked,
         islandTrips: state.stats.islandTrips,
         jungleSpidersSlain: state.stats.jungleSpidersSlain,
-        crawlingHandsSlain: state.stats.crawlingHandsSlain,
-        bansheesSlain: state.stats.bansheesSlain,
-        spectersSlain: state.stats.spectersSlain,
+        graspingClawsSlain: state.stats.graspingClawsSlain,
+        keeningShadesSlain: state.stats.keeningShadesSlain,
+        miasmaWraithsSlain: state.stats.miasmaWraithsSlain,
         hillGiantsSlain: state.stats.hillGiantsSlain,
         desertScorpionsSlain: state.stats.desertScorpionsSlain,
         highwaymenSlain: state.stats.highwaymenSlain,
@@ -7317,7 +7470,7 @@
         potionsMixed: state.stats.potionsMixed,
         chickensSlain: state.stats.chickensSlain,
         randomEventsCompleted: state.stats.randomEventsCompleted,
-        slayerTasksCompleted: state.stats.slayerTasksCompleted,
+        vigilTasksCompleted: state.stats.vigilTasksCompleted,
       },
       randomEvent: state.randomEvent ? state.randomEvent.name : null,
       worldMapDestinations: state.modal?.type === "worldMap" ? MAP_DESTINATIONS.map((dest) => ({ label: dest.label, x: dest.x, y: dest.y })) : null,
@@ -7339,8 +7492,8 @@
     buildWorld();
     initInventory();
     normalizePlayerState();
-    addChat("Welcome to BoonScape 2005.");
-    addChat("Click to walk, fight, gather, trade, bank, quest, and grind Slayer.");
+    addChat("Welcome to Briarbound.");
+    addChat("Click to walk, fight, gather, trade, bank, quest, and grind Vigilance.");
     state.player.hp = maxHp();
     updateCamera();
     canvas.addEventListener("pointerdown", onPointerDown);

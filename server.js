@@ -41,5 +41,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`BoonScape server listening at http://localhost:${port}`);
+  console.log(`Briarbound server listening at http://localhost:${port}`);
 });
