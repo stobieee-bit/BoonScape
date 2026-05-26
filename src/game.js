@@ -63,8 +63,8 @@
     Prayer: ["1 Bury bones", "4 Thick Skin", "7 Burst Strength", "10 Sharp Eye", "15 Rapid Heal"],
     Mining: ["1 Copper/Tin", "15 Iron ore", "30 Gold ore", "35 Better clue odds in mine"],
     Smithing: ["1 Bronze bar/sword", "15 Iron bars/sword", "20 Gold bars", "25 Efficient furnace work"],
-    Fishing: ["1 Shrimp spots", "20 Trout at Lake Mollusk"],
-    Cooking: ["1 Shrimp/Beef", "15 Fewer burns", "20 Trout"],
+    Fishing: ["1 Shrimp spots", "20 Trout at Lake Mollusk", "35 Lobsters on Karamel Isle"],
+    Cooking: ["1 Shrimp/Beef", "15 Fewer burns", "20 Trout", "35 Lobsters"],
     Woodcutting: ["1 Normal trees", "15 Oak trees", "25 Better firemaking supplies"],
     Firemaking: ["1 Logs", "15 Oak logs", "30 Town warmth and diary credit"],
     Crafting: ["1 Cowhide work", "5 Leather body / gold rings", "12 Cut gems", "20 Power amulets"],
@@ -73,7 +73,7 @@
     Fletching: ["1 Arrow shafts", "1 Bronze arrows", "5 Shortbows", "15 Oak shortbows", "25 Broad arrow wisdom"],
     Runecrafting: ["1 Air runes", "2 Mind runes", "15 Chaos runes", "25 Law runes", "35 Multiple rune whispers"],
     Farming: ["1 Potato patch", "5 Mirthleaf herbs", "10 Better yields", "20 Lower disease chance", "35 Farmhands nod politely"],
-    Herblore: ["1 Clean mirthleaf", "1 Mix attack potions", "8 Energy mixtures", "15 Stronger brews someday"],
+    Herblore: ["1 Clean mirthleaf", "1 Mix attack potions", "5 Antipoison", "8 Energy mixtures", "15 Stronger brews someday"],
     Slayer: ["1 Rat/Imp tasks", "10 Skeleton/Crawler tasks", "25 Moss brutes", "30 Deep wight", "38 Lesser demons"],
   };
 
@@ -215,6 +215,7 @@
     spinach_roll: { name: "Spinach roll", color: "#4f9f49", icon: "sr", value: 12, food: 6 },
     cake: { name: "Cake", color: "#e8c56b", icon: "ck", value: 24, food: 7 },
     silk: { name: "Silk", color: "#efe4b0", icon: "sk", value: 34 },
+    spider_silk: { name: "Spider silk", stackable: true, color: "#dfe7d3", icon: "ss", value: 18 },
     fur: { name: "Fur", color: "#8f6848", icon: "fr", value: 28 },
     attack_potion: { name: "Attack potion", color: "#8b4dcc", icon: "ap", value: 42, boostSkill: "Attack", boostFlat: 3, boostPct: 0.1 },
     strength_potion: { name: "Strength potion", color: "#d65d4c", icon: "sp", value: 54, boostSkill: "Strength", boostFlat: 3, boostPct: 0.1 },
@@ -222,6 +223,7 @@
     ranging_potion: { name: "Ranging potion", color: "#5dbb62", icon: "rp", value: 70, boostSkill: "Ranged", boostFlat: 4, boostPct: 0.1 },
     magic_potion: { name: "Magic potion", color: "#57a9e8", icon: "mp", value: 74, boostSkill: "Magic", boostFlat: 4, boostPct: 0.08 },
     energy_potion: { name: "Energy potion", color: "#f0d85b", icon: "ep", value: 36, runRestore: 35 },
+    antipoison: { name: "Antipoison", color: "#79d473", icon: "ap", value: 46, poisonCure: true },
     potato_seed: { name: "Potato seed", stackable: true, color: "#9f7a3f", icon: "ps", value: 3 },
     mirthleaf_seed: { name: "Mirthleaf seed", stackable: true, color: "#6cbf5f", icon: "ms", value: 9 },
     potato: { name: "Potato", color: "#cfa866", icon: "pt", value: 8, food: 3 },
@@ -244,6 +246,7 @@
     black_helm: { name: "Black helm", slot: "helm", color: "#1d1d21", icon: "bh", value: 210, defence: 5, requirements: { Defence: 10 } },
     iron_platelegs: { name: "Iron platelegs", slot: "legs", color: "#aeb5b9", icon: "pl", value: 130, defence: 4, requirements: { Defence: 5 } },
     team_cape: { name: "Team cape", slot: "body", color: "#b63232", icon: "tc", value: 160, attack: 1, defence: 3 },
+    spider_cape: { name: "Spider silk cape", slot: "body", color: "#dfe7d3", icon: "sp", value: 540, attack: 2, defence: 4, poisonResist: true, requirements: { Crafting: 12 } },
     castle_ticket: { name: "Castle wars ticket", stackable: true, color: "#e0c45b", icon: "ct", value: 12 },
     castle_bandage: { name: "Castle bandage", color: "#f2e7c7", icon: "cb", value: 8, food: 9 },
     decorative_helm: { name: "Decorative helm", slot: "helm", color: "#d8d0a8", icon: "dh", value: 520, defence: 4, requirements: { Defence: 10 } },
@@ -374,6 +377,18 @@
       value: 15,
       food: 5,
     },
+    lobster_pot: { name: "Lobster pot", color: "#d6c18f", icon: "lp", value: 28 },
+    raw_lobster: {
+      name: "Raw lobster",
+      color: "#a6474b",
+      icon: "rl",
+      value: 55,
+      cookTo: "lobster",
+      burnTo: "burnt_fish",
+      cookingXp: 120,
+      burnLevel: 42,
+      noBurnLevel: 45,
+    },
     logs: { name: "Logs", color: "#8b5a32", icon: "lg", value: 5, log: true },
     oak_logs: { name: "Oak logs", color: "#a16b35", icon: "ok", value: 14, log: true },
     copper_ore: { name: "Copper ore", color: "#c26a35", icon: "co", value: 6, ore: true },
@@ -404,7 +419,18 @@
     chaos_rune: { name: "Chaos rune", stackable: true, color: "#6146b4", icon: "cr", value: 48 },
     law_rune: { name: "Law rune", stackable: true, color: "#d8c75a", icon: "lr", value: 90 },
     death_rune: { name: "Death rune", stackable: true, color: "#2e2b33", icon: "dr", value: 120 },
+    banana: { name: "Banana", color: "#edd45a", icon: "bn", value: 6, food: 3 },
     lobster: { name: "Lobster", color: "#d23e36", icon: "lb", value: 95, food: 12 },
+    pirate_cutlass: {
+      name: "Pirate cutlass",
+      slot: "weapon",
+      color: "#cfd2d0",
+      icon: "pc",
+      value: 420,
+      attack: 16,
+      strength: 13,
+      requirements: { Attack: 20 },
+    },
   };
 
   const state = {
@@ -470,6 +496,11 @@
         state: "not-started",
         text: "Gardener Bess wants a harvested crop and a homemade potion.",
       },
+      islandRun: {
+        title: "Island Supply Run",
+        state: "not-started",
+        text: "Trader Kojo wants bananas and a lobster from Karamel Isle.",
+      },
     },
     stats: {
       bankUses: 0,
@@ -495,10 +526,16 @@
       jewelryCrafted: 0,
       lesserDemonsSlain: 0,
       logsCut: 0,
+      bananasPicked: 0,
+      islandTrips: 0,
+      jungleSpidersSlain: 0,
+      lobstersCaught: 0,
+      lobstersCooked: 0,
       mapsOpened: 0,
       oresMined: 0,
       potionsDrunk: 0,
       potionsMixed: 0,
+      poisonsCured: 0,
       randomEventsCompleted: 0,
       essenceMined: 0,
       runesCrafted: 0,
@@ -514,6 +551,7 @@
       slayerTasksCompleted: 0,
       stallsStolen: 0,
       visitedWilderness: false,
+      websCut: 0,
     },
     slayer: { task: null, streak: 0, points: 0 },
     runePouch: { essence: 0, capacity: 12 },
@@ -543,6 +581,8 @@
       boostDecay: 60,
       runEnergy: 100,
       hp: 100,
+      poisonDamage: 0,
+      poisonTick: 0,
       inventory: Array.from({ length: 28 }, () => null),
       bank: Array.from({ length: 48 }, () => null),
       equipment: {
@@ -567,6 +607,7 @@
     { id: "bones", label: "Bury bones", done: () => state.stats.bonesBuried > 0 },
     { id: "fire", label: "Light a fire", done: () => state.stats.firesLit > 0 },
     { id: "fish", label: "Catch fish", done: () => state.stats.fishCaught > 0 },
+    { id: "lobster", label: "Catch a lobster", done: () => state.stats.lobstersCaught > 0 },
     { id: "ore", label: "Mine ore", done: () => state.stats.oresMined > 0 },
     { id: "potion", label: "Drink a potion", done: () => state.stats.potionsDrunk > 0 },
     { id: "craft", label: "Craft leather", done: () => state.stats.cowhidesCrafted > 0 },
@@ -576,7 +617,10 @@
     { id: "fletching", label: "Fletch bronze arrows", done: () => state.stats.arrowsFletched > 0 },
     { id: "runecrafting", label: "Craft runes at an altar", done: () => state.stats.runesCrafted > 0 },
     { id: "farming", label: "Harvest a farm patch", done: () => state.stats.cropsHarvested > 0 },
+    { id: "banana", label: "Pick island bananas", done: () => state.stats.bananasPicked > 0 },
+    { id: "web", label: "Cut an island spider web", done: () => state.stats.websCut > 0 },
     { id: "herblore", label: "Mix a potion", done: () => state.stats.potionsMixed > 0 },
+    { id: "antipoison", label: "Cure poison", done: () => state.stats.poisonsCured > 0 },
     { id: "contract", label: "Complete a farming contract", done: () => state.stats.farmingContractsCompleted > 0 },
     { id: "slayer", label: "Finish a Slayer task", done: () => state.stats.slayerTasksCompleted > 0 },
     { id: "clue", label: "Solve a clue scroll", done: () => state.stats.cluesSolved > 0 },
@@ -597,6 +641,7 @@
     { id: "crypts", label: "Brother Crypts", x: 58, y: 54, note: "wights and chest loot", color: "#b9c7c6" },
     { id: "castlewars", label: "Castle Wars", x: 72, y: 30, note: "capture flags for tickets", color: "#f0d25d" },
     { id: "lake", label: "Lake Mollusk", x: 64, y: 64, note: "fish and ferry", color: "#7fd7ff" },
+    { id: "karamel", label: "Karamel Isle", x: 73, y: 72, note: "30gp ferry, lobsters", color: "#ffe36a", ferryCost: 30 },
     { id: "agility", label: "Agility Yard", x: 31, y: 24, note: "obstacles and run training", color: "#9dff8a" },
     { id: "farm", label: "Bess's Patches", x: 28, y: 44, note: "farming and herbs", color: "#b9e46a" },
     { id: "hollow", label: "Crawler Hollow", x: 68, y: 43, note: "crawlers and wight", color: "#a0a8ff" },
@@ -613,6 +658,7 @@
     { type: "grave_skeleton", name: "Grave skeleton", level: 12, location: "Old Graveyard", drops: "bones, iron sword", tip: "prayer fuel" },
     { type: "salt_slug", name: "Salt slug", level: 18, location: "Crawler Hollow", drops: "gems, salt", tip: "finish with salt" },
     { type: "cave_crawler", name: "Cave crawler", level: 16, location: "Crawler Hollow", drops: "gems, coins", tip: "bring food" },
+    { type: "jungle_spider", name: "Jungle spider", level: 24, location: "Karamel Isle", drops: "bananas, herbs, silk", tip: "poisons; pack antipoison" },
     { type: "dark_wizard", name: "Dark wizard", level: 20, location: "Low Wilderness", drops: "chaos, talismans, staff", tip: "keep prayer ready" },
     { type: "moss_brute", name: "Moss brute", level: 28, location: "Mosswood", drops: "mirthleaf seeds, steel", tip: "slow but heavy" },
     { type: "black_knight", name: "Black knight", level: 33, location: "Low Wilderness", drops: "black helm, legs", tip: "armoured target" },
@@ -701,6 +747,10 @@
     return Math.hypot(dx, dy);
   }
 
+  function rectsOverlap(a, b, pad = 0) {
+    return a.x < b.x + b.w + pad && a.x + a.w + pad > b.x && a.y < b.y + b.h + pad && a.y + a.h + pad > b.y;
+  }
+
   function xpForLevel(level) {
     if (level <= 1) return 0;
     let points = 0;
@@ -739,6 +789,10 @@
     return Math.max(10, getLevel("Prayer") * 10);
   }
 
+  function isPoisoned() {
+    return (state.player.poisonDamage || 0) > 0;
+  }
+
   function agilityRunBonus() {
     return Math.max(0, effectiveLevel("Agility") - 1);
   }
@@ -773,6 +827,16 @@
     const item = state.player.inventory[slot];
     if (!item) return;
     const data = ITEMS[item.id];
+    if (data.poisonCure) {
+      const wasPoisoned = isPoisoned();
+      state.player.poisonDamage = 0;
+      state.player.poisonTick = 0;
+      removeSlot(state.player.inventory, slot, 1);
+      state.stats.potionsDrunk += 1;
+      if (wasPoisoned) state.stats.poisonsCured += 1;
+      addChat(wasPoisoned ? "You drink the antipoison. The poison fades." : "You drink the antipoison. It tastes aggressively green.");
+      return;
+    }
     if (data.runRestore) {
       state.player.runEnergy = Math.min(100, state.player.runEnergy + data.runRestore);
       removeSlot(state.player.inventory, slot, 1);
@@ -957,6 +1021,10 @@
       wanderTimer: random() * 2,
       wanderDx: 0,
       wanderDy: 0,
+      wanderRadius: stats.wanderRadius || 4,
+      wanderSpeed: stats.wanderSpeed || 0.55,
+      poisonDamage: stats.poisonDamage || 0,
+      poisonChance: stats.poisonChance || 0,
       cryptBrother: stats.cryptBrother || null,
       despawnOnDeath: Boolean(stats.despawnOnDeath),
       finisher: stats.finisher || null,
@@ -1019,6 +1087,11 @@
     setRect(54, 51, 8, 5, "stone");
     setRect(62, 59, 5, 4, "stone");
     drawRoad(58, 58, 64, 61, 1);
+    setRect(69, 68, 10, 10, "sand");
+    setRect(71, 70, 6, 5, "field");
+    setRect(74, 68, 4, 4, "stone");
+    setRect(71, 75, 6, 2, "dirt");
+    drawRoad(72, 75, 75, 70, 1);
     setRect(66, 24, 13, 13, "field");
     setRect(66, 24, 5, 5, "stone");
     setRect(74, 32, 5, 5, "stone");
@@ -1050,6 +1123,14 @@
     addScenery("rope_swing", "Rope swing", 34, 23, { action: "agility", level: 5, xp: 58, restore: 10, failDamage: 5, cooldown: 3.0 });
     addScenery("stepping_stones", "Stepping stones", 29, 26, { action: "agility", level: 12, xp: 86, restore: 13, failDamage: 7, cooldown: 3.4 });
     addScenery("dock", "Fishing dock", 55, 61, { action: "fish" });
+    addScenery("island_dock", "Karamel dock", 72, 75, { action: "fish_lobster", interactRange: 2.8 });
+    addScenery("banana_tree", "Banana tree", 72, 71, { action: "banana", interactRange: 2.4, readyAt: 0 });
+    addScenery("banana_tree", "Banana tree", 75, 74, { action: "banana", interactRange: 2.4, readyAt: 0 });
+    addScenery("volcano_entrance", "Volcano mouth", 75, 70, { action: "examine", interactRange: 2.8 });
+    addScenery("spider_web", "Jungle web", 76, 72, { action: "web", interactRange: 2.1, readyAt: 0 });
+    addScenery("spider_web", "Jungle web", 78, 73, { action: "web", interactRange: 2.1, readyAt: 0 });
+    addScenery("island_stall", "Island supply stall", 73, 73, { action: "island_shop", interactRange: 2.4 });
+    addScenery("range", "Island cookfire", 75, 73, { action: "cook" });
     addScenery("law_altar", "Law altar", 64, 61, { action: "runecraft", rune: "law", interactRange: 2.5 });
     addScenery("crypt_mound", "Mord's crypt", 53, 53, { action: "crypt", brother: "mord", interactRange: 2.7 });
     addScenery("crypt_mound", "Vell's crypt", 58, 52, { action: "crypt", brother: "vell", interactRange: 2.7 });
@@ -1097,6 +1178,13 @@
     ]) {
       addResource("fishing_spot", spot[0], spot[1]);
     }
+    for (const spot of [
+      [70, 75],
+      [73, 77],
+      [77, 75],
+    ]) {
+      addResource("lobster_spot", spot[0], spot[1]);
+    }
 
     addNpc("banker", "Banker Niles", "banker", 35, 31);
     addNpc("shopkeeper", "Shopkeeper Marnie", "shop", 45, 32);
@@ -1111,6 +1199,7 @@
     addNpc("wizard", "Wizard Elric", "wizard", 52, 27);
     addNpc("gardener", "Gardener Bess", "gardener", 27, 42);
     addNpc("castle_squire", "Castle Squire", "squire", 70, 36);
+    addNpc("island_trader", "Trader Kojo", "island_trader", 73, 72);
     addNpc("guard", "Town Guard", "guard", 41, 37, { patrol: true });
     addNpc("border_guard", "Border Guard", "guard", 25, 32);
 
@@ -1247,7 +1336,7 @@
       strength: 21,
       defence: 18,
       xp: 240,
-      aggro: 6,
+      aggro: 2.8,
       respawn: 28,
       slayerType: "deep_wight",
     }, [["bones", 1, 1], ["coins", 120, 0.7], ["clue_scroll", 1, 0.35], ["ranging_potion", 1, 0.14], ["amulet_of_accuracy", 1, 0.08], ["team_cape", 1, 0.06], ["steel_sword", 1, 0.05]]);
@@ -1264,6 +1353,43 @@
         slayerType: "moss_brute",
       }, [["bones", 1, 0.9], ["coins", 55, 0.55], ["mirthleaf_seed", 2, 0.18], ["strength_potion", 1, 0.12], ["steel_sword", 1, 0.04]]);
     }
+    for (const spot of [
+      [77, 68],
+      [78, 67],
+      [78, 69],
+      [77, 71],
+      [78, 72],
+      [77, 73],
+    ]) {
+      addEnemy("jungle_spider", "Jungle spider", spot[0], spot[1], {
+        level: 24,
+        hp: 68,
+        attack: 14,
+        strength: 15,
+        defence: 12,
+        xp: 115,
+        aggro: 0.1,
+        wanderRadius: 1.35,
+        wanderSpeed: 0.28,
+        poisonDamage: 4,
+        poisonChance: 0.28,
+        respawn: 15,
+        slayerType: "jungle_spider",
+      }, [["bones", 1, 0.45], ["banana", 1, 0.45], ["spider_silk", 2, 0.62], ["grimy_mirthleaf", 1, 0.12], ["coins", 42, 0.5], ["clue_scroll", 1, 0.08]]);
+    }
+    addEnemy("lesser_demon", "Volcano demon", 76, 68, {
+      level: 42,
+      hp: 125,
+      attack: 25,
+      strength: 28,
+      defence: 22,
+      xp: 310,
+      aggro: 0.1,
+      wanderRadius: 1.0,
+      wanderSpeed: 0.2,
+      respawn: 36,
+      slayerType: "lesser_demon",
+    }, [["big_bones", 1, 1], ["chaos_rune", 7, 0.48], ["law_rune", 2, 0.16], ["raw_lobster", 1, 0.24], ["rune_scimitar", 1, 0.035]]);
   }
 
   function walkable(x, y) {
@@ -1472,6 +1598,8 @@
     };
     state.player.boosts = state.player.boosts || {};
     state.player.boostDecay = state.player.boostDecay || 60;
+    state.player.poisonDamage = Math.max(0, Number(state.player.poisonDamage) || 0);
+    state.player.poisonTick = Math.max(0, Number(state.player.poisonTick) || 0);
     for (const skill of skillNames) {
       if (!state.player.skills[skill]) state.player.skills[skill] = { xp: skill === "Hitpoints" ? xpForLevel(10) : 0 };
     }
@@ -1669,18 +1797,18 @@
       : roll > 0.965
         ? [choice(["crypt_helm", "ancient_page"]), 1]
         : roll > 0.92
-        ? ["team_cape", 1]
-        : roll > 0.82
-          ? ["clue_scroll", 1]
-          : roll > 0.66
-            ? [choice(["uncut_gem", "cut_gem", "gold_bar"]), 1]
-            : roll > 0.5
-              ? [choice(["attack_potion", "strength_potion", "defence_potion", "energy_potion"]), 1]
-              : roll > 0.32
-                ? [choice(["law_rune", "death_rune"]), 2 + Math.floor(random() * 3)]
-                : roll > 0.16
-                  ? [choice(["spinach_roll", "bow_string"]), 1]
-                  : ["coins", 80 + Math.floor(random() * 220)];
+          ? ["team_cape", 1]
+          : roll > 0.82
+            ? ["clue_scroll", 1]
+            : roll > 0.66
+              ? [choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster"]), 1]
+              : roll > 0.5
+                ? [choice(["attack_potion", "strength_potion", "defence_potion", "energy_potion"]), 1]
+                : roll > 0.32
+                  ? [choice(["law_rune", "death_rune"]), 2 + Math.floor(random() * 3)]
+                  : roll > 0.16
+                    ? [choice(["spinach_roll", "bow_string"]), 1]
+                    : ["coins", 80 + Math.floor(random() * 220)];
     addInventory(reward[0], reward[1]);
     gainXp("Crafting", 35);
     addChat(`The mystery box contains ${formatItem(reward[0], reward[1])}.`, "loot");
@@ -1924,6 +2052,7 @@
     if (player.prayerMode === "rapidHeal" && player.prayerPoints > 0 && player.hp < maxHp()) {
       player.hp = Math.min(maxHp(), player.hp + dt * 1.8);
     }
+    updatePoison(dt);
     updateBoosts(dt);
     if (state.musicOn && state.time >= state.nextMusic) {
       state.nextMusic = state.time + 9 + random() * 7;
@@ -1945,6 +2074,7 @@
   function areaAt(x, y) {
     if (x < 22 && y < 28) return "Low Wilderness";
     if (x > 64 && y > 22 && y < 39) return "Castle Wars";
+    if (x > 68 && y > 67) return "Karamel Isle";
     if (Math.hypot(x - 66, y - 43) < 11) return "Crawler Hollow";
     if (Math.hypot(x - 62, y - 18) < 12) return "Greyrock Mine";
     if (Math.hypot(x - 52, y - 25) < 7) return "Wizard Tower";
@@ -1956,6 +2086,20 @@
     if (Math.hypot(x - 64, y - 64) < 11) return "Lake Mollusk";
     if (Math.hypot(x - 16, y - 18) < 10) return "Mosswood";
     return "Wilderness Road";
+  }
+
+  function updatePoison(dt) {
+    const player = state.player;
+    if (!isPoisoned()) return;
+    player.poisonTick -= dt;
+    if (player.poisonTick > 0) return;
+    player.poisonTick = 18;
+    const hit = Math.max(1, Math.ceil(player.poisonDamage));
+    player.hp = Math.max(1, player.hp - hit);
+    player.damageFlash = 0.4;
+    addFloatingText(player.x, player.y, `${hit}`, "#58d35b");
+    player.poisonDamage = Math.max(0, player.poisonDamage - 1);
+    if (!isPoisoned()) addChat("The poison wears off.");
   }
 
   function updateBoosts(dt) {
@@ -2026,6 +2170,22 @@
         duration: level >= 20 ? 3.6 : 2.7,
       };
       addChat("You cast a small net.");
+    } else if (resource.type === "lobster_spot") {
+      if (getLevel("Fishing") < 35) {
+        addChat("You need Fishing level 35 to catch lobsters.");
+        return;
+      }
+      if (inventoryCount("lobster_pot") <= 0) {
+        addChat("You need a lobster pot.");
+        return;
+      }
+      state.player.action = {
+        kind: "lobster_fishing",
+        resourceId: resource.id,
+        progress: 0,
+        duration: 4.1,
+      };
+      addChat("You lower the lobster pot.");
     }
   }
 
@@ -2065,6 +2225,12 @@
       gainXp("Fishing", trout ? 60 : 25);
       state.stats.fishCaught += 1;
       resource.depleted = state.time + 1.5;
+    } else if (action.kind === "lobster_fishing") {
+      if (!addInventory("raw_lobster")) return;
+      gainXp("Fishing", 110);
+      state.stats.fishCaught += 1;
+      state.stats.lobstersCaught += 1;
+      resource.depleted = state.time + 2.3;
     }
   }
 
@@ -2073,6 +2239,7 @@
     if (kind === "mining") return "Mining";
     if (kind === "essence") return "Mining";
     if (kind === "fishing") return "Fishing";
+    if (kind === "lobster_fishing") return "Fishing";
     return "Attack";
   }
 
@@ -2138,6 +2305,18 @@
     floatingText.push({ x, y, text, color, age: 0 });
   }
 
+  function poisonPlayer(amount, sourceName) {
+    const body = ITEMS[state.player.equipment.body];
+    if (body?.poisonResist && random() < 0.45) {
+      addFloatingText(state.player.x, state.player.y, "resist", "#b8ffb2");
+      return;
+    }
+    if ((state.player.poisonDamage || 0) >= amount) return;
+    state.player.poisonDamage = amount;
+    state.player.poisonTick = 8;
+    addChat(`${sourceName} poisons you.`, "danger");
+  }
+
   function killEnemy(enemy) {
     if (enemy.finisher) {
       if (inventoryCount(enemy.finisher) <= 0) {
@@ -2158,6 +2337,7 @@
     state.stats.goblinsSlain += enemy.type === "field_imp" ? 1 : 0;
     state.stats.darkWizardsSlain += enemy.type === "dark_wizard" ? 1 : 0;
     state.stats.deepWightsSlain += enemy.type === "deep_wight" ? 1 : 0;
+    state.stats.jungleSpidersSlain += enemy.type === "jungle_spider" ? 1 : 0;
     state.stats.lesserDemonsSlain += enemy.type === "lesser_demon" ? 1 : 0;
     for (const [itemId, qty, chance] of enemy.loot) {
       if (random() < chance) dropGroundItem(itemId, qty, enemy.x, enemy.y);
@@ -2223,6 +2403,7 @@
             state.player.hp = Math.max(0, state.player.hp - hit);
             state.player.damageFlash = 0.4;
             addFloatingText(state.player.x, state.player.y, `${hit}`, "#ff5858");
+            if (enemy.poisonDamage && random() < enemy.poisonChance) poisonPlayer(enemy.poisonDamage, `The ${enemy.name}`);
             if (state.player.hp <= 0) playerDeath();
           } else {
             addFloatingText(state.player.x, state.player.y, "0", "#efefef");
@@ -2238,13 +2419,13 @@
         const homeD = Math.hypot(enemy.x - enemy.spawnX, enemy.y - enemy.spawnY);
         let dx = enemy.wanderDx;
         let dy = enemy.wanderDy;
-        if (homeD > 4) {
+        if (homeD > enemy.wanderRadius) {
           dx = enemy.spawnX - enemy.x;
           dy = enemy.spawnY - enemy.y;
         }
         const l = Math.hypot(dx, dy) || 1;
-        const nx = enemy.x + (dx / l) * dt * 0.55;
-        const ny = enemy.y + (dy / l) * dt * 0.55;
+        const nx = enemy.x + (dx / l) * dt * enemy.wanderSpeed;
+        const ny = enemy.y + (dy / l) * dt * enemy.wanderSpeed;
         if (walkable(Math.floor(nx), Math.floor(ny))) {
           enemy.x = nx;
           enemy.y = ny;
@@ -2274,6 +2455,7 @@
           gardener: ["Water once. Wait forever.", "Compost cures many sins."],
           wizard: ["Essence hums. So do unpaid apprentices.", "Mind the altar sparks."],
           squire: ["Take the flag. Bring it back. Simple until it isn't.", "Tickets buy lovely pointless armour."],
+          island_trader: ["Bananas stack badly. Profit stacks nicely.", "Volcano spiders make poor customers."],
           guard: ["Keep the peace."],
         };
         addBark(npc, choice(lines[npc.role] || ["Lovely weather."]));
@@ -2375,6 +2557,8 @@
     state.player.action = null;
     state.player.combatTarget = null;
     state.player.hp = maxHp();
+    state.player.poisonDamage = 0;
+    state.player.poisonTick = 0;
     state.player.respawnFlash = 1.5;
     if (state.crypt?.awakened?.length) {
       state.crypt.awakened = [];
@@ -2445,9 +2629,27 @@
       wizardDialogue(npc);
     } else if (npc.role === "squire") {
       castleSquireDialogue(npc);
+    } else if (npc.role === "island_trader") {
+      islandTraderDialogue(npc);
     } else if (npc.role === "fisher") {
       openDialogue(npc.name, ["Small net for shrimp by the bridge. Higher levels can fish trout at the lake. I also row shortcuts for coin."], [
         { label: "To Lake Mollusk - 12gp", action: () => travelTo(63.5, 62.5, 12, "Lake Mollusk") },
+        {
+          label: "To Karamel Isle - 30gp",
+          action: () => {
+            const canPay = inventoryCount("coins") >= 30;
+            travelTo(73.5, 72.5, 30, "Karamel Isle");
+            if (canPay) state.stats.islandTrips += 1;
+          },
+        },
+        {
+          label: "Buy lobster pot - 20gp",
+          action: () => {
+            if (!spendCoins(20)) addChat("You need 20 coins for a lobster pot.");
+            else addInventory("lobster_pot", 1);
+            closeModal();
+          },
+        },
         { label: "To Greyrock Mine - 18gp", action: () => travelTo(60.5, 20.5, 18, "Greyrock Mine") },
         { label: "To Wilderness ditch - 25gp", action: () => travelTo(25.5, 32.5, 25, "the Wilderness ditch") },
         { label: "Close", action: () => closeModal() },
@@ -2476,6 +2678,54 @@
       { label: "How does this work?", action: () => addChat("Squire says: take the rival flag, click your flag to score, first to three wins.") },
       { label: "Close", action: () => closeModal() },
     ]);
+  }
+
+  function islandTraderDialogue(npc) {
+    const quest = state.quests.islandRun;
+    const choices = [
+      { label: "Trade island supplies", action: () => openIslandShop() },
+      { label: "Ask about the island", action: () => addChat("Kojo says: pot lobsters at the dock, pick bananas inland, cut webs with a knife, and pack antipoison.") },
+      { label: "Close", action: () => closeModal() },
+    ];
+    if (quest.state === "not-started") {
+      openDialogue(npc.name, ["Mainlanders keep ordering food and forgetting boats exist. Bring me three bananas and one cooked lobster."], [
+        {
+          label: "Start Island Supply Run",
+          action: () => {
+            quest.state = "started";
+            addInventory("lobster_pot", 1);
+            addChat("Quest started: Island Supply Run.");
+            closeModal();
+          },
+        },
+        ...choices,
+      ]);
+      return;
+    }
+    if (quest.state === "started") {
+      const ready = inventoryCount("banana") >= 3 && inventoryCount("lobster") >= 1;
+      openDialogue(npc.name, [ready ? "That is a proper island crate." : `Supplies: ${inventoryCount("banana")}/3 bananas, ${inventoryCount("lobster")}/1 lobster.`], [
+        {
+          label: ready ? "Complete quest" : "Keep gathering",
+          action: () => {
+            if (ready) {
+              removeItem(state.player.inventory, "banana", 3);
+              removeItem(state.player.inventory, "lobster", 1);
+              quest.state = "completed";
+              addInventory("pirate_cutlass", 1);
+              addInventory("coins", 180);
+              gainXp("Fishing", 220);
+              gainXp("Cooking", 180);
+              addChat("Quest complete: Island Supply Run.");
+            }
+            closeModal();
+          },
+        },
+        ...choices.slice(0, 2),
+      ]);
+      return;
+    }
+    openDialogue(npc.name, ["Karamel Isle exports fish, fruit, and questionable confidence."], choices);
   }
 
   function wizardDialogue(npc) {
@@ -2833,6 +3083,7 @@
       stock: [
         { id: "broad_arrow", price: 1, qty: 35 },
         { id: "bag_of_salt", price: 1, qty: 20 },
+        { id: "antipoison", price: 1 },
         { id: "clue_scroll", price: 2 },
         { id: "amulet_of_accuracy", price: 3 },
         { id: "slayer_helm", price: 5 },
@@ -2851,6 +3102,7 @@
       { type: "grave_skeleton", label: "grave skeletons", amount: 8, minCombat: 10, xp: 75 },
       { type: "salt_slug", label: "salt slugs", amount: 8, minCombat: 12, xp: 80 },
       { type: "cave_crawler", label: "cave crawlers", amount: 10, minCombat: 12, xp: 95 },
+      { type: "jungle_spider", label: "jungle spiders", amount: 8, minCombat: 16, xp: 105 },
       { type: "dark_wizard", label: "dark wizards", amount: 7, minCombat: 18, xp: 110 },
       { type: "moss_brute", label: "moss brutes", amount: 6, minCombat: 24, xp: 140 },
       { type: "black_knight", label: "black knights", amount: 5, minCombat: 28, xp: 175 },
@@ -2886,6 +3138,7 @@
         { id: "bronze_arrow", price: 22, qty: 25 },
         { id: "knife", price: 13 },
         { id: "chisel", price: 18 },
+        { id: "lobster_pot", price: 28 },
         { id: "bag_of_salt", price: 6, qty: 10 },
         { id: "feather", price: 15, qty: 30 },
         { id: "bow_string", price: 24 },
@@ -2910,6 +3163,7 @@
         { id: "strength_potion", price: 58 },
         { id: "defence_potion", price: 54 },
         { id: "energy_potion", price: 36 },
+        { id: "antipoison", price: 48 },
         { id: "ranging_potion", price: 88 },
         { id: "magic_potion", price: 94 },
         { id: "empty_vial", price: 12, qty: 2 },
@@ -2962,6 +3216,22 @@
         { id: "law_talisman", price: 360 },
         { id: "air_rune", price: 5, qty: 20 },
         { id: "mind_rune", price: 4, qty: 20 },
+      ],
+    };
+  }
+
+  function openIslandShop() {
+    state.modal = {
+      type: "shop",
+      title: "Karamel Trader",
+      rects: [],
+      stock: [
+        { id: "lobster_pot", price: 25 },
+        { id: "banana", price: 7, qty: 3 },
+        { id: "raw_lobster", price: 72 },
+        { id: "lobster", price: 118 },
+        { id: "antipoison", price: 52 },
+        { id: "energy_potion", price: 42 },
       ],
     };
   }
@@ -3019,6 +3289,15 @@
     } else if (action === "fish") {
       const spot = nearestResource("fishing_spot");
       if (spot) resourceAction(spot);
+    } else if (action === "fish_lobster") {
+      const spot = nearestResource("lobster_spot");
+      if (spot) resourceAction(spot);
+    } else if (action === "banana") {
+      pickBanana(obj);
+    } else if (action === "web") {
+      cutSpiderWeb(obj);
+    } else if (action === "island_shop") {
+      openIslandShop();
     } else if (action === "steal") {
       stealFromStall(obj);
     } else if (action === "agility") {
@@ -3058,6 +3337,34 @@
     return state.resources
       .filter((r) => r.type === type)
       .sort((a, b) => dist(a, state.player) - dist(b, state.player))[0];
+  }
+
+  function pickBanana(obj) {
+    if (obj.readyAt && obj.readyAt > state.time) {
+      addChat("The banana tree needs a moment.");
+      return;
+    }
+    if (!addInventory("banana", 1)) return;
+    obj.readyAt = state.time + 24;
+    state.stats.bananasPicked += 1;
+    gainXp("Farming", 12);
+    addChat("You pick a banana.", "loot");
+  }
+
+  function cutSpiderWeb(obj) {
+    if (obj.readyAt && obj.readyAt > state.time) {
+      addChat("The web needs time to thicken again.");
+      return;
+    }
+    if (inventoryCount("knife") <= 0) {
+      addChat("You need a knife to cut spider silk.");
+      return;
+    }
+    if (!addInventory("spider_silk", 2, true)) return;
+    obj.readyAt = state.time + 28;
+    state.stats.websCut += 1;
+    gainXp("Crafting", 22);
+    addChat("You cut strands of spider silk.", "loot");
   }
 
   function castleWarsScoreText() {
@@ -3486,6 +3793,16 @@
       addChat("You need mirthleaf and a vial of water.");
       return;
     }
+    if (getLevel("Herblore") >= 5 && inventoryCount("spider_silk") > 0) {
+      removeItem(state.player.inventory, "clean_mirthleaf", 1);
+      removeItem(state.player.inventory, "vial_of_water", 1);
+      removeItem(state.player.inventory, "spider_silk", 1);
+      addInventory("antipoison", 1);
+      gainXp("Herblore", 58);
+      state.stats.potionsMixed += 1;
+      addChat("You mix an antipoison.", "loot");
+      return;
+    }
     if (getLevel("Herblore") >= 8 && inventoryCount("potato") > 0) {
       removeItem(state.player.inventory, "clean_mirthleaf", 1);
       removeItem(state.player.inventory, "vial_of_water", 1);
@@ -3625,20 +3942,23 @@
   }
 
   function cookBestRawFish() {
-    const itemId = inventoryCount("raw_trout") > 0 ? "raw_trout" : inventoryCount("raw_beef") > 0 ? "raw_beef" : inventoryCount("raw_chicken") > 0 ? "raw_chicken" : inventoryCount("raw_shrimp") > 0 ? "raw_shrimp" : null;
+    const itemId = inventoryCount("raw_lobster") > 0 ? "raw_lobster" : inventoryCount("raw_trout") > 0 ? "raw_trout" : inventoryCount("raw_beef") > 0 ? "raw_beef" : inventoryCount("raw_chicken") > 0 ? "raw_chicken" : inventoryCount("raw_shrimp") > 0 ? "raw_shrimp" : null;
     if (!itemId) {
       addChat("You need raw food to cook.");
       return;
     }
     const data = ITEMS[itemId];
     removeItem(state.player.inventory, itemId, 1);
-    const burnChance = clamp(0.45 - effectiveLevel("Cooking") * 0.018 + data.burnLevel * 0.01, 0.04, 0.6);
+    const burnChance = data.noBurnLevel && effectiveLevel("Cooking") >= data.noBurnLevel
+      ? 0
+      : clamp(0.45 - effectiveLevel("Cooking") * 0.018 + data.burnLevel * 0.01, 0.04, 0.6);
     if (random() < burnChance) {
       addInventory(data.burnTo || "burnt_fish");
       addChat("You burn the food.");
     } else {
       addInventory(data.cookTo);
       gainXp("Cooking", data.cookingXp);
+      if (data.cookTo === "lobster") state.stats.lobstersCooked += 1;
       addChat(`You cook the ${ITEMS[data.cookTo].name}.`);
     }
   }
@@ -3696,6 +4016,21 @@
     gainXp("Crafting", 85);
     state.stats.gemsCut += 1;
     addChat("You cut the gem into a bright little wedge.", "loot");
+  }
+
+  function weaveSpiderCape() {
+    if (getLevel("Crafting") < 12) {
+      addChat("You need Crafting level 12 to weave a spider silk cape.");
+      return;
+    }
+    if (inventoryCount("spider_silk") < 6) {
+      addChat("You need six spider silk.");
+      return;
+    }
+    removeItem(state.player.inventory, "spider_silk", 6);
+    addInventory("spider_cape", 1);
+    gainXp("Crafting", 145);
+    addChat("You weave a spider silk cape.", "loot");
   }
 
   function craftJewellery() {
@@ -3787,7 +4122,7 @@
       cutGem(slot);
     } else if (item.id === "gold_bar" || item.id === "cut_gem") {
       craftJewellery();
-    } else if (data.boostSkill || data.runRestore) {
+    } else if (data.boostSkill || data.runRestore || data.poisonCure) {
       drinkPotion(slot);
     } else if (data.food) {
       const before = state.player.hp;
@@ -3817,7 +4152,9 @@
         state.stats.cowhidesCrafted += 1;
         addChat("You stitch the cowhides into a leather body.");
       }
-    } else if (item.id === "raw_shrimp" || item.id === "raw_trout" || item.id === "raw_beef" || item.id === "raw_chicken") {
+    } else if (item.id === "spider_silk") {
+      weaveSpiderCape();
+    } else if (item.id === "raw_shrimp" || item.id === "raw_trout" || item.id === "raw_beef" || item.id === "raw_chicken" || item.id === "raw_lobster") {
       const nearRange = state.scenery.some((obj) => obj.action === "cook" && dist(obj, state.player) < 3);
       const nearFire = state.fires.some((fire) => dist(fire, state.player) < 2.5);
       if (nearRange || nearFire) cookBestRawFish();
@@ -3875,8 +4212,8 @@
     if (roll > 0.985) addInventory("rune_scimitar", 1);
     else if (roll > 0.94) addInventory("team_cape", 1);
     else if (roll > 0.92) addInventory("slayer_helm", 1);
-    else if (roll > 0.78) addInventory(choice(["amulet_of_accuracy", "power_amulet"]), 1);
-    else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar"]), 1);
+    else if (roll > 0.78) addInventory(choice(["amulet_of_accuracy", "power_amulet", "pirate_cutlass"]), 1);
+    else if (roll > 0.62) addInventory(choice(["uncut_gem", "cut_gem", "gold_bar", "raw_lobster"]), 1);
     else if (roll > 0.46) addInventory(choice(["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "bow_string"]), 1);
     else if (roll > 0.28) addInventory("death_rune", 2 + Math.floor(random() * 5));
     else addInventory("broad_arrow", 20 + Math.floor(random() * 25));
@@ -4069,6 +4406,7 @@
     }
     drawables.push({ kind: "player", ySort: state.player.x + state.player.y, data: state.player });
     drawables.sort((a, b) => a.ySort - b.ySort);
+    state.enemyLabelBoxes = [];
     for (const drawable of drawables) {
       if (drawable.kind === "resource") drawResource(drawable.data);
       else if (drawable.kind === "scenery") drawScenery(drawable.data);
@@ -4206,6 +4544,19 @@
       ctx.ellipse(screen.x, screen.y - 4, 15 + Math.sin(state.time * 4) * 2, 6, 0, 0, Math.PI * 2);
       ctx.stroke();
       drawText("fish", screen.x, screen.y - 18, { size: 10, color: "#e8fbff", outline: "#06384e", align: "center" });
+    } else if (resource.type === "lobster_spot") {
+      const bob = Math.sin(state.time * 3 + resource.id) * 2;
+      ctx.strokeStyle = "#ffded1";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 4 + bob, 17, 7, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = "#d24d4d";
+      ctx.beginPath();
+      ctx.arc(screen.x - 7, screen.y - 9 + bob, 4, 0, Math.PI * 2);
+      ctx.arc(screen.x + 7, screen.y - 9 + bob, 4, 0, Math.PI * 2);
+      ctx.fill();
+      drawText("pots", screen.x, screen.y - 22, { size: 10, color: "#fff4d6", outline: "#6e231f", align: "center" });
     }
   }
 
@@ -4419,6 +4770,53 @@
       }
     } else if (obj.type === "dock") {
       drawBox(screen.x, screen.y - 8, 80, 16, "#8b5c32", "#3f2412");
+    } else if (obj.type === "island_dock") {
+      drawBox(screen.x, screen.y - 8, 92, 16, "#8b5c32", "#3f2412");
+      drawText("LOBSTER", screen.x, screen.y - 26, { color: "#ffd6c6", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "banana_tree") {
+      ctx.fillStyle = "#6b4825";
+      ctx.fillRect(screen.x - 5, screen.y - 32, 10, 34);
+      ctx.fillStyle = "#2f7a34";
+      for (let i = 0; i < 5; i += 1) {
+        ctx.beginPath();
+        ctx.ellipse(screen.x + Math.cos(i * 1.25) * 13, screen.y - 48 + Math.sin(i * 1.25) * 8, 20, 7, i * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (!obj.readyAt || obj.readyAt <= state.time) drawText("BAN", screen.x, screen.y - 68, { color: "#ffe36a", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "volcano_entrance") {
+      ctx.fillStyle = "#3d332b";
+      ctx.beginPath();
+      ctx.moveTo(screen.x - 38, screen.y - 5);
+      ctx.lineTo(screen.x, screen.y - 72);
+      ctx.lineTo(screen.x + 38, screen.y - 5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#1a100b";
+      ctx.stroke();
+      ctx.fillStyle = "#ff6b24";
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 58, 16, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      drawText("VOLCANO", screen.x, screen.y - 82, { color: "#ffb06a", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "spider_web") {
+      ctx.strokeStyle = obj.readyAt && obj.readyAt > state.time ? "rgba(210,220,210,0.35)" : "#dfe7d3";
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 4; i += 1) {
+        ctx.beginPath();
+        ctx.moveTo(screen.x - 24 + i * 16, screen.y - 48);
+        ctx.lineTo(screen.x + 24 - i * 16, screen.y - 10);
+        ctx.moveTo(screen.x - 24, screen.y - 12 - i * 9);
+        ctx.lineTo(screen.x + 24, screen.y - 42 + i * 9);
+        ctx.stroke();
+      }
+      drawText("WEB", screen.x, screen.y - 58, { color: "#edf5e7", outline: "#000", size: 9, align: "center" });
+    } else if (obj.type === "island_stall") {
+      drawBox(screen.x, screen.y - 18, 78, 30, "#9b6a35", "#2b160d");
+      ctx.fillStyle = "#edd45a";
+      ctx.fillRect(screen.x - 24, screen.y - 35, 13, 13);
+      ctx.fillStyle = "#d24d4d";
+      ctx.fillRect(screen.x + 5, screen.y - 35, 20, 11);
+      drawText("ISLE", screen.x, screen.y - 43, { color: "#ffe36a", outline: "#000", size: 10, align: "center" });
     } else if (obj.type === "ditch") {
       drawBox(screen.x, screen.y - 8, 90, 16, "#2b1a10", "#080604");
       drawText("WILDY", screen.x, screen.y - 22, { color: "#ff8a6b", outline: "#000", size: 10, align: "center" });
@@ -4508,13 +4906,14 @@
   function drawNpc(npc) {
     const screen = screenOf(npc);
     if (screen.x < -80 || screen.x > VIEW.w + 80 || screen.y < -100 || screen.y > VIEW.h + 80) return;
-    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : "#7f5231";
+    const color = npc.role === "slayer" ? "#243c44" : npc.role === "banker" ? "#273b68" : npc.role === "priest" ? "#e8e2c7" : npc.role === "apothecary" ? "#365c3c" : npc.role === "fletcher" ? "#80512d" : npc.role === "gardener" ? "#5f7b34" : npc.role === "wizard" ? "#513b8f" : npc.role === "squire" ? "#7b6a35" : npc.role === "island_trader" ? "#a0712d" : "#7f5231";
     drawHumanoid(screen.x, screen.y, color, "#f0c69b");
     drawText(npc.name, screen.x, screen.y - 58, { color: "#ffeaaa", outline: "#000", size: 10, align: "center" });
     if (npc.role === "slayer") drawText("!", screen.x + 16, screen.y - 45, { color: "#6feaff", outline: "#000", size: 18, align: "center" });
     if (npc.role === "gardener") drawText("*", screen.x + 15, screen.y - 45, { color: "#d8ff77", outline: "#000", size: 15, align: "center" });
     if (npc.role === "wizard") drawText("*", screen.x + 15, screen.y - 45, { color: "#d9d2ff", outline: "#000", size: 16, align: "center" });
     if (npc.role === "squire") drawText("cw", screen.x + 17, screen.y - 45, { color: "#f0d25d", outline: "#000", size: 10, align: "center" });
+    if (npc.role === "island_trader") drawText("gp", screen.x + 17, screen.y - 45, { color: "#ffe36a", outline: "#000", size: 10, align: "center" });
   }
 
   function drawBarks() {
@@ -4550,6 +4949,8 @@
       black_knight: "#1e1e22",
       grave_skeleton: "#dfd8bd",
       cave_crawler: "#3f6051",
+      salt_slug: "#7d8f75",
+      jungle_spider: "#2f2f28",
       deep_wight: "#5860a8",
       lesser_demon: "#8e2f32",
       moss_brute: "#557b3e",
@@ -4648,6 +5049,36 @@
         ctx.lineTo(screen.x + i * 11, screen.y + 3);
         ctx.stroke();
       }
+    } else if (enemy.type === "salt_slug") {
+      ctx.fillStyle = colors[enemy.type];
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 13, 24, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#d8d8cf";
+      ctx.beginPath();
+      ctx.moveTo(screen.x + 12, screen.y - 19);
+      ctx.lineTo(screen.x + 18, screen.y - 30);
+      ctx.moveTo(screen.x + 16, screen.y - 18);
+      ctx.lineTo(screen.x + 24, screen.y - 29);
+      ctx.stroke();
+    } else if (enemy.type === "jungle_spider") {
+      ctx.fillStyle = colors[enemy.type];
+      ctx.beginPath();
+      ctx.ellipse(screen.x, screen.y - 18, 21, 14, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#141410";
+      ctx.lineWidth = 2;
+      for (let i = -3; i <= 3; i += 1) {
+        ctx.beginPath();
+        ctx.moveTo(screen.x + i * 5, screen.y - 13);
+        ctx.lineTo(screen.x + i * 10, screen.y + 3 + Math.abs(i));
+        ctx.stroke();
+      }
+      ctx.fillStyle = "#9dff65";
+      ctx.beginPath();
+      ctx.arc(screen.x + 7, screen.y - 22, 2, 0, Math.PI * 2);
+      ctx.arc(screen.x + 13, screen.y - 21, 2, 0, Math.PI * 2);
+      ctx.fill();
     } else if (enemy.type === "deep_wight") {
       drawHumanoid(screen.x, screen.y, colors[enemy.type], "#95a0e8", 1.18);
       ctx.strokeStyle = "#b7c3ff";
@@ -4682,7 +5113,13 @@
     }
     ctx.restore();
     drawHpBar(screen.x, screen.y - 60, 44, enemy.hp / enemy.maxHp);
-    drawText(`${enemy.name} (${enemy.level})`, screen.x, screen.y - 72, { color: "#ffd6d6", outline: "#000", size: 10, align: "center" });
+    const label = `${enemy.name} (${enemy.level})`;
+    const labelBox = { x: screen.x - Math.min(128, label.length * 5.8) / 2, y: screen.y - 84, w: Math.min(128, label.length * 5.8), h: 14 };
+    const important = state.player.combatTarget === enemy.id || dist(enemy, state.player) < 2.8;
+    if (important || !state.enemyLabelBoxes.some((box) => rectsOverlap(box, labelBox, 4))) {
+      state.enemyLabelBoxes.push(labelBox);
+      drawText(label, screen.x, screen.y - 72, { color: "#ffd6d6", outline: "#000", size: 10, align: "center" });
+    }
   }
 
   function drawPlayer() {
@@ -4780,7 +5217,8 @@
     drawText(`BoonScape 2005 - ${state.areaName}`, 24, 29, { color: "#ffd86b", outline: "#000", size: 17, align: "left" });
     const task = state.slayer.task ? `${state.slayer.task.remaining} ${state.slayer.task.label}` : "No task";
     const boosts = activeBoosts().map(([skill, amount]) => `${skill.slice(0, 3)}+${amount}`).join(" ");
-    drawText(`Combat ${combatLevel()}  HP ${Math.ceil(state.player.hp)}/${maxHp()}  Prayer ${prayerLabel(state.player.prayerMode)}  Slayer: ${task}${boosts ? `  Boosts ${boosts}` : ""}`, 24, 50, {
+    const poison = isPoisoned() ? `  Poison ${Math.ceil(state.player.poisonDamage)}` : "";
+    drawText(`Combat ${combatLevel()}  HP ${Math.ceil(state.player.hp)}/${maxHp()}  Prayer ${prayerLabel(state.player.prayerMode)}  Slayer: ${task}${boosts ? `  Boosts ${boosts}` : ""}${poison}`, 24, 50, {
       color: "#f6e5bd",
       outline: "#000",
       size: 11,
@@ -4857,6 +5295,7 @@
     drawText("Pray", x + 86, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
     drawText("Mage", x + 142, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
     drawText("Run", x + 198, y + 55, { size: 10, color: "#f2dab0", outline: "#000", align: "center" });
+    if (isPoisoned()) drawText("Poison", x + 30, y + 9, { size: 10, color: "#79e068", outline: "#000", align: "center" });
   }
 
   function drawOrb(x, y, r, pct, color, label) {
@@ -4981,10 +5420,10 @@
     let yy = y + 34;
     for (const quest of Object.values(state.quests)) {
       const color = quest.state === "completed" ? "#78e05f" : quest.state === "started" ? "#ffe46b" : "#d0c0a0";
-      drawText(`${quest.title}`, x, yy, { color, outline: "#000", size: 12, align: "left" });
-      drawText(`${quest.state}`, x + w, yy, { color, outline: "#000", size: 10, align: "right" });
-      drawText(fitLine(quest.text, w, 10), x, yy + 14, { color: "#cdbb8a", outline: "#000", size: 10, align: "left" });
-      yy += 42;
+      drawText(`${quest.title}`, x, yy, { color, outline: "#000", size: 11, align: "left" });
+      drawText(`${quest.state}`, x + w, yy, { color, outline: "#000", size: 9, align: "right" });
+      drawText(fitLine(quest.text, w, 9), x, yy + 13, { color: "#cdbb8a", outline: "#000", size: 9, align: "left" });
+      yy += 35;
     }
     if (state.clue) {
       drawText("Active Clue", x, yy, { color: "#83efff", outline: "#000", size: 12, align: "left" });
@@ -5124,10 +5563,10 @@
       } else if (picked.kind === "enemy") {
         options.push({ label: `Attack ${item.name} (level ${item.level})`, action: () => approachOrAttackEnemy(item) });
       } else if (picked.kind === "resource") {
-        const label = item.type.includes("tree") ? "Chop" : item.type === "essence_rock" ? "Mine-essence" : item.type.includes("rock") ? "Mine" : "Net";
+        const label = item.type.includes("tree") ? "Chop" : item.type === "essence_rock" ? "Mine-essence" : item.type.includes("rock") ? "Mine" : item.type === "lobster_spot" ? "Cage" : "Net";
         options.push({ label: `${label} ${resourceName(item)}`, action: () => moveAdjacentTo(item, { kind: "resource", id: item.id }) });
       } else if (picked.kind === "scenery") {
-        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "runecraft" ? "Craft-rune-at" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "castle_wars" ? "Enter" : item.action === "castle_flag" ? "Use-flag" : item.action === "castle_supply" ? "Take-from" : item.action === "castle_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
+        const label = item.action === "steal" ? "Steal-from" : item.action === "agility" ? "Cross" : item.action === "fletch" ? "Fletch-at" : item.action === "farm" ? "Tend" : item.action === "water" ? "Fill-at" : item.action === "fish_lobster" ? "Cage-at" : item.action === "banana" ? "Pick-from" : item.action === "web" ? "Cut" : item.action === "island_shop" ? "Trade-at" : item.action === "runecraft" ? "Craft-rune-at" : item.action === "crypt" ? "Open" : item.action === "crypt_chest" ? "Loot" : item.action === "castle_wars" ? "Enter" : item.action === "castle_flag" ? "Use-flag" : item.action === "castle_supply" ? "Take-from" : item.action === "castle_scoreboard" ? "Read" : item.action === "examine" ? "Look-at" : "Use";
         options.push({ label: `${label} ${item.name}`, action: () => moveAdjacentTo(item, { kind: "scenery", id: item.id }) });
       }
       options.push({ label: `Examine ${contextName(picked.kind, item)}`, action: () => addChat(examineText(picked.kind, item)) });
@@ -5156,6 +5595,7 @@
     if (resource.type === "gold_rock") return "Gold rock";
     if (resource.type === "essence_rock") return "Rune essence";
     if (resource.type === "fishing_spot") return "Fishing spot";
+    if (resource.type === "lobster_spot") return "Lobster spot";
     return resource.type;
   }
 
@@ -5175,6 +5615,10 @@
     if (kind === "scenery" && item.action === "farm") return `${item.name}: ${farmPatchStatus(item.patchId)}.`;
     if (kind === "scenery" && item.action === "compost") return "A wooden bin where spare crops become useful dirt.";
     if (kind === "scenery" && item.action === "water") return "A town well. Excellent for vials and rumours.";
+    if (kind === "scenery" && item.action === "fish_lobster") return "A dock for lobster pots and better food.";
+    if (kind === "scenery" && item.action === "banana") return `${item.name}: ${item.readyAt && item.readyAt > state.time ? "bare for now" : "heavy with yellow supplies"}.`;
+    if (kind === "scenery" && item.action === "web") return `${item.name}: ${item.readyAt && item.readyAt > state.time ? "thin strands regrowing" : "thick enough to cut for silk"}.`;
+    if (kind === "scenery" && item.action === "island_shop") return "A stall with prices set by someone who owns the only boat.";
     if (kind === "scenery" && item.action === "runecraft") return `${item.name}: ${RUNECRAFTING_RECIPES[item.rune].name} runes require Runecrafting ${RUNECRAFTING_RECIPES[item.rune].level}.`;
     if (kind === "scenery" && item.action === "crypt") return `${item.name}: a slab for one of the crypt brothers. ${cryptStatusText()}.`;
     if (kind === "scenery" && item.action === "crypt_chest") return `The crypt chest is sealed by old combat nonsense. ${cryptStatusText()}.`;
@@ -5378,11 +5822,11 @@
     state.modal.rects.push(close);
     drawButton(close, "x");
     const groups = [
-      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "wight_blade", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "wizard_hat", "black_helm", "iron_platelegs", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff"]],
+      ["Combat", ["bronze_sword", "iron_sword", "steel_sword", "rune_scimitar", "pirate_cutlass", "wight_blade", "shortbow", "bronze_arrow", "broad_arrow", "wooden_shield", "bronze_helm", "wizard_hat", "black_helm", "iron_platelegs", "team_cape", "spider_cape", "decorative_helm", "decorative_shield", "decorative_sword", "decorative_platebody", "crypt_helm", "crypt_platebody", "crypt_platelegs", "staff_of_air", "crypt_staff"]],
       ["Skilling", ["logs", "oak_logs", "copper_ore", "tin_ore", "iron_ore", "gold_ore", "bronze_bar", "iron_bar", "gold_bar", "cowhide", "leather_body", "silk", "fur"]],
-      ["Food", ["bread", "cake", "spinach_roll", "raw_shrimp", "cooked_shrimp", "raw_trout", "cooked_trout", "raw_beef", "cooked_beef", "burnt_fish", "burnt_meat", "lobster"]],
-      ["Potions", ["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "energy_potion"]],
-      ["Treasure", ["slayer_gem", "bag_of_salt", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "team_cape", "achievement_cape"]],
+      ["Food", ["bread", "cake", "spinach_roll", "banana", "raw_shrimp", "cooked_shrimp", "raw_trout", "cooked_trout", "raw_lobster", "lobster", "raw_beef", "cooked_beef", "burnt_fish", "burnt_meat"]],
+      ["Potions", ["attack_potion", "strength_potion", "defence_potion", "ranging_potion", "magic_potion", "energy_potion", "antipoison"]],
+      ["Treasure", ["slayer_gem", "bag_of_salt", "spider_silk", "lobster_pot", "castle_ticket", "clue_scroll", "reward_casket", "mystery_box", "antique_lamp", "chisel", "uncut_gem", "cut_gem", "gold_ring", "power_amulet", "ancient_page", "amulet_of_accuracy", "slayer_helm", "achievement_cape"]],
       ["Runes", ["air_rune", "mind_rune", "chaos_rune", "law_rune", "death_rune"]],
     ];
     let yy = y + 82;
@@ -5446,7 +5890,7 @@
     ctx.lineWidth = 3;
     ctx.strokeRect(x, y, w, h);
     drawText("World Map", x + 20, y + 28, { color: "#ffd86b", outline: "#000", size: 20, align: "left" });
-    drawText("Click a labelled place to plot a walk there.", x + 20, y + 54, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
+    drawText("Click a labelled place to plot a walk or book a ferry.", x + 20, y + 54, { color: "#f2dfb4", outline: "#000", size: 12, align: "left" });
     const close = { kind: "modalClose", x: x + w - 38, y: y + 12, w: 26, h: 26 };
     state.modal.rects.push(close);
     drawButton(close, "x");
@@ -5491,17 +5935,17 @@
     drawText("You", playerX + 9, playerY + 8, { color: "#ffffff", outline: "#000", size: 10, align: "left" });
 
     const listX = x + 488;
-    let listY = y + 88;
-    const rowH = 33;
+    let listY = y + 82;
+    const rowH = 29;
     for (const destination of MAP_DESTINATIONS) {
-      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 12, w: 202, h: 29 };
+      const rect = { kind: "mapDestination", destination, x: listX, y: listY - 11, w: 202, h: 26 };
       state.modal.rects.push(rect);
       ctx.fillStyle = "#2d2013";
       ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
       ctx.strokeStyle = "#70552d";
       ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-      drawText(destination.label, listX + 10, listY, { color: destination.color, outline: "#000", size: 12, align: "left" });
-      drawText(destination.note, listX + 10, listY + 13, { color: "#cdbb8a", outline: "#000", size: 8, align: "left" });
+      drawText(destination.label, listX + 10, listY, { color: destination.color, outline: "#000", size: 11, align: "left" });
+      drawText(destination.note, listX + 10, listY + 12, { color: "#cdbb8a", outline: "#000", size: 7, align: "left" });
       listY += rowH;
     }
   }
@@ -5758,6 +6202,8 @@
     if (data.food) lines.push(`Heals ${data.food}`);
     if (data.boostSkill) lines.push(`Boosts ${data.boostSkill}`);
     if (data.runRestore) lines.push(`Restores ${data.runRestore}% run`);
+    if (data.poisonCure) lines.push("Cures poison");
+    if (data.poisonResist) lines.push("Resists poison");
     if (item.id === "rune_pouch") lines.push(runePouchText());
     if (data.requirements) lines.push(`Requires ${requirementText(data.requirements)}`);
     if (data.value) lines.push(`Value ${data.value} gp`);
@@ -5767,7 +6213,7 @@
   function hoverLinesForWorld(picked) {
     const item = picked.item;
     if (picked.kind === "groundItem") return hoverLinesForItem({ id: item.itemId, qty: item.qty });
-    if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.slayerType ? `Slayer: ${item.slayerType.replaceAll("_", " ")}` : "Attack", item.finisher ? `Finish with ${ITEMS[item.finisher].name}` : null].filter(Boolean);
+    if (picked.kind === "enemy") return [`${item.name} level ${item.level}`, item.slayerType ? `Slayer: ${item.slayerType.replaceAll("_", " ")}` : "Attack", item.poisonDamage ? "Poisonous" : null, item.finisher ? `Finish with ${ITEMS[item.finisher].name}` : null].filter(Boolean);
     if (picked.kind === "npc") return [item.name, item.role.replaceAll("_", " ")];
     if (picked.kind === "resource") return [resourceName(item)];
     if (picked.kind === "scenery") {
@@ -5789,6 +6235,10 @@
       if (item.action === "castle_flag") return [item.name, item.team === "enemy" ? "Steal flag" : "Score here", castleWarsScoreText()];
       if (item.action === "castle_supply") return [item.name, "Bandages and run energy", castleWarsScoreText()];
       if (item.action === "castle_scoreboard") return [item.name, castleWarsScoreText()];
+      if (item.action === "fish_lobster") return [item.name, "Cage lobsters", "Requires Fishing 35 and lobster pot"];
+      if (item.action === "banana") return [item.name, item.readyAt && item.readyAt > state.time ? "Growing back" : "Pick banana"];
+      if (item.action === "web") return [item.name, item.readyAt && item.readyAt > state.time ? "Regrowing" : "Cut spider silk", "Requires knife"];
+      if (item.action === "island_shop") return [item.name, "Trade island supplies"];
       if (item.action === "examine") return [item.name, "Examine"];
       return [item.name, item.action === "steal" ? "Steal-from" : "Use"];
     }
@@ -5829,6 +6279,17 @@
     else if (rect.kind === "setting") handleSetting(rect.setting);
     else if (rect.kind === "modalClose") closeModal();
     else if (rect.kind === "mapDestination") {
+      if (rect.destination.ferryCost) {
+        if (!spendCoins(rect.destination.ferryCost)) {
+          addChat(`You need ${rect.destination.ferryCost} coins for the ferry.`);
+          closeModal();
+          return;
+        }
+        state.stats.ferriesTaken += 1;
+        state.stats.islandTrips += 1;
+        travelTo(rect.destination.x + 0.5, rect.destination.y + 0.5, 0, rect.destination.label);
+        return;
+      }
       moveToTile(rect.destination.x, rect.destination.y);
       addChat(`World map destination: ${rect.destination.label}.`);
       closeModal();
@@ -5937,6 +6398,8 @@
         x: state.player.x,
         y: state.player.y,
         hp: state.player.hp,
+        poisonDamage: state.player.poisonDamage || 0,
+        poisonTick: state.player.poisonTick || 0,
         inventory: state.player.inventory,
         bank: state.player.bank,
         equipment: state.player.equipment,
@@ -6015,11 +6478,14 @@
       .filter((enemy) => enemy.hp > 0 && dist(enemy, state.player) < 8)
       .map((enemy) => {
         const screen = screenOf(enemy);
-        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
+        return { id: enemy.id, name: enemy.name, type: enemy.type, slayerType: enemy.slayerType, cryptBrother: enemy.cryptBrother || null, finisher: enemy.finisher || null, poisonDamage: enemy.poisonDamage || 0, x: Number(enemy.x.toFixed(1)), y: Number(enemy.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y), hp: enemy.hp, level: enemy.level };
       });
     const nearbyNpcs = state.npcs
       .filter((npc) => dist(npc, state.player) < 7)
-      .map((npc) => ({ id: npc.id, name: npc.name, role: npc.role, x: Number(npc.x.toFixed(1)), y: Number(npc.y.toFixed(1)) }));
+      .map((npc) => {
+        const screen = screenOf(npc);
+        return { id: npc.id, name: npc.name, role: npc.role, x: Number(npc.x.toFixed(1)), y: Number(npc.y.toFixed(1)), screenX: Math.round(screen.x), screenY: Math.round(screen.y) };
+      });
     const nearbyResources = state.resources
       .filter((resource) => resource.depleted <= state.time && dist(resource, state.player) < 7)
       .slice(0, 20)
@@ -6030,19 +6496,25 @@
     const nearbyScenery = state.scenery
       .filter((obj) => dist(obj, state.player) < 7)
       .slice(0, 12)
-      .map((obj) => ({
-        id: obj.id,
-        name: obj.name,
-        type: obj.type,
-        action: obj.action,
-        level: obj.level || null,
-        patch: obj.patchId ? farmPatchStatus(obj.patchId) : null,
-        rune: obj.rune || null,
-        brother: obj.brother || null,
-        team: obj.team || null,
-        x: obj.x,
-        y: obj.y,
-      }));
+      .map((obj) => {
+        const screen = screenOf(obj);
+        return {
+          id: obj.id,
+          name: obj.name,
+          type: obj.type,
+          action: obj.action,
+          level: obj.level || null,
+          patch: obj.patchId ? farmPatchStatus(obj.patchId) : null,
+          rune: obj.rune || null,
+          brother: obj.brother || null,
+          team: obj.team || null,
+          ready: obj.readyAt ? obj.readyAt <= state.time : null,
+          x: obj.x,
+          y: obj.y,
+          screenX: Math.round(screen.x),
+          screenY: Math.round(screen.y),
+        };
+      });
     const nearbyGroundItems = state.groundItems
       .filter((item) => dist(item, state.player) < 8)
       .map((item) => ({ id: item.id, itemId: item.itemId, name: ITEMS[item.itemId].name, qty: item.qty, x: Number(item.x.toFixed(1)), y: Number(item.y.toFixed(1)) }));
@@ -6058,6 +6530,7 @@
         y: Number(state.player.y.toFixed(2)),
         hp: state.player.hp,
         maxHp: maxHp(),
+        poisonDamage: state.player.poisonDamage || 0,
         prayerPoints: Number(state.player.prayerPoints.toFixed(1)),
         prayerMode: state.player.prayerMode,
         runEnergy: Number(state.player.runEnergy.toFixed(1)),
@@ -6093,6 +6566,7 @@
         mapsOpened: state.stats.mapsOpened,
         ferriesTaken: state.stats.ferriesTaken,
         potionsDrunk: state.stats.potionsDrunk,
+        poisonsCured: state.stats.poisonsCured,
         stallsStolen: state.stats.stallsStolen,
         agilityObstacles: state.stats.agilityObstacles,
         arrowsFletched: state.stats.arrowsFletched,
@@ -6112,6 +6586,12 @@
         castleFlagsCaptured: state.stats.castleFlagsCaptured,
         gemsCut: state.stats.gemsCut,
         jewelryCrafted: state.stats.jewelryCrafted,
+        lobstersCaught: state.stats.lobstersCaught,
+        lobstersCooked: state.stats.lobstersCooked,
+        bananasPicked: state.stats.bananasPicked,
+        islandTrips: state.stats.islandTrips,
+        jungleSpidersSlain: state.stats.jungleSpidersSlain,
+        websCut: state.stats.websCut,
         herbsHarvested: state.stats.herbsHarvested,
         herbsCleaned: state.stats.herbsCleaned,
         potionsMixed: state.stats.potionsMixed,
